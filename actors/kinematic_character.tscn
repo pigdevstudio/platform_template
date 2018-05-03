@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://actors/basic_kinematic_character.gd" type="Script" id=1]
+[ext_resource path="res://actors/kinematic_character.gd" type="Script" id=1]
 
-[node name="basic_character" type="KinematicBody2D"]
+[node name="kinematic_character" type="KinematicBody2D" index="0"]
 
 input_pickable = false
 collision_layer = 1

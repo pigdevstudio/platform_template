@@ -5,13 +5,16 @@ var state = IDLE setget set_state, get_state
 
 export (int) var walk_speed = 100
 export (int) var jump_height = 800
-var direction = 1
-var was_walking = false
+
+var direction = 0
+
 onready var in_jump_speed = walk_speed
 
-const GRAVITY = 50
-const UP = Vector2(0, -1)
+const GRAVITY = 100
+const FLOOR_NORMAL = Vector2(0, -1)
+
 var velocity = Vector2(0, 0)
+var jump_amount = 2
 
 signal state_changed(from, to)
 func set_state(new_state):
@@ -19,14 +22,14 @@ func set_state(new_state):
 		return
 	match new_state:
 		IDLE:
-			velocity = stop()
-			was_walking = false
+			jump_amount = 2
+			velocity = Vector2(0,0)
 		WALK:
-			was_walking = true
+			jump_amount = 2
 		JUMP:
-			var can_jump = is_on_floor()
-			if can_jump:
-				velocity.y = jump()
+			if jump_amount > 0:
+				velocity.y = jump() if jump_amount == 2 else jump() * 1.15
+				jump_amount -= 1
 		FALL:
 			pass
 	emit_signal("state_changed", state, new_state)
@@ -46,6 +49,7 @@ func walk(direction, speed):
 	return(speed)
 	
 func stop():
+	direction = 0
 	return(Vector2(0, velocity.y))
 	
 func _physics_process(delta):
@@ -54,14 +58,13 @@ func _physics_process(delta):
 			pass
 		WALK:
 			velocity.x = walk(direction, walk_speed)
+			if velocity.y > 0:
+				set_state(FALL)
 		JUMP:
 			if velocity.y > 0:
 				set_state(FALL)
 		FALL:
 			if is_on_floor():
-				if was_walking:
-					set_state(WALK)
-				else:
-					set_state(IDLE)
+				set_state(IDLE)
 	velocity.y += GRAVITY
-	velocity = move_and_slide(velocity, UP)
+	velocity = move_and_slide(velocity, FLOOR_NORMAL, 0)
