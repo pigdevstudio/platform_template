@@ -14,7 +14,8 @@ const GRAVITY = 100
 const FLOOR_NORMAL = Vector2(0, -1)
 
 var velocity = Vector2(0, 0)
-var jump_amount = 2
+export (int) var max_jumps = 2
+onready var jumps = max_jumps
 
 signal state_changed(from, to)
 func set_state(new_state):
@@ -22,14 +23,14 @@ func set_state(new_state):
 		return
 	match new_state:
 		IDLE:
-			jump_amount = 2
+			jumps = max_jumps
 			velocity = Vector2(0,0)
 		WALK:
-			jump_amount = 2
+			jumps = max_jumps
 		JUMP:
-			if jump_amount > 0:
-				velocity.y = jump() if jump_amount == 2 else jump() * 1.15
-				jump_amount -= 1
+			if jumps > 0:
+				velocity.y = jump() if jumps == max_jumps else jump() * 1.15
+				jumps -= 1
 		FALL:
 			pass
 	emit_signal("state_changed", state, new_state)
