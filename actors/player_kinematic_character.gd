@@ -1,4 +1,4 @@
-extends "res://actors/platform_character/kinematic_character.gd"
+extends "res://actors/kinematic_character.gd"
 
 func _input(event):
 	match state:
@@ -38,7 +38,7 @@ func _input(event):
 			if event.is_action_released("jump"):
 				cancel_jump()
 		FALL:
-			if event.is_action_pressed("right") :
+			if event.is_action_pressed("right"):
 				direction = 1
 				velocity.x = walk(direction, in_jump_speed)
 			elif event.is_action_pressed("left") :
@@ -48,7 +48,7 @@ func _input(event):
 				velocity = stop()
 			elif event.is_action_released("left") and direction == -1:
 				velocity = stop()
-			if event.is_action_pressed("jump"):
+			if event.is_action_pressed("jump") and jumps > 0:
 				set_state(JUMP)
 				
 func _physics_process(delta):
