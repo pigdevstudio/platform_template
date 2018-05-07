@@ -12,6 +12,7 @@ onready var in_jump_speed = walk_speed
 
 const GRAVITY = 100
 const FLOOR_NORMAL = Vector2(0, -1)
+const SLOPE_STOP_SPEED = 400
 
 var velocity = Vector2(0, 0)
 export (int) var max_jumps = 2
@@ -68,4 +69,4 @@ func _physics_process(delta):
 			if is_on_floor():
 				set_state(IDLE)
 	velocity.y += GRAVITY
-	velocity = move_and_slide(velocity, FLOOR_NORMAL, 0)
+	velocity = move_and_slide(velocity, FLOOR_NORMAL, SLOPE_STOP_SPEED)
