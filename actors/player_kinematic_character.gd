@@ -11,7 +11,8 @@ func _input(event):
 				set_state(WALK)
 			if event.is_action_pressed("jump"):
 				set_state(JUMP)
-				
+			if event.is_action_pressed("dash"):
+				set_state(DASH)
 		WALK:
 			if event.is_action_pressed("right") :
 				direction = 1
@@ -23,6 +24,8 @@ func _input(event):
 				set_state(IDLE)
 			if event.is_action_pressed("jump"):
 				set_state(JUMP)
+			if event.is_action_pressed("dash"):
+				set_state(DASH)
 
 		JUMP:
 			if event.is_action_pressed("right") :
@@ -37,6 +40,8 @@ func _input(event):
 				velocity = stop()
 			if event.is_action_released("jump"):
 				cancel_jump()
+			if event.is_action_pressed("dash"):
+				set_state(DASH)
 		FALL:
 			if event.is_action_pressed("right"):
 				direction = 1
@@ -50,6 +55,19 @@ func _input(event):
 				velocity = stop()
 			if event.is_action_pressed("jump") and jumps > 0:
 				set_state(JUMP)
+			if event.is_action_pressed("dash"):
+				set_state(DASH)
+				
+		DASH:
+			if event.is_action_released("dash"):
+				set_state(IDLE)
+			if event.is_action_released("left"):
+				direction = -1
+				set_state(WALK)
+			if event.is_action_released("right"):
+				direction = 1
+				set_state(WALK)
+				
 				
 func _physics_process(delta):
 	match state:
