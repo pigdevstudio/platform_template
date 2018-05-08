@@ -40,7 +40,6 @@ func set_state(new_state):
 		DASH:
 			if can_dash:
 				dash(state)
-				can_dash = false
 			else:
 				set_state(state)
 	emit_signal("state_changed", state, new_state)
@@ -54,15 +53,20 @@ func jump():
 	
 func dash(previous_state):
 	var init_pos = position
+	if previous_state == JUMP:
+		previous_state = FALL
 	while init_pos.distance_to(position) < dash_length:
 		velocity.x = dash_speed * direction
-		velocity.y = 0
+#		velocity.y = 0
 		yield(get_tree(), "physics_frame")
-		if get_state() != DASH:
+		if !can_dash:
+			if previous_state == WALK:
+				previous_state = IDLE
+			if Input.is_action_pressed("right") or Input.is_action_pressed("left"):
+				previous_state = WALK
+			velocity.x = 0
 			break
-	if previous_state == JUMP:
-		set_state(FALL)
-		return
+	can_dash = false
 	set_state(previous_state)
 	
 func cancel_jump():
@@ -79,6 +83,8 @@ func _physics_process(delta):
 	match state:
 		IDLE:
 			can_dash = is_on_floor()
+			if velocity.y > 0:
+				set_state(FALL)
 		WALK:
 			velocity.x = walk(direction, walk_speed)
 			if velocity.y > 0:

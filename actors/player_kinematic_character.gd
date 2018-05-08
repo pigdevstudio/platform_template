@@ -60,13 +60,11 @@ func _input(event):
 				
 		DASH:
 			if event.is_action_released("dash"):
-				set_state(IDLE)
-			if event.is_action_released("left"):
-				direction = -1
-				set_state(WALK)
-			if event.is_action_released("right"):
-				direction = 1
-				set_state(WALK)
+				can_dash = false
+			if event.is_action_released("right") or event.is_action_released("left"):
+				can_dash = false
+			if event.is_action_pressed("jump"):
+				set_state(JUMP)
 				
 				
 func _physics_process(delta):
