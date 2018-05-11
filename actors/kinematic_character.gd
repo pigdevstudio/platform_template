@@ -14,7 +14,12 @@ onready var state_machine = $state_machine
 const GRAVITY = 80
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 200
-	
+
+enum states {IDLE, WALK, JUMP, FALL}
+
+func set_state(new_state):
+	state_machine.set_state(state_machine.states[new_state])
+
 func jump():
 	if jumps > 0:
 		return(-jump_height)
@@ -24,8 +29,8 @@ func jump():
 func cancel_jump():
 	velocity.y = 0
 	
-func walk(direction, speed):
-	speed = speed * direction
+func walk():
+	var speed = walk_speed * direction
 	return(speed)
 	
 func stop():

@@ -1,16 +1,21 @@
 extends Node
 
 var state = self
-var kinematic_character  = null
+var wrapper = null
 
-func set_state(new_state, wrapper):
+func _ready():
+	set_process_input(false)
+	set_physics_process(false)
+
+func set_state(new_state):
 	emit_signal("state_changed", state, new_state)
 	state = new_state
-	
+
 func get_state():
 	return(state)
 	
-func setup_state(wrapper):
-	kinematic_character = wrapper
-	if wrapper is load("res://actors/player_kinematic_character.gd"):
+func setup_state(kinematic_character):
+	set_physics_process(true)
+	if kinematic_character.has_method("handle_input"):
 		set_process_input(true)
+	wrapper = kinematic_character
