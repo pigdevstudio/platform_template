@@ -7,9 +7,10 @@ signal state_changed(from, to)
 
 func _ready():
 	if get_child_count() > 0:
-		set_state(get_child(0))
+		set_state(0)
 
-func set_state(new_state):
+func set_state(new_state_index):
+	var new_state = states[new_state_index]
 	clear_state(state)
 	new_state.setup_state(get_parent())
 	emit_signal("state_changed", state, new_state)

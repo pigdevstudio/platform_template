@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+enum states {IDLE, WALK, JUMP, FALL}
+
 export (int) var walk_speed = 100
 export (int) var jump_height = 800
 export (int) var max_jumps = 2
@@ -15,10 +17,8 @@ const GRAVITY = 80
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 200
 
-enum states {IDLE, WALK, JUMP, FALL}
-
 func set_state(new_state):
-	state_machine.set_state(state_machine.states[new_state])
+	state_machine.set_state(new_state)
 
 func jump():
 	if jumps > 0:
