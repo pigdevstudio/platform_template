@@ -1,5 +1,8 @@
 extends "state.gd"
-
+signal idling(speed)
+func setup(actor):
+	.setup(actor)
+	emit_signal("idling", actor.walk_speed)
 func handle_input(actor, event):
 	if event.is_action_pressed("right"):
 		actor.direction = 1

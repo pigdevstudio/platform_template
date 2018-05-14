@@ -22,6 +22,8 @@ shape = SubResource( 1 )
 
 [connection signal="state_changed" from="state_machine" to="cutout_character" method="_on_state_machine_state_changed"]
 
+[connection signal="idling" from="state_machine/idle" to="state_machine/jump" method="set_in_jump_speed"]
+
 [connection signal="walking" from="state_machine/walk" to="state_machine/jump" method="set_in_jump_speed"]
 
 [connection signal="falling" from="state_machine/jump" to="cutout_character" method="_on_character_falling"]
