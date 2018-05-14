@@ -1,5 +1,5 @@
 extends "state.gd"
-
+signal falling
 func handle_input(actor, event):
 	if event.is_action_pressed("right"):
 		actor.direction = 1
@@ -24,4 +24,4 @@ func process(actor, delta):
 			return
 		actor.stop()
 	if !actor.is_on_floor() and actor.velocity.y > 0:
-		actor.fall()
+		emit_signal("falling")

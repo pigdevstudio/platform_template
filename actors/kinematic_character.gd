@@ -16,9 +16,7 @@ onready var state_machine = $state_machine
 
 const GRAVITY = 80
 const FLOOR_NORMAL = Vector2(0, -1)
-const SLOPE_STOP_SPEED = 100
-
-signal falling
+const SLOPE_STOP_SPEED = 200
 
 func set_state(new_state):
 	state_machine.set_state(new_state)
@@ -36,9 +34,6 @@ func jump():
 		set_state("jump")
 		velocity.y = -jump_height
 		jumps -= 1
-
-func fall():
-	emit_signal("falling")
 
 func cancel_jump():
 	velocity.y = 0
