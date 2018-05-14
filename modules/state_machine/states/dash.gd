@@ -15,6 +15,8 @@ func handle_input(actor, event):
 		actor.jump()
 func process(actor, delta):
 	actor.velocity.y = 0
+	if actor.is_on_wall():
+		actor.stop()
 	if abs(init_pos.x - actor.position.x) > actor.dash_length:
 		if !actor.has_method("handle_input"):
 			actor.stop()
