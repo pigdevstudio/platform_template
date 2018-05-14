@@ -24,7 +24,7 @@ func set_state(new_state):
 	state_machine.set_state(new_state)
 
 func dash():
-	if !can_dash:
+	if !can_dash or jumps < 1:
 		return
 	set_state("dash")
 	var speed = (dash_speed * direction)
