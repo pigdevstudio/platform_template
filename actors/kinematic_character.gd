@@ -28,6 +28,7 @@ func dash():
 	var speed = (dash_speed * direction)
 	velocity.x = speed
 	can_dash = false
+	jumps -= 1
 
 func jump():
 	if jumps > 0:
@@ -38,6 +39,9 @@ func jump():
 func cancel_jump():
 	velocity.y = 0
 
+func fall():
+	set_state("jump")
+	jumps -= 1
 func walk():
 	set_state("walk")
 	var speed = walk_speed * direction
