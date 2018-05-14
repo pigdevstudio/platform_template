@@ -17,6 +17,7 @@ onready var state_machine = $state_machine
 const GRAVITY = 80
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 200
+const MAX_FALL_SPEED = 2000
 
 func set_state(new_state):
 	state_machine.set_state(new_state)
@@ -56,5 +57,6 @@ func _ready():
 
 func _physics_process(delta):
 	velocity = move_and_slide(velocity, FLOOR_NORMAL, SLOPE_STOP_SPEED, 4, deg2rad(46))
+	velocity.y = min(velocity.y, MAX_FALL_SPEED)
 	velocity.y += GRAVITY
 	state_machine.state.process(self, delta)
