@@ -16,13 +16,14 @@ func handle_input(actor, event):
 func process(actor, delta):
 	actor.velocity.y = 0
 	if abs(init_pos.x - actor.position.x) > actor.dash_length:
-		if actor.velocity.y > 10:
-			actor.set_state("jump")
-			return
 		if !actor.has_method("handle_input"):
 			actor.stop()
 			return
-		if Input.is_action_pressed("right") or Input.is_action_pressed("left"):
-			actor.walk()
-			return
+		elif Input.is_action_pressed("right") or Input.is_action_pressed("left"):
+			if !actor.is_on_floor():
+				actor.set_state("jump")
+				return
+			else:
+				actor.walk()
+				return
 		actor.stop()

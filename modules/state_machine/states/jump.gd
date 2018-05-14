@@ -23,3 +23,5 @@ func process(actor, delta):
 			actor.walk()
 			return
 		actor.stop()
+	if !actor.is_on_floor() and actor.velocity.y > 0:
+		actor.fall()

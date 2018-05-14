@@ -20,6 +20,8 @@ shape = SubResource( 1 )
 
 [node name="cutout_character" parent="." index="2" instance=ExtResource( 3 )]
 
+[connection signal="falling" from="." to="cutout_character" method="_on_character_falling"]
+
 [connection signal="state_changed" from="state_machine" to="cutout_character" method="_on_state_machine_state_changed"]
 
 

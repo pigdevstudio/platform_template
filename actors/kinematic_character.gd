@@ -18,6 +18,8 @@ const GRAVITY = 80
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 100
 
+signal falling
+
 func set_state(new_state):
 	state_machine.set_state(new_state)
 
@@ -36,7 +38,7 @@ func jump():
 		jumps -= 1
 
 func fall():
-	set_state("fall")
+	emit_signal("falling")
 
 func cancel_jump():
 	velocity.y = 0
