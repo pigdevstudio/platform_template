@@ -2,9 +2,23 @@ extends 'state.gd'
 
 func handle_input(actor, event):
 	if event.is_action_released("right") and actor.direction == 1:
+		if Input.is_action_pressed("left"):
+			actor.direction = -1
+			actor.walk()
+			return
 		actor.stop()
-	elif event.is_action_released("left") and actor.direction == -1:
+	if event.is_action_released("left") and actor.direction == -1:
+		if Input.is_action_pressed("right"):
+			actor.direction = 1
+			actor.walk()
+			return
 		actor.stop()
+	if event.is_action_pressed("left"):
+		actor.direction = -1
+		actor.walk()
+	elif event.is_action_pressed("right"):
+		actor.direction = 1
+		actor.walk()
 
 	if event.is_action_pressed("jump"):
 		actor.jump()
