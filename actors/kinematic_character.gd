@@ -3,10 +3,12 @@ extends KinematicBody2D
 export (int) var walk_speed = 100
 export (int) var jump_height = 800
 export (int) var max_jumps = 2
-export (int) var dash_length
+export (int) var dash_length = 300
+export (int) var dash_speed = 200
 
 var direction = 1
 var velocity = Vector2(0, 0)
+var can_dash = true
 
 onready var in_jump_speed = walk_speed
 onready var jumps = max_jumps
@@ -14,16 +16,18 @@ onready var state_machine = $state_machine
 
 const GRAVITY = 80
 const FLOOR_NORMAL = Vector2(0, -1)
-const SLOPE_STOP_SPEED = 200
+const SLOPE_STOP_SPEED = 100
 
 func set_state(new_state):
-	state_machine.push_state(new_state)
-	state_machine.resolve_states()
+	state_machine.set_state(new_state)
 
 func dash():
+	if !can_dash:
+		return
 	set_state("dash")
-	var speed = (walk_speed * direction) * 3
+	var speed = (dash_speed * direction)
 	velocity.x = speed
+	can_dash = false
 
 func jump():
 	if jumps > 0:
@@ -36,7 +40,6 @@ func fall():
 
 func cancel_jump():
 	velocity.y = 0
-	fall()
 
 func walk():
 	set_state("walk")
@@ -44,13 +47,13 @@ func walk():
 	velocity.x = speed
 
 func stop():
+	set_state("idle")
 	velocity.x = 0
 
 func _ready():
 	set_state("idle")
 
 func _physics_process(delta):
-	velocity.y += GRAVITY
 	velocity = move_and_slide(velocity, FLOOR_NORMAL, SLOPE_STOP_SPEED, 4, deg2rad(46))
-	if is_on_floor():
-		jumps = max_jumps
+	velocity.y += GRAVITY
+	state_machine.state.process(self, delta)
