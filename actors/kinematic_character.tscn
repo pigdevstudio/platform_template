@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://actors/kinematic_character.gd" type="Script" id=1]
 [ext_resource path="res://modules/state_machine/state_machine.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://modules/state_machine/states/walk.gd" type="Script" id=4]
 [ext_resource path="res://modules/state_machine/states/jump.gd" type="Script" id=5]
 [ext_resource path="res://modules/state_machine/states/dash.gd" type="Script" id=6]
+[ext_resource path="res://modules/state_machine/states/wall.gd" type="Script" id=7]
 
 [node name="kinematic_character" type="KinematicBody2D"]
 
@@ -39,5 +40,9 @@ script = ExtResource( 5 )
 [node name="dash" type="Node" parent="state_machine" index="3"]
 
 script = ExtResource( 6 )
+
+[node name="wall" type="Node" parent="state_machine" index="4"]
+
+script = ExtResource( 7 )
 
 

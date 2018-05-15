@@ -36,10 +36,8 @@ func jump():
 		set_state("jump")
 		velocity.y = -jump_height
 		jumps -= 1
-
 func cancel_jump():
 	velocity.y = 0
-
 func fall():
 	set_state("jump")
 	jumps -= 1
@@ -47,11 +45,11 @@ func walk():
 	set_state("walk")
 	var speed = walk_speed * direction
 	velocity.x = speed
-
 func stop():
 	set_state("idle")
 	velocity.x = 0
-
+func wall_slide():
+	set_state("wall")
 func _ready():
 	set_state("idle")
 

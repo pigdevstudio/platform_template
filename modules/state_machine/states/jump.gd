@@ -22,6 +22,9 @@ func handle_input(actor, event):
 		actor.dash()
 
 func process(actor, delta):
+	if actor.is_on_wall():
+		actor.wall_slide()
+		return
 	if actor.is_on_floor():
 		if !actor.has_method("handle_input"):
 			actor.stop()
