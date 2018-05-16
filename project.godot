@@ -11,7 +11,6 @@ config_version=3
 [application]
 
 config/name="Platform Template"
-run/main_scene="res://assets/level_0.tscn"
 config/icon="res://icon.png"
 
 [input]
