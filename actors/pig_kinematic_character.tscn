@@ -32,5 +32,11 @@ shape = SubResource( 1 )
 
 [connection signal="drifting" from="state_machine/dash" to="cutout_character" method="_on_drifting"]
 
+[connection signal="is_on_wall" from="state_machine/wall" to="cutout_character" method="_on_wall_is_on_wall"]
+
+[connection signal="wall_finished" from="state_machine/wall" to="cutout_character" method="_on_wall_finished"]
+
+[connection signal="wall_jumping" from="state_machine/wall" to="cutout_character" method="_on_wall_jumping"]
+
 
 [editable path="cutout_character"]

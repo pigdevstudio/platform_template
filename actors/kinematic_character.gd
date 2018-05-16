@@ -50,6 +50,9 @@ func stop():
 	velocity.x = 0
 func wall_slide():
 	set_state("wall")
+func wall_jump(length, height = -jump_height):
+	velocity.y = height
+	velocity.x = length
 func _ready():
 	set_state("idle")
 
