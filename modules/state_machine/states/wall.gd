@@ -30,12 +30,17 @@ func handle_input(actor, event):
 			actor.jump()
 			return
 		emit_signal("wall_jumping")
+	if event.is_action_released("jump"):
+		actor.cancel_jump()
 func process(actor, delta):
 	actor.velocity.x += actor.GRAVITY * -normal.x
 	if actor.is_on_floor():
 		actor.stop()
 		return
 	if !actor.is_on_wall():
+		if (actor.velocity.x * -normal.x) > 100:
+			actor.fall()
+			return
 		return
 	emit_signal("is_on_wall")
 	actor.velocity.y = actor.velocity.y / 2

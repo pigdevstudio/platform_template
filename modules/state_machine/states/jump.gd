@@ -22,9 +22,6 @@ func handle_input(actor, event):
 		actor.dash()
 
 func process(actor, delta):
-	if actor.is_on_wall():
-		actor.wall_slide()
-		return
 	if actor.is_on_floor():
 		if !actor.has_method("handle_input"):
 			actor.stop()
@@ -41,4 +38,7 @@ func process(actor, delta):
 	elif Input.is_action_pressed("left"):
 		actor.direction = -1
 		actor.velocity.x = in_jump_speed * actor.direction
+	if actor.is_on_wall():
+		actor.wall_slide()
+		return
 	

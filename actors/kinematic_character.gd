@@ -14,7 +14,7 @@ onready var in_jump_speed = walk_speed
 onready var jumps = max_jumps
 onready var state_machine = $state_machine
 
-const GRAVITY = 80
+const GRAVITY = 50
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 200
 const MAX_FALL_SPEED = 2000
