@@ -4,16 +4,26 @@ var normal = Vector2(0,0)
 var jump_length = 500
 signal wall_finished
 signal wall_jumping
-signal is_on_wall
 func setup(actor):
 	.setup(actor)
 	normal = actor.get_slide_collision(0).normal
 	actor.jumps = actor.max_jumps
+	actor.can_dash = true
+	jump_length = actor.wall_jump_length
+	jump_height = actor.jump_height
+	if actor.has_method("handle_input"):
+		if Input.is_action_pressed("dash"):
+			jump_length = actor.wall_jump_length * 1.5
+			jump_height = actor.jump_height * 1.5
+			actor.can_dash = false
 func handle_input(actor, event):
 	if event.is_action_pressed("dash"):
-		jump_length = 800
+		jump_length = actor.wall_jump_length * 1.5
+		jump_height = actor.jump_height * 1.5
+		actor.can_dash = false
 	elif event.is_action_released("dash"):
-		jump_length = 500
+		jump_length = actor.wall_jump_length
+		jump_height = actor.jump_height
 	if event.is_action_released("left"):
 		actor.velocity.x = 10 * normal.x
 		actor.fall()
@@ -21,11 +31,10 @@ func handle_input(actor, event):
 		actor.velocity.x = 10 * normal.x
 		actor.fall()
 	if event.is_action_pressed("jump"):
-		var height = actor.jump_height if Input.is_action_pressed("dash") else actor.jump_height * 2
 		if Input.is_action_pressed("right") and normal.x < 0:
-			actor.wall_jump(jump_length * normal.x)
+			actor.wall_jump(jump_length * normal.x, jump_height)
 		elif Input.is_action_pressed("left") and normal.x > 0:
-			actor.wall_jump(jump_length * normal.x)
+			actor.wall_jump(jump_length * normal.x, jump_height)
 		else:
 			actor.jump()
 			return
@@ -42,7 +51,6 @@ func process(actor, delta):
 			actor.fall()
 			return
 		return
-	emit_signal("is_on_wall")
 	actor.velocity.y = actor.velocity.y / 2
 	
 func clear():
