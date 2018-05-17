@@ -15,6 +15,7 @@ collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
 script = ExtResource( 1 )
+state_machine_path = NodePath("state_machine")
 walk_speed = 100
 jump_height = 800
 max_jumps = 2
@@ -44,5 +45,7 @@ script = ExtResource( 6 )
 [node name="wall" type="Node" parent="state_machine" index="4"]
 
 script = ExtResource( 7 )
+
+[connection signal="enter_state" from="." to="state_machine" method="set_state"]
 
 
