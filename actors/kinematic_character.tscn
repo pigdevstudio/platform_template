@@ -18,6 +18,7 @@ script = ExtResource( 1 )
 state_machine_path = NodePath("state_machine")
 walk_speed = 100
 jump_height = 800
+wall_jump_length = 800
 max_jumps = 2
 dash_length = 300
 dash_speed = 200

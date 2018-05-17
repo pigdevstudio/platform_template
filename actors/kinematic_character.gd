@@ -3,6 +3,7 @@ extends KinematicBody2D
 export (NodePath) var state_machine_path
 export (int) var walk_speed = 100
 export (int) var jump_height = 800
+export (int) var wall_jump_length = 800
 export (int) var max_jumps = 2
 export (int) var dash_length = 300
 export (int) var dash_speed = 200
@@ -53,8 +54,8 @@ func stop():
 	velocity.x = 0
 func wall_slide():
 	set_state("wall")
-func wall_jump(length, height = -jump_height):
-	velocity.y = height
+func wall_jump(length = jump_height, height = jump_height):
+	velocity.y = -height
 	velocity.x = length
 func _ready():
 	set_state("idle")
