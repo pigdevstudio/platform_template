@@ -2,8 +2,10 @@ extends "res://modules/state_machine/states/state.gd"
 
 var normal = Vector2(0,0)
 var jump_length = 500
-signal wall_finished
+var jump_height = 500
+signal wall_exited
 signal wall_jumping
+signal wall_entered
 func setup(actor):
 	.setup(actor)
 	normal = actor.get_slide_collision(0).normal
@@ -51,8 +53,8 @@ func process(actor, delta):
 			actor.fall()
 			return
 		return
+	emit_signal("wall_entered")
 	actor.velocity.y = actor.velocity.y / 2
 	
 func clear():
-	emit_signal("wall_finished")
-	jump_length = 500
+	emit_signal("wall_exited")
