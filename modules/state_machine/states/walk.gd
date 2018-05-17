@@ -29,3 +29,5 @@ func process(actor, delta):
 	if actor.is_on_floor():
 		actor.jumps = actor.max_jumps
 		actor.can_dash = true
+	else:
+		actor.fall()

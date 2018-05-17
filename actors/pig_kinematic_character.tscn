@@ -24,9 +24,7 @@ shape = SubResource( 1 )
 
 [connection signal="falling" from="state_machine/jump" to="cutout_character" method="_on_character_falling"]
 
-[connection signal="is_on_wall" from="state_machine/wall" to="cutout_character" method="_on_wall_is_on_wall"]
-
-[connection signal="wall_finished" from="state_machine/wall" to="cutout_character" method="_on_wall_finished"]
+[connection signal="drifting" from="state_machine/dash" to="cutout_character" method="_on_drifting"]
 
 [connection signal="wall_jumping" from="state_machine/wall" to="cutout_character" method="_on_wall_jumping"]
 
