@@ -1,8 +1,5 @@
 extends 'state.gd'
-signal walking(speed)
-func setup(actor):
-	.setup(actor)
-	emit_signal("walking", actor.walk_speed)
+
 func handle_input(actor, event):
 	if event.is_action_released("right") and actor.direction == 1:
 		if Input.is_action_pressed("left"):

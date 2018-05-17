@@ -1,12 +1,10 @@
 extends "state.gd"
 var init_pos = Vector2()
 signal drifting
-signal dashing(speed)
 
 func setup(actor):
 	.setup(actor)
 	init_pos = actor.position
-	emit_signal("dashing", actor.dash_speed)
 
 func handle_input(actor, event):
 	if event.is_action_released("dash"):

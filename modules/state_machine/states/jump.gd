@@ -3,6 +3,10 @@ signal falling
 
 var in_jump_speed = 100 setget set_in_jump_speed
 
+func setup(actor, speed):
+	.setup(actor)
+	set_in_jump_speed(speed)
+
 func set_in_jump_speed(value):
 	in_jump_speed = value
 func handle_input(actor, event):
@@ -41,4 +45,3 @@ func process(actor, delta):
 	if actor.is_on_wall():
 		actor.wall_slide()
 		return
-	
