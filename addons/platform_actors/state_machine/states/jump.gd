@@ -1,5 +1,4 @@
 extends "state.gd"
-signal falling
 
 var in_jump_speed = 100 setget set_in_jump_speed
 
@@ -35,7 +34,7 @@ func process(actor, delta):
 			return
 		actor.stop()
 	if !actor.is_on_floor() and actor.velocity.y > 0:
-		emit_signal("falling")
+		actor.emit_signal("perform_action", "fall")
 	if Input.is_action_pressed("right"):
 		actor.direction = 1
 		actor.velocity.x = in_jump_speed * actor.direction
@@ -45,3 +44,9 @@ func process(actor, delta):
 	if actor.is_on_wall():
 		actor.wall_slide()
 		return
+	if actor.is_on_ladder():
+		if actor.has_method("handle_input"):
+			if Input.is_action_pressed("up"):
+				actor.climb_ladder()
+			elif Input.is_action_pressed("down"):
+				actor.climb_ladder()

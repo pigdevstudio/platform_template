@@ -1,4 +1,4 @@
-extends "res://modules/state_machine/states/state.gd"
+extends "state.gd"
 
 var normal = Vector2(0,0)
 var jump_length = 500
@@ -40,7 +40,7 @@ func handle_input(actor, event):
 		else:
 			actor.jump()
 			return
-		emit_signal("wall_jumping")
+		actor.emit_signal("perform_action", "jump")
 	if event.is_action_released("jump"):
 		actor.cancel_jump()
 func process(actor, delta):
@@ -53,8 +53,9 @@ func process(actor, delta):
 			actor.fall()
 			return
 		return
-	emit_signal("wall_entered")
+	actor.emit_signal("perform_action", "wall")
 	actor.velocity.y = actor.velocity.y / 2
 	
 func clear():
-	emit_signal("wall_exited")
+#	actor.emit_signal("perform_action", "fall")
+	pass

@@ -1,4 +1,4 @@
-extends "kinematic_character.gd"
+extends "platform_actor.gd"
 
 func handle_input():
 	pass

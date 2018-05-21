@@ -1,4 +1,4 @@
-extends 'state.gd'
+extends "state.gd"
 
 func handle_input(actor, event):
 	if event.is_action_released("right") and actor.direction == 1:
