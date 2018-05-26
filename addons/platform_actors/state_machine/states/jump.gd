@@ -9,44 +9,38 @@ func setup(actor, speed):
 func set_in_jump_speed(value):
 	in_jump_speed = value
 func handle_input(actor, event):
-	if event.is_action_pressed("right"):
+	if event.is_action_pressed(actor.right):
 		actor.direction = 1
 		actor.velocity.x = in_jump_speed * actor.direction
-	elif event.is_action_pressed("left"):
+	elif event.is_action_pressed(actor.left):
 		actor.direction = -1
 		actor.velocity.x = in_jump_speed * actor.direction
-	if event.is_action_released("right") or event.is_action_released("left"):
+	if event.is_action_released(actor.right) or event.is_action_released(actor.left):
 		actor.velocity.x = 0
-	if event.is_action_pressed("jump"):
+	if event.is_action_pressed(actor.jump):
 		actor.jump()
-	elif event.is_action_released("jump") and actor.velocity.y < 0:
+	elif event.is_action_released(actor.jump) and actor.velocity.y < 0:
 		actor.cancel_jump()
-	if event.is_action_pressed("dash"):
+	if event.is_action_pressed(actor.dash):
 		actor.dash()
 
 func process(actor, delta):
-	if actor.is_on_floor():
-		if !actor.has_method("handle_input"):
-			actor.stop()
-			return
-		if Input.is_action_pressed("right") or Input.is_action_pressed("left"):
-			actor.walk()
-			return
-		actor.stop()
-	if !actor.is_on_floor() and actor.velocity.y > 0:
-		actor.emit_signal("perform_action", "fall")
-	if Input.is_action_pressed("right"):
-		actor.direction = 1
-		actor.velocity.x = in_jump_speed * actor.direction
-	elif Input.is_action_pressed("left"):
-		actor.direction = -1
-		actor.velocity.x = in_jump_speed * actor.direction
 	if actor.is_on_wall():
 		actor.wall_slide()
 		return
-	if actor.is_on_ladder():
-		if actor.has_method("handle_input"):
-			if Input.is_action_pressed("up"):
-				actor.climb_ladder()
-			elif Input.is_action_pressed("down"):
-				actor.climb_ladder()
+	if !actor.is_on_floor() and actor.velocity.y > 0:
+		actor.emit_signal("perform_action", "fall")
+	if actor.is_on_floor():
+		actor.stop()
+	if !actor.has_method("handle_input"):
+		return
+	if Input.is_action_pressed(actor.right) or Input.is_action_pressed(actor.left):
+		if actor.is_on_floor():
+			actor.walk()
+			return
+	if Input.is_action_pressed(actor.right):
+		actor.direction = 1
+		actor.velocity.x = in_jump_speed * actor.direction
+	elif Input.is_action_pressed(actor.left):
+		actor.direction = -1
+		actor.velocity.x = in_jump_speed * actor.direction

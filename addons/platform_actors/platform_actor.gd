@@ -8,7 +8,7 @@ export (int) var dash_length = 300
 export (int) var dash_speed = 200
 export (int) var climb_speed = 200
 
-var direction = 1
+var direction = 1 setget set_direction
 var velocity = Vector2(0, 0)
 var can_dash = true
 
@@ -23,6 +23,11 @@ const MAX_FALL_SPEED = 2000
 
 signal enter_state(state)
 signal perform_action(action)
+signal direction_changed(new_direction)
+
+func set_direction(value):
+	direction = value
+	emit_signal("direction_changed", value)
 
 func set_state(new_state):
 	emit_signal("enter_state", new_state)
