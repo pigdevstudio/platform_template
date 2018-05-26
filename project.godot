@@ -43,7 +43,8 @@ dash=[ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","
 
 [layer_names]
 
-2d_physics/layer_2="ladder"
+2d_physics/layer_1="environment"
+2d_physics/layer_2="actors"
 
 [node]
 
