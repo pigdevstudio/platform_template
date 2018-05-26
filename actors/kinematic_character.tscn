@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://actors/kinematic_character.gd" type="Script" id=1]
+[ext_resource path="res://modules/state_machine/state_machine.tscn" type="PackedScene" id=2]
+[ext_resource path="res://modules/state_machine/states/idle.gd" type="Script" id=3]
+[ext_resource path="res://modules/state_machine/states/walk.gd" type="Script" id=4]
+[ext_resource path="res://modules/state_machine/states/jump.gd" type="Script" id=5]
+[ext_resource path="res://modules/state_machine/states/dash.gd" type="Script" id=6]
+[ext_resource path="res://modules/state_machine/states/wall.gd" type="Script" id=7]
+
+[node name="kinematic_character" type="KinematicBody2D"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+state_machine_path = NodePath("state_machine")
+walk_speed = 100
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="." index="0"]
+
+[node name="state_machine" parent="." index="1" instance=ExtResource( 2 )]
+
+[node name="idle" type="Node" parent="state_machine" index="0"]
+
+script = ExtResource( 3 )
+
+[node name="walk" type="Node" parent="state_machine" index="1"]
+
+script = ExtResource( 4 )
+
+[node name="jump" type="Node" parent="state_machine" index="2"]
+
+script = ExtResource( 5 )
+
+[node name="dash" type="Node" parent="state_machine" index="3"]
+
+script = ExtResource( 6 )
+
+[node name="wall" type="Node" parent="state_machine" index="4"]
+
+script = ExtResource( 7 )
+
+[connection signal="enter_state" from="." to="state_machine" method="set_state"]
+
+
