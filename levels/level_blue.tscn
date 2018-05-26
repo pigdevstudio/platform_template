@@ -1,0 +1,146 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://levels/tilemap/blue/tiles/tileset.tres" type="TileSet" id=1]
+[ext_resource path="res://addons/platform_actors/player_platform_actor.gd" type="Script" id=2]
+[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=3]
+[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=4]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_stand.png" type="Texture" id=5]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim1.png" type="Texture" id=6]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_up2.png" type="Texture" id=7]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk4.png" type="Texture" id=8]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk1.png" type="Texture" id=9]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk2.png" type="Texture" id=10]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk3.png" type="Texture" id=11]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim2.png" type="Texture" id=12]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 16, 24 )
+
+[sub_resource type="SpriteFrames" id=2]
+
+animations = [ {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "dash",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": true,
+"name": "fall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "walk",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "wall",
+"speed": 5.0
+} ]
+
+[sub_resource type="GDScript" id=3]
+
+script/source = "extends AnimatedSprite
+
+func _on_perform_action(action):
+	print(action)
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"fall\":
+			play(\"fall\")
+		\"wall\":
+			play(\"wall\")
+		\"dash\":
+			play(\"dash\")
+
+func _on_direction_changed(new_direction):
+	flip_h = new_direction < 0
+"
+_sections_unfolded = [ "Resource" ]
+
+[node name="level_blue" type="Node2D"]
+
+[node name="tile_map" type="TileMap" parent="." index="0"]
+
+mode = 0
+tile_set = ExtResource( 1 )
+cell_size = Vector2( 64, 64 )
+cell_quadrant_size = 16
+cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+cell_half_offset = 2
+cell_tile_origin = 0
+cell_y_sort = false
+cell_clip_uv = false
+collision_use_kinematic = false
+collision_friction = 1.0
+collision_bounce = 0.0
+collision_layer = 1
+collision_mask = 1
+occluder_light_mask = 1
+format = 1
+tile_data = PoolIntArray( 0, -1610612736, 0, 15, -1073741824, 0, 65536, -1610612736, 0, 65551, -1073741824, 0, 131072, -1610612736, 0, 131074, 6, 0, 131087, -1073741824, 0, 196608, -1610612736, 0, 196615, 6, 0, 196623, -1073741824, 0, 262144, -1610612736, 0, 262155, 6, 0, 262159, -1073741824, 0, 327680, -1610612736, 0, 327695, -1073741824, 0, 393216, -1610612736, 0, 393220, 5, 0, 393221, 536870912, 0, 393222, 536870912, 0, 393223, 536870912, 0, 393224, 536870912, 0, 393225, 536870912, 0, 393226, 536870917, 0, 393231, -1073741824, 0, 458752, 536870913, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 1, 0, 458757, 2, 0, 458758, 536870916, 0, 458759, 536870916, 0, 458760, 536870916, 0, 458761, 2, 0, 458762, 536870913, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 1, 0, 524288, 2, 0, 524289, 4, 0, 524290, 4, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 3, 0, 524296, 4, 0, 524297, 4, 0, 524298, 4, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 3, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 4, 0, 589828, 4, 0, 589829, 4, 0, 589830, 4, 0, 589831, 4, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 4, 0, 589837, 4, 0, 589838, 2, 0, 589839, 4, 0 )
+
+[node name="platform_actor_2d" type="KinematicBody2D" parent="." index="1"]
+
+position = Vector2( 360, 328 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_icon": ExtResource( 3 )
+}
+walk_speed = 300
+jump_height = 800
+wall_jump_length = 400
+max_jumps = 2
+dash_length = 300
+dash_speed = 600
+climb_speed = 400
+left = "left"
+right = "right"
+up = "up"
+down = "down"
+jump = "jump"
+dash = "dash"
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="platform_actor_2d" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 1 )
+
+[node name="state_machine" parent="platform_actor_2d" index="1" instance=ExtResource( 4 )]
+
+[node name="animated_sprite" type="AnimatedSprite" parent="platform_actor_2d" index="2"]
+
+position = Vector2( 0, -24 )
+frames = SubResource( 2 )
+animation = "fall"
+playing = true
+script = SubResource( 3 )
+
+[connection signal="direction_changed" from="platform_actor_2d" to="platform_actor_2d/animated_sprite" method="_on_direction_changed"]
+
+[connection signal="perform_action" from="platform_actor_2d" to="platform_actor_2d/animated_sprite" method="_on_perform_action"]
+
+

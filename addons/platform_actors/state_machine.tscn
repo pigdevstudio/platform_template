@@ -1,0 +1,39 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://addons/platform_actors/state_machine/state_machine.gd" type="Script" id=1]
+[ext_resource path="res://addons/platform_actors/state_machine/states/idle.gd" type="Script" id=2]
+[ext_resource path="res://addons/platform_actors/state_machine/states/walk.gd" type="Script" id=3]
+[ext_resource path="res://addons/platform_actors/state_machine/states/jump.gd" type="Script" id=4]
+[ext_resource path="res://addons/platform_actors/state_machine/states/dash.gd" type="Script" id=5]
+[ext_resource path="res://addons/platform_actors/state_machine/states/wall.gd" type="Script" id=6]
+[ext_resource path="res://addons/platform_actors/state_machine/states/climb.gd" type="Script" id=7]
+
+[node name="state_machine" type="Node"]
+
+script = ExtResource( 1 )
+
+[node name="idle" type="Node" parent="." index="0"]
+
+script = ExtResource( 2 )
+
+[node name="walk" type="Node" parent="." index="1"]
+
+script = ExtResource( 3 )
+
+[node name="jump" type="Node" parent="." index="2"]
+
+script = ExtResource( 4 )
+
+[node name="dash" type="Node" parent="." index="3"]
+
+script = ExtResource( 5 )
+
+[node name="wall" type="Node" parent="." index="4"]
+
+script = ExtResource( 6 )
+
+[node name="climb" type="Node" parent="." index="5"]
+
+script = ExtResource( 7 )
+
+
