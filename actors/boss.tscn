@@ -1,0 +1,162 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://actors/boss.gd" type="Script" id=1]
+[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=2]
+[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/cutout_characters/pig/pig_character.tscn" type="PackedScene" id=4]
+
+[sub_resource type="GDScript" id=2]
+
+resource_name = "brain"
+script/source = "extends Node
+
+onready var actor = get_parent()
+onready var sprites = $\"../cutout_character\"
+
+var n = Vector2(1,0)
+var player = null
+var wall_jumps = 0
+func _on_sight_body_entered(body):
+	if body.is_in_group(\"player\"):
+		player = body
+		n = (player.global_position - actor.global_position).normalized()
+		actor.walk()
+
+func _on_boss_perform_action(action):
+	if player == null:
+		return
+	if !$timer.is_stopped():
+		return
+	n = (player.global_position - actor.global_position).normalized()
+	actor.direction = sign(n.x)
+	match action:
+		\"wall\":
+			if wall_jumps >= actor.MAX_WALL_JUMPS:
+				actor.dash()
+				wall_jumps = 0
+				return
+			$timer.start()
+			yield($timer, \"timeout\")
+			actor.wall_jump(actor.wall_jump_length * actor.direction)
+			var flip = 1 if actor.direction < 0 else 0
+			sprites.flip_sprites(flip)
+			wall_jumps += 1
+		\"walk\":
+			var flip = 0 if actor.direction < 0 else 1
+			sprites.flip_sprites(flip)
+		\"dash\":
+			var flip = 0 if actor.direction < 0 else 1
+			sprites.flip_sprites(flip)
+
+func _physics_process(delta):
+	if $\"../ray_right\".is_colliding() or $\"../ray_left\".is_colliding():
+		$\"../ray_right\".enabled = !$\"../ray_right\".is_colliding()
+		$\"../ray_left\".enabled = !$\"../ray_left\".is_colliding()
+		actor.jump()
+	if player == null:
+		return
+	var d = actor.global_position.distance_to(player.global_position)
+	if d > 500:
+		actor.dash()
+
+func _on_sight_body_exited(body):
+	pass
+"
+_sections_unfolded = [ "Resource" ]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 20.1823, 25.2357 )
+
+[sub_resource type="CircleShape2D" id=3]
+
+custom_solver_bias = 0.0
+radius = 212.467
+
+[node name="boss" type="KinematicBody2D"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 0
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+_sections_unfolded = [ "Collision", "Transform" ]
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 100
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="brain" type="Node" parent="." index="0"]
+
+script = SubResource( 2 )
+
+[node name="timer" type="Timer" parent="brain" index="0"]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = true
+autostart = false
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="." index="1"]
+
+position = Vector2( 0, -25.3432 )
+shape = SubResource( 1 )
+
+[node name="state_machine" parent="." index="2" instance=ExtResource( 3 )]
+
+[node name="cutout_character" parent="." index="3" instance=ExtResource( 4 )]
+
+editor/display_folded = true
+scale = Vector2( -0.7, 0.7 )
+
+[node name="sight" type="Area2D" parent="." index="4"]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision_layer = 0
+collision_mask = 2
+audio_bus_override = false
+audio_bus_name = "Master"
+_sections_unfolded = [ "Collision" ]
+
+[node name="range" type="CollisionShape2D" parent="sight" index="0"]
+
+position = Vector2( 0, -42.0163 )
+shape = SubResource( 3 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="ray_left" type="RayCast2D" parent="." index="5"]
+
+position = Vector2( 0, -38.6817 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( -80, 0 )
+collision_mask = 1
+
+[node name="ray_right" type="RayCast2D" parent="." index="6"]
+
+position = Vector2( 0, -38.6817 )
+enabled = true
+exclude_parent = true
+cast_to = Vector2( 80, 0 )
+collision_mask = 1
+
+[connection signal="perform_action" from="." to="cutout_character" method="_on_character_perform_action"]
+
+[connection signal="perform_action" from="." to="brain" method="_on_boss_perform_action"]
+
+[connection signal="body_entered" from="sight" to="brain" method="_on_sight_body_entered"]
+
+[connection signal="body_exited" from="sight" to="brain" method="_on_sight_body_exited"]
+
+
