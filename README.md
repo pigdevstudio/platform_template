@@ -1,7 +1,6 @@
 # Pigdev's Platform Template
 
-[![](https://i.imgur.com/Xd9P4oM.png)](https://discordapp.com/invite/fBhS9Zd)     [![](https://i.imgur.com/K9YDj7X.png)](https://github.com/pigdevstudio/platform_template/projects/2)      [![](https://i.imgur.com/2xctLSs.png)](https://github.com/pigdevstudio/platform_template/issues)  
-
+[![](https://img.itch.zone/aW1nLzEyMjYwODMucG5n/original/BoqJUa.png)](https://pigdev.itch.io/platform-template)
 A complete platform template project which aims to ease the development of  platform games in [Godot Engine](https://github.com/godotengine/godot).  
 
 
@@ -15,3 +14,5 @@ This is the base code used for the Platform Template Assets at our itch.io page.
 - Editable Assets to customize sfx, vfx, characters and more
 
 **And of course exclusive premium support on our discord server**
+
+[![](https://i.imgur.com/Xd9P4oM.png)](https://discordapp.com/invite/fBhS9Zd)
