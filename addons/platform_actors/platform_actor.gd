@@ -18,7 +18,7 @@ var state_machine = null
 
 const GRAVITY = 50
 const FLOOR_NORMAL = Vector2(0, -1)
-const SLOPE_STOP_SPEED = 200
+const SLOPE_STOP_SPEED = 100
 const MAX_FALL_SPEED = 2000
 
 signal enter_state(state)
