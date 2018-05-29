@@ -1,0 +1,845 @@
+[gd_scene load_steps=42 format=2]
+
+[ext_resource path="res://levels/level_template.tscn" type="PackedScene" id=1]
+[ext_resource path="res://interface/themes/green_theme.tres" type="Theme" id=2]
+[ext_resource path="res://objects/coin/coin.tscn" type="PackedScene" id=3]
+[ext_resource path="res://levels/tilemap/blue/flag.png" type="Texture" id=4]
+[ext_resource path="res://levels/tilemap/red/flag.png" type="Texture" id=5]
+[ext_resource path="res://levels/tilemap/blue/tiles/tileset.tres" type="TileSet" id=6]
+[ext_resource path="res://levels/tilemap/red/tiles/tileset.tres" type="TileSet" id=7]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_stand.png" type="Texture" id=8]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim1.png" type="Texture" id=9]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_up1.png" type="Texture" id=10]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk4.png" type="Texture" id=11]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk1.png" type="Texture" id=12]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk2.png" type="Texture" id=13]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk3.png" type="Texture" id=14]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim2.png" type="Texture" id=15]
+[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=16]
+[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=17]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_stand.png" type="Texture" id=18]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_swim1.png" type="Texture" id=19]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_up1.png" type="Texture" id=20]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk4.png" type="Texture" id=21]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk1.png" type="Texture" id=22]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk2.png" type="Texture" id=23]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk3.png" type="Texture" id=24]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_swim2.png" type="Texture" id=25]
+
+[sub_resource type="GDScript" id=10]
+
+script/source = "extends Node2D
+
+onready var coins_goal = $coins.get_children().size()
+
+func _on_void_area_entered(area):
+	if \"player\" in area.get_groups():
+		get_tree().reload_current_scene()
+
+func _on_goal_area_entered(area):
+	var players = 0
+	for a in $goal.get_overlapping_areas():
+		if a.is_in_group(\"player\"):
+			players += 1
+	if players < 2:
+		return
+		
+	if $interface/control/coins.coins >= coins_goal:
+		trigger_animation(\"win\")
+	else:
+		$interface/animator.play(\"coins\")
+		yield($interface/animator, \"animation_finished\")
+		$interface/animator.play_backwards(\"coins\")
+
+func _on_timer_timeout():
+	trigger_animation(\"lose\")
+
+
+func _on_goal_area_shape_entered(area_id, area, area_shape, self_shape):
+	if !area.is_in_group(\"player\"):
+		return
+	var texture = $goal.get_child(self_shape).get_node(\"sprite\").texture
+	match self_shape:
+		0:
+			if area.is_in_group(\"blue\"):
+				texture = load(\"res://levels/tilemap/blue/flag_raised.png\")
+		1:
+			if area.is_in_group(\"red\"):
+				texture = load(\"res://levels/tilemap/red/flag_raised.png\")
+	$goal.get_child(self_shape).get_node(\"sprite\").texture = texture
+
+
+func _on_goal_area_shape_exited(area_id, area, area_shape, self_shape):
+	var texture = null
+	match self_shape:
+		0:
+			texture = load(\"res://levels/tilemap/blue/flag.png\")
+		1:
+			texture = load(\"res://levels/tilemap/red/flag.png\")
+	$goal.get_child(self_shape).get_node(\"sprite\").set_texture(texture)
+
+func trigger_animation(animation):
+	get_tree().paused = true
+	$interface/animator.play(animation)
+	yield($interface/animator, \"animation_finished\")
+	
+	$interface/control/button.show()
+	$interface/control/button.grab_focus()
+	yield($interface/control/button, \"button_up\")
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+	
+func _ready():
+	$interface/control/progress_bar.max_value = $interface/control/time/spam/timer.wait_time
+	$interface/control/progress_bar.value = $interface/control/time/spam/timer.wait_time
+func _process(delta):
+	$interface/control/progress_bar.value = $interface/control/time/spam/timer.time_left
+	"
+
+[sub_resource type="Animation" id=16]
+
+resource_name = "coins"
+length = 0.5
+loop = false
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/coins/coin:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/coins/coin:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -11, -14 ), Vector2( 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/coins/coin:rect_size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 32, 42 ), Vector2( 53, 70 ), Vector2( 32, 42 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+
+resource_name = "lose"
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/color_rect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.712706 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/label:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.9 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "You lose..." ]
+}
+
+[sub_resource type="Animation" id=15]
+
+resource_name = "win"
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/color_rect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.712706 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/label:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.9 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "You win!!" ]
+}
+
+[sub_resource type="GDScript" id=9]
+
+script/source = "extends Area2D
+
+func queue_free():
+	#Play a sound?
+	$shape.disabled = true
+	$tween.interpolate_property(self, \"position\", position, position + 
+		Vector2(0, -32), 0.5, Tween.TRANS_BACK, Tween.EASE_IN_OUT)
+	$tween.interpolate_property($sprite, \"self_modulate\", $sprite.self_modulate,
+		Color(1.0, 1.0, 1.0, 0.0), 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	$tween.start()
+	yield($tween, \"tween_completed\")
+	.queue_free()"
+
+[sub_resource type="RectangleShape2D" id=12]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 32 )
+
+[sub_resource type="RectangleShape2D" id=13]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 32 )
+
+[sub_resource type="SpriteFrames" id=1]
+
+animations = [ {
+"frames": [ ExtResource( 8 ) ],
+"loop": false,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": false,
+"name": "dash",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": false,
+"name": "fall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ) ],
+"loop": true,
+"name": "walk",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 15 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
+} ]
+
+[sub_resource type="GDScript" id=2]
+
+script/source = "extends AnimatedSprite
+onready var initial_scale = get_scale()
+enum directions {RIGHT, LEFT}
+
+func _on_player_direction_changed(new_direction):
+	if new_direction > 0:
+		flip_sprites(RIGHT)
+	else:
+		flip_sprites(LEFT)
+
+func _on_player_perform_action(action):
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"dash\":
+			play(\"dash\")
+		\"wall\":
+			play(\"wall\")
+		\"fall\":
+			play(\"fall\")
+
+func flip_sprites(direction):
+	if direction == RIGHT:
+		scale.x = initial_scale.x
+	else:
+		scale.x = initial_scale.x * -1"
+
+[sub_resource type="GDScript" id=3]
+
+script/source = "extends \"res://addons/platform_actors/player_platform_actor.gd\"
+
+func _on_pick_area_entered(area):
+	if \"pickup\" in area.get_groups():
+		area.queue_free()
+
+func _on_stomp_area_entered(area):
+	if \"enemy\" in area.get_groups():
+		var n = (global_position - area.global_position)
+		n = n.normalized()
+		if n.y > 0:
+			return
+		jumps = max_jumps
+		jump()
+		area.get_parent().queue_free()"
+
+[sub_resource type="RectangleShape2D" id=4]
+
+custom_solver_bias = 0.0
+extents = Vector2( 16, 24 )
+
+[sub_resource type="CircleShape2D" id=5]
+
+custom_solver_bias = 0.0
+radius = 32.9848
+
+[sub_resource type="RectangleShape2D" id=6]
+
+custom_solver_bias = 0.0
+extents = Vector2( 24, 10 )
+
+[sub_resource type="SpriteFrames" id=7]
+
+animations = [ {
+"frames": [ ExtResource( 18 ) ],
+"loop": false,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 19 ) ],
+"loop": false,
+"name": "dash",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 20 ) ],
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 21 ) ],
+"loop": false,
+"name": "fall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 22 ), ExtResource( 23 ), ExtResource( 24 ) ],
+"loop": true,
+"name": "walk",
+"speed": 8.0
+}, {
+"frames": [ ExtResource( 25 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
+} ]
+
+[sub_resource type="GDScript" id=8]
+
+script/source = "extends AnimatedSprite
+onready var initial_scale = get_scale()
+enum directions {RIGHT, LEFT}
+
+func _on_player_direction_changed(new_direction):
+	if new_direction > 0:
+		flip_sprites(RIGHT)
+	else:
+		flip_sprites(LEFT)
+
+func _on_player_perform_action(action):
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"dash\":
+			play(\"dash\")
+		\"wall\":
+			play(\"wall\")
+		\"fall\":
+			play(\"fall\")
+
+func flip_sprites(direction):
+	if direction == RIGHT:
+		scale.x = initial_scale.x
+	else:
+		scale.x = initial_scale.x * -1"
+
+[sub_resource type="LineShape2D" id=11]
+
+custom_solver_bias = 0.0
+normal = Vector2( 0, -1 )
+d = 0.0
+
+[node name="level_blue" instance=ExtResource( 1 )]
+
+script = SubResource( 10 )
+
+[node name="interface" parent="." index="0"]
+
+pause_mode = 2
+_sections_unfolded = [ "Pause" ]
+
+[node name="control" parent="interface" index="0"]
+
+pause_mode = 1
+theme = ExtResource( 2 )
+_sections_unfolded = [ "Pause", "Theme" ]
+
+[node name="progress_bar" type="ProgressBar" parent="interface/control" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 456.0
+margin_top = 32.0
+margin_right = 592.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 0
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+page = 0.0
+value = 0.0
+exp_edit = false
+rounded = false
+percent_visible = false
+
+[node name="time" parent="interface/control" index="1"]
+
+editor/display_folded = false
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 412.0
+margin_top = -40.0
+margin_right = 556.0
+margin_bottom = 28.0
+
+[node name="title" parent="interface/control/time" index="0"]
+
+margin_right = 144.0
+margin_bottom = 23.0
+size_flags_horizontal = 7
+size_flags_vertical = 0
+align = 1
+valign = 1
+_sections_unfolded = [ "Size Flags" ]
+
+[node name="spam" parent="interface/control/time" index="1"]
+
+visible = false
+margin_top = 37.0
+margin_right = 144.0
+margin_bottom = 60.0
+
+[node name="timer" parent="interface/control/time/spam" index="0"]
+
+wait_time = 30.0
+
+[node name="coins" parent="interface/control" index="2"]
+
+editor/display_folded = false
+
+[node name="coin" parent="interface/control/coins" index="0"]
+
+stretch_mode = 6
+_sections_unfolded = [ "Rect", "Visibility" ]
+
+[node name="amount" parent="interface/control/coins" index="1"]
+
+margin_right = 195.0
+
+[node name="score" parent="interface/control" index="3"]
+
+visible = false
+
+[node name="color_rect" type="ColorRect" parent="interface/control" index="4"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = -160.0
+margin_right = 1024.0
+margin_bottom = 680.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0, 0, 0, 0 )
+_sections_unfolded = [ "Mouse" ]
+
+[node name="label" type="Label" parent="interface/control" index="5"]
+
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 408.0
+margin_top = 200.0
+margin_right = 616.0
+margin_bottom = 256.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "You win!!"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Visibility" ]
+
+[node name="button" type="Button" parent="interface/control" index="6"]
+
+pause_mode = 2
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 432.0
+margin_top = 256.0
+margin_right = 593.75
+margin_bottom = 310.75
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "play again"
+flat = false
+align = 1
+_sections_unfolded = [ "Pause" ]
+
+[node name="animator" type="AnimationPlayer" parent="interface" index="1"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/coins = SubResource( 16 )
+anims/lose = SubResource( 14 )
+anims/win = SubResource( 15 )
+blend_times = [  ]
+
+[node name="coins" parent="." index="1"]
+
+editor/display_folded = true
+
+[node name="coin" parent="coins" index="0" instance=ExtResource( 3 )]
+
+position = Vector2( 784, 280 )
+script = SubResource( 9 )
+
+[node name="coin2" parent="coins" index="1" instance=ExtResource( 3 )]
+
+position = Vector2( 296, 296 )
+script = SubResource( 9 )
+
+[node name="coin3" parent="coins" index="2" instance=ExtResource( 3 )]
+
+position = Vector2( 224, 120 )
+script = SubResource( 9 )
+
+[node name="coin4" parent="coins" index="3" instance=ExtResource( 3 )]
+
+position = Vector2( 704, 216 )
+script = SubResource( 9 )
+
+[node name="coin5" parent="coins" index="4" instance=ExtResource( 3 )]
+
+position = Vector2( 464, 64 )
+script = SubResource( 9 )
+
+[node name="coin6" parent="coins" index="5" instance=ExtResource( 3 )]
+
+position = Vector2( 856, 0 )
+script = SubResource( 9 )
+
+[node name="goal" parent="." index="3"]
+
+position = Vector2( 512, 384 )
+
+[node name="shape" parent="goal" index="0"]
+
+position = Vector2( -80, 32 )
+shape = SubResource( 12 )
+
+[node name="sprite" type="Sprite" parent="goal/shape" index="0"]
+
+position = Vector2( 24, 0 )
+texture = ExtResource( 4 )
+
+[node name="shape2" type="CollisionShape2D" parent="goal" index="1"]
+
+position = Vector2( 72, 32 )
+shape = SubResource( 13 )
+
+[node name="sprite" type="Sprite" parent="goal/shape2" index="0"]
+
+position = Vector2( 24, 0 )
+texture = ExtResource( 5 )
+
+[node name="tile_map" parent="." index="6"]
+
+tile_set = ExtResource( 6 )
+collision_layer = 1024
+collision_mask = 1024
+tile_data = PoolIntArray( 196608, -1610612736, 0, 196611, 8, 0, 262144, -1610612736, 0, 327680, -1610612736, 0, 393216, -1610612736, 0, 458752, -1610612735, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 524288, 4, 0, 524289, 4, 0, 524290, 2, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 4, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 3, 0, 589828, 4, 0, 589829, 4, 0, 589830, 2, 0, 589831, 4, 0 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="tile_map_red" type="TileMap" parent="." index="7"]
+
+mode = 0
+tile_set = ExtResource( 7 )
+cell_size = Vector2( 64, 64 )
+cell_quadrant_size = 16
+cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+cell_half_offset = 2
+cell_tile_origin = 0
+cell_y_sort = false
+cell_clip_uv = false
+collision_use_kinematic = false
+collision_friction = 1.0
+collision_bounce = 0.0
+collision_layer = 2048
+collision_mask = 2048
+occluder_light_mask = 1
+format = 1
+tile_data = PoolIntArray( 131085, 8, 0, 196623, -1073741824, 0, 262159, -1073741824, 0, 327691, 8, 0, 327695, -1073741824, 0, 393231, -1073741824, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 1, 0, 524296, 4, 0, 524297, 4, 0, 524298, 2, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 3, 0, 524303, 2, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 3, 0, 589837, 4, 0, 589838, 4, 0, 589839, 4, 0 )
+_sections_unfolded = [ "Collision" ]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="camera" parent="." index="8"]
+
+position = Vector2( 512, 256 )
+
+[node name="player" parent="." index="9"]
+
+position = Vector2( 336, 408 )
+collision_layer = 1024
+collision_mask = 1024
+_sections_unfolded = [ "Collision" ]
+max_jumps = 1
+left = "left_1"
+right = "right_1"
+up = "up_1"
+down = "down_1"
+jump = "jump_1"
+dash = "dash_1"
+
+[node name="camera_rig" parent="player" index="2"]
+
+remote_path = NodePath("")
+
+[node name="pick_area" parent="player" index="3" groups=[
+"player",
+"blue",
+]]
+
+[node name="animated_sprite" type="AnimatedSprite" parent="player" index="5"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 1 )
+animation = "idle"
+script = SubResource( 2 )
+
+[node name="player2" type="KinematicBody2D" parent="." index="10" groups=[
+"player",
+]]
+
+editor/display_folded = true
+position = Vector2( 760, 408 )
+input_pickable = false
+collision_layer = 2048
+collision_mask = 2048
+collision/safe_margin = 0.08
+script = SubResource( 3 )
+_sections_unfolded = [ "Collision" ]
+__meta__ = {
+"_editor_icon": ExtResource( 16 )
+}
+walk_speed = 300
+jump_height = 800
+wall_jump_length = 400
+max_jumps = 2
+dash_length = 0
+dash_speed = 1
+climb_speed = 400
+left = "left_2"
+right = "right_2"
+up = "up_2"
+down = "down_2"
+jump = "jump_2"
+dash = "dash_2"
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="player2" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 4 )
+
+[node name="state_machine" parent="player2" index="1" instance=ExtResource( 17 )]
+
+[node name="camera_rig" type="RemoteTransform2D" parent="player2" index="2"]
+
+remote_path = NodePath("")
+use_global_coordinates = true
+update_position = true
+update_rotation = true
+update_scale = true
+
+[node name="pick_area" type="Area2D" parent="player2" index="3" groups=[
+"player",
+"red",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="player2/pick_area" index="0"]
+
+shape = SubResource( 5 )
+
+[node name="stomp_area" type="Area2D" parent="player2" index="4"]
+
+editor/display_folded = true
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="player2/stomp_area" index="0"]
+
+position = Vector2( 0, -8 )
+shape = SubResource( 6 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="player2" index="5"]
+
+position = Vector2( 0, -22.6669 )
+frames = SubResource( 7 )
+animation = "idle"
+script = SubResource( 8 )
+
+[node name="void" type="Area2D" parent="." index="11"]
+
+editor/display_folded = true
+position = Vector2( 1440, 736 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="void" index="0"]
+
+shape = SubResource( 11 )
+
+[connection signal="timeout" from="interface/control/time/spam/timer" to="." method="_on_timer_timeout"]
+
+[connection signal="area_shape_entered" from="goal" to="." method="_on_goal_area_shape_entered"]
+
+[connection signal="area_shape_exited" from="goal" to="." method="_on_goal_area_shape_exited"]
+
+[connection signal="direction_changed" from="player" to="player/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="player" to="player/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="direction_changed" from="player2" to="player2/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="player2" to="player2/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="area_entered" from="player2/pick_area" to="player2" method="_on_pick_area_entered"]
+
+[connection signal="area_entered" from="player2/stomp_area" to="player2" method="_on_stomp_area_entered"]
+
+[connection signal="area_entered" from="void" to="." method="_on_void_area_entered"]
+
+
