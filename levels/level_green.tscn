@@ -1,58 +1,122 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://levels/level_blue.tscn" type="PackedScene" id=1]
+[ext_resource path="res://levels/level_template.tscn" type="PackedScene" id=1]
 [ext_resource path="res://levels/tilemap/green/tiles/tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://levels/tilemap/green/player/playerGreen_stand.png" type="Texture" id=3]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_swim1.png" type="Texture" id=4]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_up1.png" type="Texture" id=5]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk4.png" type="Texture" id=6]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk1.png" type="Texture" id=7]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk2.png" type="Texture" id=8]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk3.png" type="Texture" id=9]
-[ext_resource path="res://levels/tilemap/green/player/playerGreen_swim2.png" type="Texture" id=10]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_swim2.png" type="Texture" id=4]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_swim1.png" type="Texture" id=5]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_up1.png" type="Texture" id=6]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk4.png" type="Texture" id=7]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk1.png" type="Texture" id=8]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk2.png" type="Texture" id=9]
+[ext_resource path="res://levels/tilemap/green/player/playerGreen_walk3.png" type="Texture" id=10]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 48, 48 )
+
+[sub_resource type="SpriteFrames" id=2]
 
 animations = [ {
 "frames": [ ExtResource( 3 ) ],
-"loop": true,
+"loop": false,
 "name": "idle",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 4 ) ],
-"loop": true,
-"name": "dash",
+"loop": false,
+"name": "wall",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
-"loop": true,
-"name": "jump",
+"loop": false,
+"name": "dash",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
-"loop": true,
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": false,
 "name": "fall",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ) ],
 "loop": true,
 "name": "walk",
 "speed": 8.0
-}, {
-"frames": [ ExtResource( 10 ) ],
-"loop": true,
-"name": "wall",
-"speed": 5.0
 } ]
+
+[sub_resource type="GDScript" id=3]
+
+script/source = "extends AnimatedSprite
+onready var initial_scale = get_scale()
+enum directions {RIGHT, LEFT}
+
+func _on_player_direction_changed(new_direction):
+	if new_direction > 0:
+		flip_sprites(RIGHT)
+	else:
+		flip_sprites(LEFT)
+
+func _on_player_perform_action(action):
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"dash\":
+			play(\"dash\")
+		\"wall\":
+			play(\"wall\")
+		\"fall\":
+			play(\"fall\")
+
+func flip_sprites(direction):
+	if direction == RIGHT:
+		scale.x = initial_scale.x
+	else:
+		scale.x = initial_scale.x * -1"
 
 [node name="level_green" instance=ExtResource( 1 )]
 
-[node name="tile_map" parent="." index="0"]
+[node name="interface" parent="." index="0"]
+
+editor/display_folded = false
+
+[node name="control" parent="interface" index="0"]
+
+visible = false
+
+[node name="goal" parent="." index="3"]
+
+editor/display_folded = false
+position = Vector2( 120, -1728 )
+
+[node name="shape" parent="goal" index="0"]
+
+position = Vector2( -72, 16 )
+shape = SubResource( 1 )
+
+[node name="tile_map" parent="." index="6"]
 
 tile_set = ExtResource( 2 )
+tile_data = PoolIntArray( -1703936, 8, 0, -1703935, 8, 0, -1703934, 8, 0, -1703933, 8, 0, -1703932, 8, 0, -1638393, -1073741824, 0, -1572857, -1073741824, 0, -1507321, -1073741824, 0, -1441785, -1073741824, 0, -1245177, -1073741824, 0, -1179641, -1073741824, 0, -1114105, -1073741824, 0, -1048569, -1073741824, 0, -983037, -1610612736, 0, -983033, -1073741824, 0, -917501, -1610612736, 0, -917497, -1073741824, 0, -851965, -1610612736, 0, -786429, -1610612736, 0, -589815, -1073741824, 0, -524284, 6, 0, -524279, -1073741824, 0, -458743, -1073741824, 0, -393207, -1073741824, 0, -327675, -1610612736, 0, -327671, -1073741824, 0, -262139, -1610612736, 0, -262135, -1073741824, 0, -196603, -1610612736, 0, -196599, -1073741824, 0, -131067, -1610612736, 0, -65531, -1610612736, 0, 5, -1610612736, 0, 65541, -1610612736, 0, 131077, -1610612736, 0, 196613, -1610612736, 0, 327687, 6, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 524288, 4, 0, 524289, 4, 0, 524290, 2, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 4, 0, 524296, 3, 0, 524297, 4, 0, 524298, 3, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 4, 0, 589824, 4, 0, 589825, 4, 0, 589826, 4, 0, 589827, 4, 0, 589828, 2, 0, 589829, 4, 0, 589830, 4, 0, 589831, 4, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 4, 0, 589837, 4, 0, 589838, 4, 0, 589839, 4, 0 )
 
-[node name="animated_sprite" parent="platform_actor_2d" index="2"]
+[node name="animated_sprite" type="AnimatedSprite" parent="player" index="5"]
 
-frames = SubResource( 1 )
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 2 )
+animation = "idle"
+script = SubResource( 3 )
+
+[connection signal="direction_changed" from="player" to="player/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="player" to="player/animated_sprite" method="_on_player_perform_action"]
 
 

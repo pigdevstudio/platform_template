@@ -1,151 +1,194 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
-[ext_resource path="res://levels/level_blue.tscn" type="PackedScene" id=1]
+[ext_resource path="res://levels/level_template.tscn" type="PackedScene" id=1]
 [ext_resource path="res://levels/tilemap/yellow/tiles/tileset.tres" type="TileSet" id=2]
 [ext_resource path="res://levels/tilemap/yellow/player/playerGrey_stand.png" type="Texture" id=3]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim1.png" type="Texture" id=4]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_up2.png" type="Texture" id=5]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk4.png" type="Texture" id=6]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk1.png" type="Texture" id=7]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk2.png" type="Texture" id=8]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk3.png" type="Texture" id=9]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim2.png" type="Texture" id=10]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim2.png" type="Texture" id=4]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim1.png" type="Texture" id=5]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_up1.png" type="Texture" id=6]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk4.png" type="Texture" id=7]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk1.png" type="Texture" id=8]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk2.png" type="Texture" id=9]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk3.png" type="Texture" id=10]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="GDScript" id=1]
 
-animations = [ {
-"frames": [ ExtResource( 3 ) ],
-"loop": true,
-"name": "idle",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 4 ) ],
-"loop": true,
-"name": "dash",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 5 ) ],
-"loop": true,
-"name": "jump",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 6 ) ],
-"loop": true,
-"name": "fall",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
-"loop": true,
-"name": "walk",
-"speed": 8.0
-}, {
-"frames": [ ExtResource( 10 ) ],
-"loop": true,
-"name": "wall",
-"speed": 5.0
-} ]
+script/source = "extends Node2D
+
+func _on_goal_area_entered(area):
+	if \"player\" in area.get_parent().get_groups():
+		print(\"finished\")
+
+
+func _on_void_area_entered(area):
+	if \"player\" in area.get_parent().get_groups():
+		get_tree().reload_current_scene()
+"
 
 [sub_resource type="RectangleShape2D" id=2]
 
 custom_solver_bias = 0.0
 extents = Vector2( 10, 680 )
 
+[sub_resource type="SpriteFrames" id=3]
+
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": false,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": false,
+"name": "dash",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": false,
+"name": "fall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ) ],
+"loop": true,
+"name": "walk",
+"speed": 8.0
+} ]
+
+[sub_resource type="GDScript" id=4]
+
+script/source = "extends AnimatedSprite
+onready var initial_scale = get_scale()
+enum directions {RIGHT, LEFT}
+
+func _on_player_direction_changed(new_direction):
+	if new_direction > 0:
+		flip_sprites(RIGHT)
+	else:
+		flip_sprites(LEFT)
+
+func _on_player_perform_action(action):
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"dash\":
+			play(\"dash\")
+		\"wall\":
+			play(\"wall\")
+		\"fall\":
+			play(\"fall\")
+
+func flip_sprites(direction):
+	if direction == RIGHT:
+		scale.x = initial_scale.x
+	else:
+		scale.x = initial_scale.x * -1"
+
+[sub_resource type="LineShape2D" id=5]
+
+custom_solver_bias = 0.0
+normal = Vector2( 0, -1 )
+d = 0.0
+
 [node name="level_blue" index="0" instance=ExtResource( 1 )]
 
-[node name="tile_map2" type="TileMap" parent="." index="0"]
+script = SubResource( 1 )
 
-modulate = Color( 0.769531, 0.769531, 0.769531, 1 )
-mode = 0
-tile_set = ExtResource( 2 )
-cell_size = Vector2( 32, 32 )
-cell_quadrant_size = 16
-cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-cell_half_offset = 2
-cell_tile_origin = 0
-cell_y_sort = false
-cell_clip_uv = false
-collision_use_kinematic = false
-collision_friction = 1.0
-collision_bounce = 0.0
-collision_layer = 1
-collision_mask = 1
-occluder_light_mask = 1
-format = 1
-tile_data = PoolIntArray( 262183, 4, 0, 262185, 4, 0, 262187, 4, 0, 262189, 4, 0, 262191, 4, 0, 393255, 4, 0, 393257, 2, 0, 393259, 4, 0, 393261, 4, 0, 393263, 4, 0, 524327, 4, 0, 524329, 4, 0, 524331, 4, 0, 524333, 4, 0, 524335, 4, 0, 589867, 4, 0, 655399, 4, 0, 655401, 4, 0, 655403, 3, 0, 655405, 4, 0, 655407, 4, 0, 786471, 4, 0, 786473, 3, 0, 786475, 4, 0, 786477, 2, 0, 786479, 4, 0, 852015, 4, 0 )
-_sections_unfolded = [ "Cell", "Visibility" ]
+[node name="interface" parent="." index="0"]
 
-[node name="tile_map" parent="." index="1"]
+editor/display_folded = false
 
-tile_set = ExtResource( 2 )
-tile_data = PoolIntArray( 131074, 6, 0, 131091, 8, 0, 131092, 8, 0, 131093, 8, 0, 131094, 8, 0, 131095, 8, 0, 131096, 8, 0, 196615, 6, 0, 262155, 6, 0, 327704, 5, 0, 327705, 0, 0, 327706, 0, 0, 327707, 0, 0, 327708, 0, 0, 327709, 0, 0, 327710, 0, 0, 393220, 5, 0, 393221, 536870912, 0, 393222, 536870912, 0, 393223, 536870912, 0, 393224, 536870912, 0, 393225, 536870912, 0, 393226, 536870917, 0, 393239, 5, 0, 393240, 1, 0, 393241, 4, 0, 393242, 4, 0, 393243, 4, 0, 393244, 4, 0, 393245, 4, 0, 393246, 4, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 1, 0, 458757, 2, 0, 458758, 536870916, 0, 458759, 536870916, 0, 458760, 536870916, 0, 458761, 2, 0, 458762, 536870913, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458771, 0, 0, 458772, 0, 0, 458773, 0, 0, 458774, 0, 0, 458775, 1, 0, 458776, 4, 0, 458777, 3, 0, 458778, 4, 0, 458779, 4, 0, 458780, 4, 0, 458781, 4, 0, 458782, 4, 0, 524288, 2, 0, 524289, 4, 0, 524290, 4, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 3, 0, 524296, 4, 0, 524297, 4, 0, 524298, 4, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 3, 0, 524304, 4, 0, 524305, 4, 0, 524306, 4, 0, 524307, 3, 0, 524308, 2, 0, 524309, 4, 0, 524310, 4, 0, 524311, 4, 0, 524312, 4, 0, 524313, 2, 0, 524314, 4, 0, 524315, 4, 0, 524316, 4, 0, 524317, 2, 0, 524318, 4, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 4, 0, 589828, 4, 0, 589829, 4, 0, 589830, 4, 0, 589831, 4, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 4, 0, 589837, 4, 0, 589838, 2, 0, 589839, 4, 0, 589840, 4, 0, 589841, 4, 0, 589842, 4, 0, 589843, 4, 0, 589844, 4, 0, 589845, 4, 0, 589846, 4, 0, 589847, 4, 0, 589848, 4, 0, 589849, 4, 0, 589850, 4, 0, 589851, 4, 0, 589852, 4, 0, 589853, 4, 0, 589854, 3, 0 )
+[node name="time" parent="interface/control" index="0"]
 
-[node name="animated_sprite" parent="platform_actor_2d" index="2"]
+editor/display_folded = false
 
-frames = SubResource( 1 )
+[node name="timer" parent="interface/control/time/spam" index="0"]
 
-[node name="camera_rig" type="RemoteTransform2D" parent="platform_actor_2d" index="3"]
+wait_time = 30.0
 
-remote_path = NodePath("../../camera_2d")
-use_global_coordinates = true
-update_position = true
-update_rotation = true
-update_scale = true
+[node name="coins" parent="interface/control" index="1"]
 
-[node name="wall_left" type="StaticBody2D" parent="." index="3"]
+visible = false
+
+[node name="score" parent="interface/control" index="2"]
+
+visible = false
+
+[node name="goal" parent="." index="3"]
+
+position = Vector2( 3560, 208 )
+
+[node name="wall_left" parent="." index="4"]
 
 position = Vector2( -8, -40 )
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
 friction = 1.0
-bounce = 0.0
 
-[node name="shape" type="CollisionShape2D" parent="wall_left" index="0"]
+[node name="shape" parent="wall_left" index="0"]
 
 shape = SubResource( 2 )
 
-[node name="wall_right" type="StaticBody2D" parent="." index="4"]
+[node name="wall_right" parent="." index="5"]
 
-position = Vector2( 1992, -40 )
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
+position = Vector2( 3656, -40 )
 friction = 1.0
-bounce = 0.0
 
-[node name="shape" type="CollisionShape2D" parent="wall_right" index="0"]
+[node name="shape" parent="wall_right" index="0"]
 
 shape = SubResource( 2 )
 
-[node name="camera_2d" type="Camera2D" parent="." index="5"]
+[node name="tile_map" parent="." index="6"]
 
-position = Vector2( 360, 328 )
-anchor_mode = 1
-rotating = false
-current = true
-zoom = Vector2( 1, 1 )
-limit_left = 0
-limit_top = -10000000
-limit_right = 1985
-limit_bottom = 600
-limit_smoothed = false
-drag_margin_h_enabled = false
-drag_margin_v_enabled = false
-smoothing_enabled = false
-smoothing_speed = 5.0
-offset_v = 0.0
-offset_h = 0.0
-drag_margin_left = 0.2
-drag_margin_top = 0.2
-drag_margin_right = 0.2
-drag_margin_bottom = 0.2
-editor_draw_screen = true
-editor_draw_limits = true
-editor_draw_drag_margin = false
-_sections_unfolded = [ "Editor", "Limit" ]
+tile_set = ExtResource( 2 )
+tile_data = PoolIntArray( 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458778, 0, 0, 458779, 0, 0, 458780, 0, 0, 458781, 0, 0, 458782, 0, 0, 458783, 0, 0, 458784, 0, 0, 458785, 0, 0, 458786, 0, 0, 458787, 0, 0, 524288, 2, 0, 524289, 4, 0, 524290, 4, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 3, 0, 524296, 4, 0, 524297, 4, 0, 524298, 4, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 3, 0, 524304, 4, 0, 524305, 4, 0, 524306, 4, 0, 524314, 3, 0, 524315, 4, 0, 524316, 4, 0, 524317, 4, 0, 524318, 2, 0, 524319, 3, 0, 524320, 4, 0, 524321, 4, 0, 524322, 4, 0, 524323, 4, 0, 524331, 0, 0, 524332, 0, 0, 524333, 0, 0, 524334, 0, 0, 524335, 0, 0, 524336, 0, 0, 524337, 0, 0, 524338, 0, 0, 524339, 0, 0, 524340, 0, 0, 524341, 0, 0, 524342, 0, 0, 524343, 0, 0, 524344, 0, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 4, 0, 589828, 4, 0, 589829, 4, 0, 589830, 4, 0, 589831, 4, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 4, 0, 589837, 4, 0, 589838, 2, 0, 589839, 4, 0, 589840, 4, 0, 589841, 4, 0, 589842, 4, 0, 589867, 4, 0, 589868, 4, 0, 589869, 2, 0, 589870, 4, 0, 589871, 4, 0, 589872, 4, 0, 589873, 3, 0, 589874, 4, 0, 589875, 4, 0, 589876, 4, 0, 589877, 4, 0, 589878, 2, 0, 589879, 4, 0, 589880, 4, 0 )
+
+[node name="camera" parent="." index="7"]
+
+position = Vector2( 384, 344 )
+limit_right = 3647
+
+[node name="player" parent="." index="8"]
+
+position = Vector2( 384, 344 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="player" index="5"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 3 )
+animation = "idle"
+script = SubResource( 4 )
+
+[node name="void" type="Area2D" parent="." index="9"]
+
+position = Vector2( 1440, 736 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="void" index="0"]
+
+shape = SubResource( 5 )
+
+[connection signal="direction_changed" from="player" to="player/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="player" to="player/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="area_entered" from="void" to="." method="_on_void_area_entered"]
 
 

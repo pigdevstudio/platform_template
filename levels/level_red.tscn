@@ -1,58 +1,804 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=28 format=2]
 
-[ext_resource path="res://levels/level_blue.tscn" type="PackedScene" id=1]
-[ext_resource path="res://levels/tilemap/red/tiles/tileset.tres" type="TileSet" id=2]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_stand.png" type="Texture" id=3]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_swim1.png" type="Texture" id=4]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_up2.png" type="Texture" id=5]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk4.png" type="Texture" id=6]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk1.png" type="Texture" id=7]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk2.png" type="Texture" id=8]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk3.png" type="Texture" id=9]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_swim2.png" type="Texture" id=10]
+[ext_resource path="res://levels/level_template.tscn" type="PackedScene" id=1]
+[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=2]
+[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=3]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_stand.png" type="Texture" id=4]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim2.png" type="Texture" id=5]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim1.png" type="Texture" id=6]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_up1.png" type="Texture" id=7]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk4.png" type="Texture" id=8]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk1.png" type="Texture" id=9]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk2.png" type="Texture" id=10]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk3.png" type="Texture" id=11]
+[ext_resource path="res://levels/tilemap/red/tiles/tileset.tres" type="TileSet" id=12]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_stand.png" type="Texture" id=13]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_swim2.png" type="Texture" id=14]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_swim1.png" type="Texture" id=15]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_up1.png" type="Texture" id=16]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk4.png" type="Texture" id=17]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk1.png" type="Texture" id=18]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk2.png" type="Texture" id=19]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk3.png" type="Texture" id=20]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends \"res://addons/platform_actors/platform_actor.gd\"
+
+func wander():
+	$timer.start()
+	yield($timer, \"timeout\")
+	set_direction(direction * -1)
+	walk()
+	yield($timer, \"timeout\")
+	stop()
+	$timer.wait_time = 1.0
+	yield($timer, \"timeout\")
+	wander()
+	$timer.wait_time = 2.0
+
+func _on_visibility_notifier_2d_screen_exited():
+	print(\"stop\")
+	stop()
+
+func _on_visibility_notifier_2d_screen_entered():
+	print(\"wander\")
+	wander()
+
+func _ready():
+	set_direction(1)"
+
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 16, 24 )
+
+[sub_resource type="CircleShape2D" id=3]
+
+custom_solver_bias = 0.0
+radius = 32.9848
+
+[sub_resource type="SpriteFrames" id=4]
 
 animations = [ {
-"frames": [ ExtResource( 3 ) ],
-"loop": true,
+"frames": [ ExtResource( 4 ) ],
+"loop": false,
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
-"loop": true,
-"name": "dash",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 5 ) ],
-"loop": true,
-"name": "jump",
+"loop": false,
+"name": "wall",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
-"loop": true,
+"loop": false,
+"name": "dash",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ) ],
+"loop": false,
 "name": "fall",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ) ],
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
 "loop": true,
 "name": "walk",
 "speed": 8.0
-}, {
-"frames": [ ExtResource( 10 ) ],
-"loop": true,
-"name": "wall",
-"speed": 5.0
 } ]
 
-[node name="level_red" index="0" instance=ExtResource( 1 )]
+[sub_resource type="GDScript" id=5]
 
-[node name="tile_map" parent="." index="0"]
+script/source = "extends AnimatedSprite
+onready var initial_scale = get_scale()
+enum directions {RIGHT, LEFT}
 
-tile_set = ExtResource( 2 )
+func _on_player_direction_changed(new_direction):
+	if new_direction > 0:
+		flip_sprites(RIGHT)
+	else:
+		flip_sprites(LEFT)
 
-[node name="animated_sprite" parent="platform_actor_2d" index="2"]
+func _on_player_perform_action(action):
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"dash\":
+			play(\"dash\")
+		\"wall\":
+			play(\"wall\")
+		\"fall\":
+			play(\"fall\")
 
-frames = SubResource( 1 )
+func flip_sprites(direction):
+	if direction == RIGHT:
+		scale.x = initial_scale.x
+	else:
+		scale.x = initial_scale.x * -1"
+
+[sub_resource type="SpriteFrames" id=6]
+
+animations = [ {
+"frames": [ ExtResource( 13 ) ],
+"loop": false,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 14 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 15 ) ],
+"loop": false,
+"name": "dash",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 16 ) ],
+"loop": false,
+"name": "jump",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 17 ) ],
+"loop": false,
+"name": "fall",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ) ],
+"loop": true,
+"name": "walk",
+"speed": 8.0
+} ]
+
+[sub_resource type="GDScript" id=7]
+
+script/source = "extends AnimatedSprite
+onready var initial_scale = get_scale()
+enum directions {RIGHT, LEFT}
+
+func _on_player_direction_changed(new_direction):
+	if new_direction > 0:
+		flip_sprites(RIGHT)
+	else:
+		flip_sprites(LEFT)
+
+func _on_player_perform_action(action):
+	match action:
+		\"idle\":
+			play(\"idle\")
+		\"walk\":
+			play(\"walk\")
+		\"jump\":
+			play(\"jump\")
+		\"dash\":
+			play(\"dash\")
+		\"wall\":
+			play(\"wall\")
+		\"fall\":
+			play(\"fall\")
+
+func flip_sprites(direction):
+	if direction == RIGHT:
+		scale.x = initial_scale.x
+	else:
+		scale.x = initial_scale.x * -1"
+
+[node name="level_red" instance=ExtResource( 1 )]
+
+[node name="interface" parent="." index="0"]
+
+editor/display_folded = false
+
+[node name="coins" parent="interface/control" index="1"]
+
+visible = false
+
+[node name="enemies" parent="." index="2"]
+
+editor/display_folded = true
+
+[node name="enemy" type="KinematicBody2D" parent="enemies" index="0" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 768, 424 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="enemy2" type="KinematicBody2D" parent="enemies" index="1" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 1496, 424 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy2" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy2" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy2" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy2/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy2" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy2" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy2" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="enemy3" type="KinematicBody2D" parent="enemies" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 1776, 424 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy3" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy3" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy3" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy3/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy3" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy3" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy3" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="enemy4" type="KinematicBody2D" parent="enemies" index="3" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 2352, 424 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy4" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy4" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy4" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy4/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy4" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy4" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy4" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="enemy5" type="KinematicBody2D" parent="enemies" index="4" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 576, 0 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy5" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy5" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy5" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy5/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy5" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy5" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy5" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="enemy6" type="KinematicBody2D" parent="enemies" index="5" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 1240, -184 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy6" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy6" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy6" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy6/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy6" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy6" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy6" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="enemy7" type="KinematicBody2D" parent="enemies" index="6" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 936, -192 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = SubResource( 1 )
+__meta__ = {
+"_editor_icon": ExtResource( 2 )
+}
+walk_speed = 150
+jump_height = 800
+wall_jump_length = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 200
+climb_speed = 200
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy7" index="0"]
+
+position = Vector2( 0, -24 )
+shape = SubResource( 2 )
+
+[node name="state_machine" parent="enemies/enemy7" index="1" instance=ExtResource( 3 )]
+
+[node name="damage" type="Area2D" parent="enemies/enemy7" index="2" groups=[
+"enemy",
+]]
+
+editor/display_folded = true
+position = Vector2( 0, -24 )
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="shape" type="CollisionShape2D" parent="enemies/enemy7/damage" index="0"]
+
+shape = SubResource( 3 )
+
+[node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy7" index="3"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 4 )
+animation = "idle"
+script = SubResource( 5 )
+
+[node name="timer" type="Timer" parent="enemies/enemy7" index="4"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="visibility_notifier_2d" type="VisibilityNotifier2D" parent="enemies/enemy7" index="5"]
+
+position = Vector2( 0, -24 )
+scale = Vector2( 1.6, 1.7 )
+rect = Rect2( -10, -10, 20, 20 )
+
+[node name="goal" parent="." index="3"]
+
+position = Vector2( 2552, 208 )
+
+[node name="wall_right" parent="." index="5"]
+
+position = Vector2( 2696, 8 )
+
+[node name="tile_map" parent="." index="6"]
+
+tile_set = ExtResource( 12 )
+tile_data = PoolIntArray( -131058, 8, 0, -131057, 8, 0, -131056, 8, 0, -131055, 8, 0, -131054, 8, 0, -131053, 8, 0, -131052, 8, 0, -131051, 8, 0, -131050, 8, 0, -131049, 8, 0, -131048, 8, 0, 65539, 8, 0, 65540, 8, 0, 65541, 8, 0, 65542, 8, 0, 65543, 8, 0, 65544, 8, 0, 65545, 8, 0, 65546, 8, 0, 65547, 8, 0, 65548, 8, 0, 65549, 8, 0, 262148, 6, 0, 327690, 6, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458771, 0, 0, 458772, 0, 0, 458773, 0, 0, 458774, 0, 0, 458775, 0, 0, 458776, 0, 0, 458777, 0, 0, 458778, 0, 0, 458779, 0, 0, 458780, 0, 0, 458781, 0, 0, 458782, 0, 0, 458783, 0, 0, 458784, 0, 0, 458785, 0, 0, 458786, 0, 0, 458787, 0, 0, 458788, 0, 0, 458789, 0, 0, 458790, 0, 0, 458791, 0, 0, 458792, 0, 0, 458793, 0, 0, 524288, 4, 0, 524289, 4, 0, 524290, 4, 0, 524291, 4, 0, 524292, 2, 0, 524293, 4, 0, 524294, 4, 0, 524295, 4, 0, 524296, 4, 0, 524297, 3, 0, 524298, 4, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 4, 0, 524304, 4, 0, 524305, 4, 0, 524306, 4, 0, 524307, 4, 0, 524308, 4, 0, 524309, 4, 0, 524310, 4, 0, 524311, 4, 0, 524312, 4, 0, 524313, 4, 0, 524314, 4, 0, 524315, 4, 0, 524316, 4, 0, 524317, 4, 0, 524318, 4, 0, 524319, 4, 0, 524320, 4, 0, 524321, 4, 0, 524322, 4, 0, 524323, 4, 0, 524324, 4, 0, 524325, 4, 0, 524326, 4, 0, 524327, 4, 0, 524328, 4, 0, 524329, 4, 0, 589824, 4, 0, 589825, 4, 0, 589826, 4, 0, 589827, 3, 0, 589828, 4, 0, 589829, 4, 0, 589830, 4, 0, 589831, 2, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 3, 0, 589837, 4, 0, 589838, 4, 0, 589839, 4, 0, 589840, 4, 0, 589841, 4, 0, 589842, 4, 0, 589843, 4, 0, 589844, 4, 0, 589845, 4, 0, 589846, 4, 0, 589847, 4, 0, 589848, 4, 0, 589849, 4, 0, 589850, 4, 0, 589851, 4, 0, 589852, 4, 0, 589853, 4, 0, 589854, 4, 0, 589855, 4, 0, 589856, 4, 0, 589857, 4, 0, 589858, 4, 0, 589859, 4, 0, 589860, 4, 0, 589861, 4, 0, 589862, 4, 0, 589863, 4, 0, 589864, 4, 0, 589865, 4, 0 )
+
+[node name="camera" parent="." index="7"]
+
+limit_right = 2685
+
+[node name="animated_sprite" type="AnimatedSprite" parent="player" index="5"]
+
+position = Vector2( 0, -24.6669 )
+frames = SubResource( 6 )
+animation = "idle"
+script = SubResource( 7 )
+
+[connection signal="direction_changed" from="enemies/enemy" to="enemies/enemy/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy" to="enemies/enemy/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy/timer" to="enemies/enemy" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy/visibility_notifier_2d" to="enemies/enemy" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_entered" from="enemies/enemy/visibility_notifier_2d" to="enemies/enemy/timer" method="start"]
+
+[connection signal="screen_exited" from="enemies/enemy/visibility_notifier_2d" to="enemies/enemy" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="screen_exited" from="enemies/enemy/visibility_notifier_2d" to="enemies/enemy/timer" method="stop"]
+
+[connection signal="direction_changed" from="enemies/enemy2" to="enemies/enemy2/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy2" to="enemies/enemy2/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy2/timer" to="enemies/enemy2" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy2/visibility_notifier_2d" to="enemies/enemy2" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_entered" from="enemies/enemy2/visibility_notifier_2d" to="enemies/enemy2/timer" method="start"]
+
+[connection signal="screen_exited" from="enemies/enemy2/visibility_notifier_2d" to="enemies/enemy2" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="screen_exited" from="enemies/enemy2/visibility_notifier_2d" to="enemies/enemy2/timer" method="stop"]
+
+[connection signal="direction_changed" from="enemies/enemy3" to="enemies/enemy3/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy3" to="enemies/enemy3/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy3/timer" to="enemies/enemy3" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy3/visibility_notifier_2d" to="enemies/enemy3" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_entered" from="enemies/enemy3/visibility_notifier_2d" to="enemies/enemy3/timer" method="start"]
+
+[connection signal="screen_exited" from="enemies/enemy3/visibility_notifier_2d" to="enemies/enemy3" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="screen_exited" from="enemies/enemy3/visibility_notifier_2d" to="enemies/enemy3/timer" method="stop"]
+
+[connection signal="direction_changed" from="enemies/enemy4" to="enemies/enemy4/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy4" to="enemies/enemy4/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy4/timer" to="enemies/enemy4" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy4/visibility_notifier_2d" to="enemies/enemy4/timer" method="start"]
+
+[connection signal="screen_entered" from="enemies/enemy4/visibility_notifier_2d" to="enemies/enemy4" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_exited" from="enemies/enemy4/visibility_notifier_2d" to="enemies/enemy4/timer" method="stop"]
+
+[connection signal="screen_exited" from="enemies/enemy4/visibility_notifier_2d" to="enemies/enemy4" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="direction_changed" from="enemies/enemy5" to="enemies/enemy5/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy5" to="enemies/enemy5/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy5/timer" to="enemies/enemy5" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_entered" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5/timer" method="start"]
+
+[connection signal="screen_exited" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="screen_exited" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5/timer" method="stop"]
+
+[connection signal="direction_changed" from="enemies/enemy6" to="enemies/enemy6/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy6" to="enemies/enemy6/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy6/timer" to="enemies/enemy6" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_entered" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6/timer" method="start"]
+
+[connection signal="screen_exited" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="screen_exited" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6/timer" method="stop"]
+
+[connection signal="direction_changed" from="enemies/enemy7" to="enemies/enemy7/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="enemies/enemy7" to="enemies/enemy7/animated_sprite" method="_on_player_perform_action"]
+
+[connection signal="timeout" from="enemies/enemy7/timer" to="enemies/enemy7" method="wander"]
+
+[connection signal="screen_entered" from="enemies/enemy7/visibility_notifier_2d" to="enemies/enemy7" method="_on_visibility_notifier_2d_screen_entered"]
+
+[connection signal="screen_entered" from="enemies/enemy7/visibility_notifier_2d" to="enemies/enemy7/timer" method="start"]
+
+[connection signal="screen_exited" from="enemies/enemy7/visibility_notifier_2d" to="enemies/enemy7" method="_on_visibility_notifier_2d_screen_exited"]
+
+[connection signal="screen_exited" from="enemies/enemy7/visibility_notifier_2d" to="enemies/enemy7/timer" method="stop"]
+
+[connection signal="direction_changed" from="player" to="player/animated_sprite" method="_on_player_direction_changed"]
+
+[connection signal="perform_action" from="player" to="player/animated_sprite" method="_on_player_perform_action"]
 
 
