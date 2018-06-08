@@ -4,11 +4,11 @@ const PATH = "res://addons/platform_actors/"
 func _enter_tree():
 	add_custom_type("PlatformActor2D", "KinematicBody2D",
 		load(PATH + "platform_actor.gd"),
-		load(PATH + "icon.png")
+		load(PATH + "icon.svg")
 		)
 	add_custom_type("PlatformPlayer2D", "KinematicBody2D",
 		load(PATH + "player_platform_actor.gd"),
-		load(PATH + "icon.png")
+		load(PATH + "icon.svg")
 		)
 	get_tree().connect("node_added", self, "_on_scene_node_added")
 func _exit_tree():
