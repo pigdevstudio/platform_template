@@ -1,27 +1,193 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://levels/level_template.tscn" type="PackedScene" id=1]
-[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=2]
-[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=3]
-[ext_resource path="res://levels/tilemap/blue/player/playerBlue_stand.png" type="Texture" id=4]
-[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim2.png" type="Texture" id=5]
+[ext_resource path="res://interface/themes/red_theme.tres" type="Theme" id=2]
+[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=3]
+[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=4]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_stand.png" type="Texture" id=5]
 [ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim1.png" type="Texture" id=6]
 [ext_resource path="res://levels/tilemap/blue/player/playerBlue_up1.png" type="Texture" id=7]
 [ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk4.png" type="Texture" id=8]
 [ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk1.png" type="Texture" id=9]
 [ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk2.png" type="Texture" id=10]
 [ext_resource path="res://levels/tilemap/blue/player/playerBlue_walk3.png" type="Texture" id=11]
-[ext_resource path="res://levels/tilemap/red/tiles/tileset.tres" type="TileSet" id=12]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_stand.png" type="Texture" id=13]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_swim2.png" type="Texture" id=14]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_swim1.png" type="Texture" id=15]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_up1.png" type="Texture" id=16]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk4.png" type="Texture" id=17]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk1.png" type="Texture" id=18]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk2.png" type="Texture" id=19]
-[ext_resource path="res://levels/tilemap/red/player/playerRed_walk3.png" type="Texture" id=20]
+[ext_resource path="res://levels/tilemap/blue/player/playerBlue_swim2.png" type="Texture" id=12]
+[ext_resource path="res://levels/tilemap/red/flag.png" type="Texture" id=13]
+[ext_resource path="res://levels/tilemap/red/tiles/tileset.tres" type="TileSet" id=14]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_stand.png" type="Texture" id=15]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_swim1.png" type="Texture" id=16]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_up1.png" type="Texture" id=17]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk4.png" type="Texture" id=18]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk1.png" type="Texture" id=19]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk2.png" type="Texture" id=20]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_walk3.png" type="Texture" id=21]
+[ext_resource path="res://levels/tilemap/red/player/playerRed_swim2.png" type="Texture" id=22]
 
 [sub_resource type="GDScript" id=1]
+
+script/source = "extends Node2D
+
+onready var objective = $enemies.get_child_count()
+
+func _ready():
+	for c in $enemies.get_children():
+		c.connect(\"tree_exited\", self, \"_on_enemy_tree_exited\")
+		
+func _on_goal_area_entered(area):
+	print(\"player\")
+	if !area.is_in_group(\"player\"):
+		return
+	if objective > 0:
+		return
+	else:
+		$goal/shape/sprite.texture = load(\"res://levels/tilemap/red/flag_raised.png\")
+		trigger_animation(\"win\")
+	
+func _on_enemy_tree_exited():
+	objective -= 1
+	objective = max(objective, 0)
+	
+func trigger_animation(animation):
+	get_tree().paused = true
+	$interface/animator.play(animation)
+	yield($interface/animator, \"animation_finished\")
+	
+	$interface/control/button.show()
+	$interface/control/button.grab_focus()
+	yield($interface/control/button, \"button_up\")
+	get_tree().paused = false
+	get_tree().reload_current_scene()"
+
+[sub_resource type="Animation" id=5]
+
+resource_name = "coins"
+length = 0.5
+loop = false
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/coins/coin:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/coins/coin:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -11, -14 ), Vector2( 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/coins/coin:rect_size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 32, 42 ), Vector2( 53, 70 ), Vector2( 32, 42 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+
+resource_name = "lose"
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/color_rect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.712706 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/label:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.9 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "You lose..." ]
+}
+
+[sub_resource type="Animation" id=7]
+
+resource_name = "win"
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/color_rect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.712706 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/label:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.9 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "You win!!" ]
+}
+
+[sub_resource type="GDScript" id=2]
 
 script/source = "extends \"res://addons/platform_actors/platform_actor.gd\"
 
@@ -48,27 +214,22 @@ func _on_visibility_notifier_2d_screen_entered():
 func _ready():
 	set_direction(1)"
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=3]
 
 custom_solver_bias = 0.0
 extents = Vector2( 16, 24 )
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=4]
 
 custom_solver_bias = 0.0
 radius = 32.9848
 
-[sub_resource type="SpriteFrames" id=4]
+[sub_resource type="SpriteFrames" id=9]
 
 animations = [ {
-"frames": [ ExtResource( 4 ) ],
-"loop": false,
-"name": "idle",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 5 ) ],
 "loop": false,
-"name": "wall",
+"name": "idle",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
@@ -90,9 +251,14 @@ animations = [ {
 "loop": true,
 "name": "walk",
 "speed": 8.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
 } ]
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=10]
 
 script/source = "extends AnimatedSprite
 onready var initial_scale = get_scale()
@@ -125,41 +291,46 @@ func flip_sprites(direction):
 	else:
 		scale.x = initial_scale.x * -1"
 
-[sub_resource type="SpriteFrames" id=6]
+[sub_resource type="RectangleShape2D" id=12]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 32 )
+
+[sub_resource type="SpriteFrames" id=11]
 
 animations = [ {
-"frames": [ ExtResource( 13 ) ],
+"frames": [ ExtResource( 15 ) ],
 "loop": false,
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 14 ) ],
-"loop": false,
-"name": "wall",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 15 ) ],
+"frames": [ ExtResource( 16 ) ],
 "loop": false,
 "name": "dash",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 16 ) ],
+"frames": [ ExtResource( 17 ) ],
 "loop": false,
 "name": "jump",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 17 ) ],
+"frames": [ ExtResource( 18 ) ],
 "loop": false,
 "name": "fall",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 18 ), ExtResource( 19 ), ExtResource( 20 ) ],
+"frames": [ ExtResource( 19 ), ExtResource( 20 ), ExtResource( 21 ) ],
 "loop": true,
 "name": "walk",
 "speed": 8.0
+}, {
+"frames": [ ExtResource( 22 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
 } ]
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="GDScript" id=8]
 
 script/source = "extends AnimatedSprite
 onready var initial_scale = get_scale()
@@ -194,17 +365,126 @@ func flip_sprites(direction):
 
 [node name="level_red" instance=ExtResource( 1 )]
 
-[node name="interface" parent="." index="0"]
+script = SubResource( 1 )
+
+[node name="control" parent="interface" index="0"]
+
+theme = ExtResource( 2 )
+_sections_unfolded = [ "Pause", "Theme" ]
+
+[node name="time" parent="interface/control" index="0"]
 
 editor/display_folded = false
+
+[node name="title" parent="interface/control/time" index="0"]
+
+margin_right = 86.0
+margin_bottom = 23.0
+
+[node name="spam" parent="interface/control/time" index="1"]
+
+margin_left = -8.0
+margin_top = 24.0
+margin_right = 78.0
+margin_bottom = 47.0
+align = 1
+valign = 1
 
 [node name="coins" parent="interface/control" index="1"]
 
 visible = false
 
-[node name="enemies" parent="." index="2"]
+[node name="score" parent="interface/control" index="2"]
 
-editor/display_folded = true
+margin_left = 800.0
+margin_right = 1027.0
+
+[node name="amount" parent="interface/control/score" index="0"]
+
+margin_right = 227.0
+
+[node name="color_rect" type="ColorRect" parent="interface/control" index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = -160.0
+margin_right = 1024.0
+margin_bottom = 680.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0, 0, 0, 0 )
+_sections_unfolded = [ "Mouse" ]
+
+[node name="button" type="Button" parent="interface/control" index="4"]
+
+pause_mode = 2
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 432.0
+margin_top = 256.0
+margin_right = 593.75
+margin_bottom = 310.75
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "play again"
+flat = false
+align = 1
+_sections_unfolded = [ "Pause" ]
+
+[node name="label" type="Label" parent="interface/control" index="5"]
+
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 408.0
+margin_top = 200.0
+margin_right = 616.0
+margin_bottom = 256.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "You win!!"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Visibility" ]
+
+[node name="animator" type="AnimationPlayer" parent="interface" index="1"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/coins = SubResource( 5 )
+anims/lose = SubResource( 6 )
+anims/win = SubResource( 7 )
+blend_times = [  ]
 
 [node name="enemy" type="KinematicBody2D" parent="enemies" index="0" groups=[
 "enemy",
@@ -216,9 +496,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -231,9 +511,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy" index="2" groups=[
 "enemy",
@@ -251,14 +531,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy" index="4"]
 
@@ -283,9 +563,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -298,9 +578,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy2" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy2" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy2" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy2" index="2" groups=[
 "enemy",
@@ -318,14 +598,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy2/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy2" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy2" index="4"]
 
@@ -350,9 +630,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -365,9 +645,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy3" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy3" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy3" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy3" index="2" groups=[
 "enemy",
@@ -385,14 +665,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy3/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy3" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy3" index="4"]
 
@@ -417,9 +697,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -432,9 +712,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy4" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy4" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy4" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy4" index="2" groups=[
 "enemy",
@@ -452,14 +732,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy4/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy4" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy4" index="4"]
 
@@ -484,9 +764,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -499,9 +779,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy5" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy5" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy5" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy5" index="2" groups=[
 "enemy",
@@ -519,14 +799,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy5/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy5" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy5" index="4"]
 
@@ -551,9 +831,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -566,9 +846,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy6" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy6" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy6" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy6" index="2" groups=[
 "enemy",
@@ -586,14 +866,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy6/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy6" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy6" index="4"]
 
@@ -618,9 +898,9 @@ input_pickable = false
 collision_layer = 1
 collision_mask = 1
 collision/safe_margin = 0.08
-script = SubResource( 1 )
+script = SubResource( 2 )
 __meta__ = {
-"_editor_icon": ExtResource( 2 )
+"_editor_icon": ExtResource( 3 )
 }
 walk_speed = 150
 jump_height = 800
@@ -633,9 +913,9 @@ climb_speed = 200
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy7" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 2 )
+shape = SubResource( 3 )
 
-[node name="state_machine" parent="enemies/enemy7" index="1" instance=ExtResource( 3 )]
+[node name="state_machine" parent="enemies/enemy7" index="1" instance=ExtResource( 4 )]
 
 [node name="damage" type="Area2D" parent="enemies/enemy7" index="2" groups=[
 "enemy",
@@ -653,14 +933,14 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="enemies/enemy7/damage" index="0"]
 
-shape = SubResource( 3 )
+shape = SubResource( 4 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="enemies/enemy7" index="3"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 4 )
+frames = SubResource( 9 )
 animation = "idle"
-script = SubResource( 5 )
+script = SubResource( 10 )
 
 [node name="timer" type="Timer" parent="enemies/enemy7" index="4"]
 
@@ -677,7 +957,21 @@ rect = Rect2( -10, -10, 20, 20 )
 
 [node name="goal" parent="." index="3"]
 
-position = Vector2( 2552, 208 )
+position = Vector2( 2552, 416 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="shape" parent="goal" index="0"]
+
+rotation = -1.5708
+shape = SubResource( 12 )
+one_way_collision = true
+_sections_unfolded = [ "Transform" ]
+
+[node name="sprite" type="Sprite" parent="goal/shape" index="0"]
+
+rotation = 1.5708
+texture = ExtResource( 13 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="wall_right" parent="." index="5"]
 
@@ -685,19 +979,23 @@ position = Vector2( 2696, 8 )
 
 [node name="tile_map" parent="." index="6"]
 
-tile_set = ExtResource( 12 )
+tile_set = ExtResource( 14 )
 tile_data = PoolIntArray( -131058, 8, 0, -131057, 8, 0, -131056, 8, 0, -131055, 8, 0, -131054, 8, 0, -131053, 8, 0, -131052, 8, 0, -131051, 8, 0, -131050, 8, 0, -131049, 8, 0, -131048, 8, 0, 65539, 8, 0, 65540, 8, 0, 65541, 8, 0, 65542, 8, 0, 65543, 8, 0, 65544, 8, 0, 65545, 8, 0, 65546, 8, 0, 65547, 8, 0, 65548, 8, 0, 65549, 8, 0, 262148, 6, 0, 327690, 6, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458771, 0, 0, 458772, 0, 0, 458773, 0, 0, 458774, 0, 0, 458775, 0, 0, 458776, 0, 0, 458777, 0, 0, 458778, 0, 0, 458779, 0, 0, 458780, 0, 0, 458781, 0, 0, 458782, 0, 0, 458783, 0, 0, 458784, 0, 0, 458785, 0, 0, 458786, 0, 0, 458787, 0, 0, 458788, 0, 0, 458789, 0, 0, 458790, 0, 0, 458791, 0, 0, 458792, 0, 0, 458793, 0, 0, 524288, 4, 0, 524289, 4, 0, 524290, 4, 0, 524291, 4, 0, 524292, 2, 0, 524293, 4, 0, 524294, 4, 0, 524295, 4, 0, 524296, 4, 0, 524297, 3, 0, 524298, 4, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 4, 0, 524304, 4, 0, 524305, 4, 0, 524306, 4, 0, 524307, 4, 0, 524308, 4, 0, 524309, 4, 0, 524310, 4, 0, 524311, 4, 0, 524312, 4, 0, 524313, 4, 0, 524314, 4, 0, 524315, 4, 0, 524316, 4, 0, 524317, 4, 0, 524318, 4, 0, 524319, 4, 0, 524320, 4, 0, 524321, 4, 0, 524322, 4, 0, 524323, 4, 0, 524324, 4, 0, 524325, 4, 0, 524326, 4, 0, 524327, 4, 0, 524328, 4, 0, 524329, 4, 0, 589824, 4, 0, 589825, 4, 0, 589826, 4, 0, 589827, 3, 0, 589828, 4, 0, 589829, 4, 0, 589830, 4, 0, 589831, 2, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 3, 0, 589837, 4, 0, 589838, 4, 0, 589839, 4, 0, 589840, 4, 0, 589841, 4, 0, 589842, 4, 0, 589843, 4, 0, 589844, 4, 0, 589845, 4, 0, 589846, 4, 0, 589847, 4, 0, 589848, 4, 0, 589849, 4, 0, 589850, 4, 0, 589851, 4, 0, 589852, 4, 0, 589853, 4, 0, 589854, 4, 0, 589855, 4, 0, 589856, 4, 0, 589857, 4, 0, 589858, 4, 0, 589859, 4, 0, 589860, 4, 0, 589861, 4, 0, 589862, 4, 0, 589863, 4, 0, 589864, 4, 0, 589865, 4, 0 )
 
 [node name="camera" parent="." index="7"]
 
 limit_right = 2685
 
+[node name="player" parent="." index="8"]
+
+_sections_unfolded = [ "Collision" ]
+
 [node name="animated_sprite" type="AnimatedSprite" parent="player" index="5"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 6 )
+frames = SubResource( 11 )
 animation = "idle"
-script = SubResource( 7 )
+script = SubResource( 8 )
 
 [connection signal="direction_changed" from="enemies/enemy" to="enemies/enemy/animated_sprite" method="_on_player_direction_changed"]
 
@@ -761,13 +1059,13 @@ script = SubResource( 7 )
 
 [connection signal="timeout" from="enemies/enemy5/timer" to="enemies/enemy5" method="wander"]
 
-[connection signal="screen_entered" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5" method="_on_visibility_notifier_2d_screen_entered"]
-
 [connection signal="screen_entered" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5/timer" method="start"]
 
-[connection signal="screen_exited" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5" method="_on_visibility_notifier_2d_screen_exited"]
+[connection signal="screen_entered" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5" method="_on_visibility_notifier_2d_screen_entered"]
 
 [connection signal="screen_exited" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5/timer" method="stop"]
+
+[connection signal="screen_exited" from="enemies/enemy5/visibility_notifier_2d" to="enemies/enemy5" method="_on_visibility_notifier_2d_screen_exited"]
 
 [connection signal="direction_changed" from="enemies/enemy6" to="enemies/enemy6/animated_sprite" method="_on_player_direction_changed"]
 
@@ -775,13 +1073,13 @@ script = SubResource( 7 )
 
 [connection signal="timeout" from="enemies/enemy6/timer" to="enemies/enemy6" method="wander"]
 
-[connection signal="screen_entered" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6" method="_on_visibility_notifier_2d_screen_entered"]
-
 [connection signal="screen_entered" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6/timer" method="start"]
 
-[connection signal="screen_exited" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6" method="_on_visibility_notifier_2d_screen_exited"]
+[connection signal="screen_entered" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6" method="_on_visibility_notifier_2d_screen_entered"]
 
 [connection signal="screen_exited" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6/timer" method="stop"]
+
+[connection signal="screen_exited" from="enemies/enemy6/visibility_notifier_2d" to="enemies/enemy6" method="_on_visibility_notifier_2d_screen_exited"]
 
 [connection signal="direction_changed" from="enemies/enemy7" to="enemies/enemy7/animated_sprite" method="_on_player_direction_changed"]
 

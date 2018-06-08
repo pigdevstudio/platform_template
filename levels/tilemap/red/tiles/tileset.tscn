@@ -10,7 +10,7 @@
 [ext_resource path="res://levels/tilemap/red/tiles/tileBrown_05.png" type="Texture" id=8]
 [ext_resource path="res://levels/tilemap/red/tiles/tileBrown_06.png" type="Texture" id=9]
 
-[node name="tileset" type="Node2D" index="0"]
+[node name="tileset" type="Node2D"]
 
 position = Vector2( 20, 0 )
 
@@ -285,7 +285,6 @@ max_lines_visible = -1
 
 [node name="floor" type="Sprite" parent="." index="1"]
 
-editor/display_folded = true
 position = Vector2( -20, 0 )
 texture = ExtResource( 1 )
 centered = false
@@ -306,6 +305,7 @@ bounce = 0.0
 position = Vector2( 0, -4 )
 build_mode = 0
 polygon = PoolVector2Array( 0, 4, 64, 4, 64, 68, 0, 68 )
+one_way_collision = true
 
 [node name="floor_to_slope" type="Sprite" parent="." index="2"]
 

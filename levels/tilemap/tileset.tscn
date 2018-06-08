@@ -6,6 +6,7 @@ position = Vector2( 20, 0 )
 
 [node name="guidelines" type="Control" parent="." index="0"]
 
+editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -274,7 +275,6 @@ max_lines_visible = -1
 
 [node name="floor" type="Sprite" parent="." index="1"]
 
-editor/display_folded = true
 position = Vector2( -20, 0 )
 centered = false
 
@@ -294,6 +294,7 @@ bounce = 0.0
 position = Vector2( 0, -4 )
 build_mode = 0
 polygon = PoolVector2Array( 0, 4, 128, 4, 128, 132, 0, 132 )
+one_way_collision = true
 
 [node name="floor_to_slope" type="Sprite" parent="." index="2"]
 

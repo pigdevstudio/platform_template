@@ -26,7 +26,7 @@
 [ext_resource path="res://levels/tilemap/red/player/playerRed_walk3.png" type="Texture" id=24]
 [ext_resource path="res://levels/tilemap/red/player/playerRed_swim2.png" type="Texture" id=25]
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=1]
 
 script/source = "extends Node2D
 
@@ -96,7 +96,7 @@ func _process(delta):
 	$interface/control/progress_bar.value = $interface/control/time/spam/timer.time_left
 	"
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=2]
 
 resource_name = "coins"
 length = 0.5
@@ -139,7 +139,7 @@ tracks/2/keys = {
 "values": [ Vector2( 32, 42 ), Vector2( 53, 70 ), Vector2( 32, 42 ) ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=3]
 
 resource_name = "lose"
 length = 1.5
@@ -182,7 +182,7 @@ tracks/2/keys = {
 "values": [ "You lose..." ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=4]
 
 resource_name = "win"
 length = 1.5
@@ -225,7 +225,7 @@ tracks/2/keys = {
 "values": [ "You win!!" ]
 }
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=5]
 
 script/source = "extends Area2D
 
@@ -240,17 +240,17 @@ func queue_free():
 	yield($tween, \"tween_completed\")
 	.queue_free()"
 
-[sub_resource type="RectangleShape2D" id=10]
+[sub_resource type="RectangleShape2D" id=6]
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 32 )
 
-[sub_resource type="RectangleShape2D" id=11]
+[sub_resource type="RectangleShape2D" id=7]
 
 custom_solver_bias = 0.0
 extents = Vector2( 32, 32 )
 
-[sub_resource type="SpriteFrames" id=12]
+[sub_resource type="SpriteFrames" id=8]
 
 animations = [ {
 "frames": [ ExtResource( 8 ) ],
@@ -284,7 +284,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="GDScript" id=13]
+[sub_resource type="GDScript" id=9]
 
 script/source = "extends AnimatedSprite
 onready var initial_scale = get_scale()
@@ -317,7 +317,7 @@ func flip_sprites(direction):
 	else:
 		scale.x = initial_scale.x * -1"
 
-[sub_resource type="GDScript" id=14]
+[sub_resource type="GDScript" id=10]
 
 script/source = "extends \"res://addons/platform_actors/player_platform_actor.gd\"
 
@@ -335,22 +335,22 @@ func _on_stomp_area_entered(area):
 		jump()
 		area.get_parent().queue_free()"
 
-[sub_resource type="RectangleShape2D" id=15]
+[sub_resource type="RectangleShape2D" id=11]
 
 custom_solver_bias = 0.0
 extents = Vector2( 16, 24 )
 
-[sub_resource type="CircleShape2D" id=16]
+[sub_resource type="CircleShape2D" id=12]
 
 custom_solver_bias = 0.0
 radius = 32.9848
 
-[sub_resource type="RectangleShape2D" id=17]
+[sub_resource type="RectangleShape2D" id=13]
 
 custom_solver_bias = 0.0
 extents = Vector2( 24, 10 )
 
-[sub_resource type="SpriteFrames" id=18]
+[sub_resource type="SpriteFrames" id=14]
 
 animations = [ {
 "frames": [ ExtResource( 18 ) ],
@@ -384,7 +384,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="GDScript" id=19]
+[sub_resource type="GDScript" id=15]
 
 script/source = "extends AnimatedSprite
 onready var initial_scale = get_scale()
@@ -417,15 +417,19 @@ func flip_sprites(direction):
 	else:
 		scale.x = initial_scale.x * -1"
 
-[sub_resource type="LineShape2D" id=20]
+[sub_resource type="LineShape2D" id=16]
 
 custom_solver_bias = 0.0
 normal = Vector2( 0, -1 )
 d = 0.0
 
-[node name="level_blue" instance=ExtResource( 1 )]
+[node name="level_blue" index="0" instance=ExtResource( 1 )]
 
-script = SubResource( 8 )
+script = SubResource( 1 )
+
+[node name="interface" parent="." index="0"]
+
+editor/display_folded = true
 
 [node name="control" parent="interface" index="0"]
 
@@ -524,6 +528,9 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 color = Color( 0, 0, 0, 0 )
 _sections_unfolded = [ "Mouse" ]
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="label" type="Label" parent="interface/control" index="5"]
 
@@ -585,44 +592,56 @@ autoplay = ""
 playback_process_mode = 1
 playback_default_blend_time = 0.0
 playback_speed = 1.0
-anims/coins = SubResource( 5 )
-anims/lose = SubResource( 6 )
-anims/win = SubResource( 7 )
+anims/coins = SubResource( 2 )
+anims/lose = SubResource( 3 )
+anims/win = SubResource( 4 )
 blend_times = [  ]
 
 [node name="coins" parent="." index="1"]
 
 editor/display_folded = true
+z_index = 1
+_sections_unfolded = [ "Z Index" ]
 
 [node name="coin" parent="coins" index="0" instance=ExtResource( 3 )]
 
-position = Vector2( 784, 280 )
-script = SubResource( 9 )
+position = Vector2( 288, 520 )
+script = SubResource( 5 )
 
 [node name="coin2" parent="coins" index="1" instance=ExtResource( 3 )]
 
-position = Vector2( 296, 296 )
-script = SubResource( 9 )
+position = Vector2( 288, 224 )
+script = SubResource( 5 )
 
 [node name="coin3" parent="coins" index="2" instance=ExtResource( 3 )]
 
-position = Vector2( 224, 120 )
-script = SubResource( 9 )
+position = Vector2( 96, -8 )
+script = SubResource( 5 )
 
 [node name="coin4" parent="coins" index="3" instance=ExtResource( 3 )]
 
-position = Vector2( 704, 216 )
-script = SubResource( 9 )
+position = Vector2( 672, 16 )
+script = SubResource( 5 )
 
 [node name="coin5" parent="coins" index="4" instance=ExtResource( 3 )]
 
-position = Vector2( 464, 64 )
-script = SubResource( 9 )
+position = Vector2( 288, 88 )
+script = SubResource( 5 )
 
 [node name="coin6" parent="coins" index="5" instance=ExtResource( 3 )]
 
-position = Vector2( 856, 0 )
-script = SubResource( 9 )
+position = Vector2( 608, 512 )
+script = SubResource( 5 )
+
+[node name="coin7" parent="coins" index="6" instance=ExtResource( 3 )]
+
+position = Vector2( 288, -8 )
+script = SubResource( 5 )
+
+[node name="coin8" parent="coins" index="7" instance=ExtResource( 3 )]
+
+position = Vector2( 432, -8 )
+script = SubResource( 5 )
 
 [node name="goal" parent="." index="3"]
 
@@ -630,8 +649,8 @@ position = Vector2( 512, 384 )
 
 [node name="shape" parent="goal" index="0"]
 
-position = Vector2( -80, 32 )
-shape = SubResource( 10 )
+position = Vector2( -96, 32 )
+shape = SubResource( 6 )
 
 [node name="sprite" type="Sprite" parent="goal/shape" index="0"]
 
@@ -640,8 +659,8 @@ texture = ExtResource( 4 )
 
 [node name="shape2" type="CollisionShape2D" parent="goal" index="1"]
 
-position = Vector2( 72, 32 )
-shape = SubResource( 11 )
+position = Vector2( -480, -160 )
+shape = SubResource( 7 )
 
 [node name="sprite" type="Sprite" parent="goal/shape2" index="0"]
 
@@ -653,7 +672,7 @@ texture = ExtResource( 5 )
 tile_set = ExtResource( 6 )
 collision_layer = 1024
 collision_mask = 1024
-tile_data = PoolIntArray( 196608, -1610612736, 0, 196611, 8, 0, 262144, -1610612736, 0, 327680, -1610612736, 0, 393216, -1610612736, 0, 458752, -1610612735, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 524288, 4, 0, 524289, 4, 0, 524290, 2, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 4, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 3, 0, 589828, 4, 0, 589829, 4, 0, 589830, 2, 0, 589831, 4, 0 )
+tile_data = PoolIntArray( 262153, 8, 0, 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458758, 6, 0, 524288, 4, 0, 524289, 4, 0, 524290, 2, 0, 524291, 4, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 3, 0 )
 _sections_unfolded = [ "Collision" ]
 
 [node name="tile_map_red" type="TileMap" parent="." index="7"]
@@ -674,7 +693,7 @@ collision_layer = 2048
 collision_mask = 2048
 occluder_light_mask = 1
 format = 1
-tile_data = PoolIntArray( 131085, 8, 0, 196623, -1073741824, 0, 262159, -1073741824, 0, 327691, 8, 0, 327695, -1073741824, 0, 393231, -1073741824, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 1, 0, 524296, 4, 0, 524297, 4, 0, 524298, 2, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 3, 0, 524303, 2, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 3, 0, 589837, 4, 0, 589838, 4, 0, 589839, 4, 0 )
+tile_data = PoolIntArray( 65546, 8, 0, 262144, 6, 0, 262150, 8, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 524297, 4, 0, 524298, 2, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 3, 0, 524303, 2, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 3, 0, 589837, 4, 0, 589838, 4, 0, 589839, 4, 0 )
 _sections_unfolded = [ "Collision" ]
 __meta__ = {
 "_edit_lock_": true
@@ -686,10 +705,13 @@ position = Vector2( 512, 256 )
 
 [node name="player" parent="." index="9"]
 
-position = Vector2( 336, 408 )
+editor/display_folded = true
+position = Vector2( 165.999, 139.887 )
+rotation = 6.28318
 collision_layer = 1024
 collision_mask = 1024
-_sections_unfolded = [ "Collision" ]
+_sections_unfolded = [ "Collision", "collision" ]
+jump_height = 900
 max_jumps = 1
 
 [node name="camera_rig" parent="player" index="2"]
@@ -703,9 +725,9 @@ remote_path = NodePath("")
 [node name="animated_sprite" type="AnimatedSprite" parent="player" index="5"]
 
 position = Vector2( 0, -24.6669 )
-frames = SubResource( 12 )
+frames = SubResource( 8 )
 animation = "idle"
-script = SubResource( 13 )
+script = SubResource( 9 )
 
 [node name="player2" type="KinematicBody2D" parent="." index="10" groups=[
 "player",
@@ -717,7 +739,7 @@ input_pickable = false
 collision_layer = 2048
 collision_mask = 2048
 collision/safe_margin = 0.08
-script = SubResource( 14 )
+script = SubResource( 10 )
 _sections_unfolded = [ "Collision" ]
 __meta__ = {
 "_editor_icon": ExtResource( 16 )
@@ -739,7 +761,7 @@ dash = "dash_2"
 [node name="collision_shape_2d" type="CollisionShape2D" parent="player2" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 15 )
+shape = SubResource( 11 )
 
 [node name="state_machine" parent="player2" index="1" instance=ExtResource( 17 )]
 
@@ -768,7 +790,7 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="player2/pick_area" index="0"]
 
-shape = SubResource( 16 )
+shape = SubResource( 12 )
 
 [node name="stomp_area" type="Area2D" parent="player2" index="4"]
 
@@ -784,14 +806,14 @@ audio_bus_name = "Master"
 [node name="shape" type="CollisionShape2D" parent="player2/stomp_area" index="0"]
 
 position = Vector2( 0, -8 )
-shape = SubResource( 17 )
+shape = SubResource( 13 )
 
 [node name="animated_sprite" type="AnimatedSprite" parent="player2" index="5"]
 
 position = Vector2( 0, -22.6669 )
-frames = SubResource( 18 )
+frames = SubResource( 14 )
 animation = "idle"
-script = SubResource( 19 )
+script = SubResource( 15 )
 
 [node name="void" type="Area2D" parent="." index="11"]
 
@@ -807,7 +829,23 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="void" index="0"]
 
-shape = SubResource( 20 )
+shape = SubResource( 16 )
+
+[node name="static_body_2d" type="StaticBody2D" parent="." index="12"]
+
+input_pickable = false
+collision_layer = 1024
+collision_mask = 1024
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Collision" ]
+
+[node name="collision_polygon_2d" type="CollisionPolygon2D" parent="static_body_2d" index="0"]
+
+build_mode = 0
+polygon = PoolVector2Array( 256, 640, 0, 640, 0, 496, 256, 496 )
 
 [connection signal="timeout" from="interface/control/time/spam/timer" to="." method="_on_timer_timeout"]
 

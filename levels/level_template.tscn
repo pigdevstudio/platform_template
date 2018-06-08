@@ -4,11 +4,9 @@
 [ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=2]
 [ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=3]
 
-[sub_resource type="GDScript" id=13]
+[sub_resource type="GDScript" id=1]
 
 script/source = "extends Node2D
-
-
 
 func _on_goal_area_entered(area):
 	if \"player\" in area.get_parent().get_groups():
@@ -52,7 +50,7 @@ func increase_score(amount):
 	var t = \"score: {amount}\"
 	$amount.text = t.format({\"amount\":score})"
 
-[sub_resource type="GDScript" id=14]
+[sub_resource type="GDScript" id=5]
 
 script/source = "extends Node2D
 
@@ -64,7 +62,7 @@ func _ready():
 		c.connect(\"tree_exited\", get_node(score_interface),
 			 \"increase_score\", [100])"
 
-[sub_resource type="GDScript" id=15]
+[sub_resource type="GDScript" id=6]
 
 script/source = "extends Node2D
 export (NodePath) var score_interface
@@ -116,7 +114,7 @@ func _on_stomp_area_entered(area):
 		jump()
 		area.get_parent().queue_free()"
 
-[sub_resource type="RectangleShape2D" id=16]
+[sub_resource type="RectangleShape2D" id=10]
 
 custom_solver_bias = 0.0
 extents = Vector2( 16, 24 )
@@ -133,18 +131,21 @@ extents = Vector2( 24, 10 )
 
 [node name="level_template" type="Node2D"]
 
-script = SubResource( 13 )
+script = SubResource( 1 )
 
 [node name="interface" type="CanvasLayer" parent="." index="0"]
 
+pause_mode = 2
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
 scale = Vector2( 1, 1 )
 transform = Transform2D( 1, 0, 0, 1, 0, 0 )
+_sections_unfolded = [ "Pause" ]
 
 [node name="control" type="Control" parent="interface" index="0"]
 
+pause_mode = 1
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -157,6 +158,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
+_sections_unfolded = [ "Pause" ]
 
 [node name="time" type="VBoxContainer" parent="interface/control" index="0"]
 
@@ -324,14 +326,14 @@ max_lines_visible = -1
 
 [node name="coins" type="Node2D" parent="." index="1"]
 
-script = SubResource( 14 )
+script = SubResource( 5 )
 coins_interface = NodePath("../interface/control/coins")
 score_interface = NodePath("../interface/control/score")
 
 [node name="enemies" type="Node2D" parent="." index="2"]
 
 z_index = -1
-script = SubResource( 15 )
+script = SubResource( 6 )
 _sections_unfolded = [ "Z Index" ]
 score_interface = NodePath("../interface/control/score")
 
@@ -437,7 +439,6 @@ _sections_unfolded = [ "Editor", "Limit" ]
 "player",
 ]]
 
-editor/display_folded = true
 position = Vector2( 392, 408 )
 input_pickable = false
 collision_layer = 1
@@ -454,17 +455,17 @@ max_jumps = 2
 dash_length = 200
 dash_speed = 600
 climb_speed = 400
-left = "left"
-right = "right"
-up = "up"
-down = "down"
-jump = "jump"
-dash = "dash"
+left = "left_1"
+right = "right_1"
+up = "up_1"
+down = "down_1"
+jump = "jump_1"
+dash = "dash_1"
 
 [node name="collision_shape_2d" type="CollisionShape2D" parent="player" index="0"]
 
 position = Vector2( 0, -24 )
-shape = SubResource( 16 )
+shape = SubResource( 10 )
 
 [node name="state_machine" parent="player" index="1" instance=ExtResource( 3 )]
 
@@ -476,7 +477,9 @@ update_position = true
 update_rotation = true
 update_scale = true
 
-[node name="pick_area" type="Area2D" parent="player" index="3"]
+[node name="pick_area" type="Area2D" parent="player" index="3" groups=[
+"player",
+]]
 
 editor/display_folded = true
 position = Vector2( 0, -24 )

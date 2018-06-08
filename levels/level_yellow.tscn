@@ -1,29 +1,187 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://levels/level_template.tscn" type="PackedScene" id=1]
-[ext_resource path="res://levels/tilemap/yellow/tiles/tileset.tres" type="TileSet" id=2]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_stand.png" type="Texture" id=3]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim2.png" type="Texture" id=4]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim1.png" type="Texture" id=5]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_up1.png" type="Texture" id=6]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk4.png" type="Texture" id=7]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk1.png" type="Texture" id=8]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk2.png" type="Texture" id=9]
-[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk3.png" type="Texture" id=10]
+[ext_resource path="res://interface/themes/yellow_theme.tres" type="Theme" id=2]
+[ext_resource path="res://levels/tilemap/yellow/flag.png" type="Texture" id=3]
+[ext_resource path="res://levels/tilemap/yellow/tiles/tileset.tres" type="TileSet" id=4]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_stand.png" type="Texture" id=5]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim1.png" type="Texture" id=6]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_up1.png" type="Texture" id=7]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk4.png" type="Texture" id=8]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk1.png" type="Texture" id=9]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk2.png" type="Texture" id=10]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_walk3.png" type="Texture" id=11]
+[ext_resource path="res://levels/tilemap/yellow/player/playerGrey_swim2.png" type="Texture" id=12]
 
-[sub_resource type="GDScript" id=1]
+[sub_resource type="GDScript" id=8]
 
 script/source = "extends Node2D
-
+		
 func _on_goal_area_entered(area):
-	if \"player\" in area.get_parent().get_groups():
-		print(\"finished\")
+	if !area.is_in_group(\"player\"):
+		return
+
+	$goal/shape/sprite.texture = load(\"res://levels/tilemap/yellow/flag_raised.png\")
+	trigger_animation(\"win\")
+	
+func trigger_animation(animation):
+	get_tree().paused = true
+	$interface/animator.play(animation)
+	yield($interface/animator, \"animation_finished\")
+	
+	$interface/control/button.show()
+	$interface/control/button.grab_focus()
+	yield($interface/control/button, \"button_up\")
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+func _on_timer_timeout():
+	trigger_animation(\"lose\")
 
 
 func _on_void_area_entered(area):
-	if \"player\" in area.get_parent().get_groups():
-		get_tree().reload_current_scene()
+	if !area.is_in_group(\"player\"):
+		return
+	get_tree().reload_current_scene()
 "
+
+[sub_resource type="GDScript" id=11]
+
+script/source = "extends VBoxContainer
+
+func _process(delta):
+	$spam.text = str(($spam/timer.time_left))"
+
+[sub_resource type="Animation" id=5]
+
+length = 0.5
+loop = false
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/coins/coin:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 0.308594, 0.308594, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/coins/coin:rect_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( -11, -14 ), Vector2( 0, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/coins/coin:rect_size")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.25, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 32, 42 ), Vector2( 53, 70 ), Vector2( 32, 42 ) ]
+}
+
+[sub_resource type="Animation" id=6]
+
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/color_rect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.712706 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/label:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.9 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "You lose..." ]
+}
+
+[sub_resource type="Animation" id=7]
+
+length = 1.5
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("control/color_rect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 0.712706 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("control/label:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("control/label:text")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.9 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "You win!!" ]
+}
+
+[sub_resource type="RectangleShape2D" id=9]
+
+custom_solver_bias = 0.0
+extents = Vector2( 32, 32 )
 
 [sub_resource type="RectangleShape2D" id=2]
 
@@ -33,35 +191,35 @@ extents = Vector2( 10, 680 )
 [sub_resource type="SpriteFrames" id=3]
 
 animations = [ {
-"frames": [ ExtResource( 3 ) ],
+"frames": [ ExtResource( 5 ) ],
 "loop": false,
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
-"loop": false,
-"name": "wall",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 5 ) ],
+"frames": [ ExtResource( 6 ) ],
 "loop": false,
 "name": "dash",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 6 ) ],
+"frames": [ ExtResource( 7 ) ],
 "loop": false,
 "name": "jump",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 7 ) ],
+"frames": [ ExtResource( 8 ) ],
 "loop": false,
 "name": "fall",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ) ],
+"frames": [ ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ) ],
 "loop": true,
 "name": "walk",
 "speed": 8.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": false,
+"name": "wall",
+"speed": 5.0
 } ]
 
 [sub_resource type="GDScript" id=4]
@@ -97,39 +255,144 @@ func flip_sprites(direction):
 	else:
 		scale.x = initial_scale.x * -1"
 
-[sub_resource type="LineShape2D" id=5]
+[sub_resource type="LineShape2D" id=10]
 
 custom_solver_bias = 0.0
 normal = Vector2( 0, -1 )
 d = 0.0
 
-[node name="level_blue" index="0" instance=ExtResource( 1 )]
+[node name="level_blue" instance=ExtResource( 1 )]
 
-script = SubResource( 1 )
+script = SubResource( 8 )
 
-[node name="interface" parent="." index="0"]
+[node name="control" parent="interface" index="0"]
+
+theme = ExtResource( 2 )
+_sections_unfolded = [ "Pause", "Theme" ]
+
+[node name="color_rect" type="ColorRect" parent="interface/control" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = -160.0
+margin_right = 1024.0
+margin_bottom = 680.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0, 0, 0, 0 )
+_sections_unfolded = [ "Mouse" ]
+
+[node name="time" parent="interface/control" index="1"]
 
 editor/display_folded = false
+script = SubResource( 11 )
 
-[node name="time" parent="interface/control" index="0"]
+[node name="title" parent="interface/control/time" index="0"]
 
-editor/display_folded = false
+margin_right = 86.0
+margin_bottom = 23.0
+
+[node name="spam" parent="interface/control/time" index="1"]
+
+margin_top = 37.0
+margin_right = 86.0
+margin_bottom = 60.0
 
 [node name="timer" parent="interface/control/time/spam" index="0"]
 
-wait_time = 30.0
+wait_time = 10.0
 
-[node name="coins" parent="interface/control" index="1"]
+[node name="coins" parent="interface/control" index="2"]
+
+visible = false
+
+[node name="score" parent="interface/control" index="3"]
 
 visible = false
 
-[node name="score" parent="interface/control" index="2"]
+[node name="button" type="Button" parent="interface/control" index="4"]
 
+pause_mode = 2
 visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 432.0
+margin_top = 256.0
+margin_right = 593.0
+margin_bottom = 310.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "play again"
+flat = false
+align = 1
+_sections_unfolded = [ "Pause" ]
+
+[node name="label" type="Label" parent="interface/control" index="5"]
+
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 408.0
+margin_top = 200.0
+margin_right = 616.0
+margin_bottom = 256.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "You win!!"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Visibility" ]
+
+[node name="animator" type="AnimationPlayer" parent="interface" index="1"]
+
+root_node = NodePath("..")
+autoplay = ""
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/coins = SubResource( 5 )
+anims/lose = SubResource( 6 )
+anims/win = SubResource( 7 )
+blend_times = [  ]
 
 [node name="goal" parent="." index="3"]
 
-position = Vector2( 3560, 208 )
+editor/display_folded = false
+position = Vector2( 3560, 480 )
+
+[node name="shape" parent="goal" index="0"]
+
+shape = SubResource( 9 )
+
+[node name="sprite" type="Sprite" parent="goal/shape" index="0"]
+
+texture = ExtResource( 3 )
 
 [node name="wall_left" parent="." index="4"]
 
@@ -151,7 +414,7 @@ shape = SubResource( 2 )
 
 [node name="tile_map" parent="." index="6"]
 
-tile_set = ExtResource( 2 )
+tile_set = ExtResource( 4 )
 tile_data = PoolIntArray( 458752, 0, 0, 458753, 0, 0, 458754, 0, 0, 458755, 0, 0, 458756, 0, 0, 458757, 0, 0, 458758, 0, 0, 458759, 0, 0, 458760, 0, 0, 458761, 0, 0, 458762, 0, 0, 458763, 0, 0, 458764, 0, 0, 458765, 0, 0, 458766, 0, 0, 458767, 0, 0, 458768, 0, 0, 458769, 0, 0, 458770, 0, 0, 458778, 0, 0, 458779, 0, 0, 458780, 0, 0, 458781, 0, 0, 458782, 0, 0, 458783, 0, 0, 458784, 0, 0, 458785, 0, 0, 458786, 0, 0, 458787, 0, 0, 524288, 2, 0, 524289, 4, 0, 524290, 4, 0, 524291, 4, 0, 524292, 4, 0, 524293, 4, 0, 524294, 4, 0, 524295, 3, 0, 524296, 4, 0, 524297, 4, 0, 524298, 4, 0, 524299, 4, 0, 524300, 4, 0, 524301, 4, 0, 524302, 4, 0, 524303, 3, 0, 524304, 4, 0, 524305, 4, 0, 524306, 4, 0, 524314, 3, 0, 524315, 4, 0, 524316, 4, 0, 524317, 4, 0, 524318, 2, 0, 524319, 3, 0, 524320, 4, 0, 524321, 4, 0, 524322, 4, 0, 524323, 4, 0, 524331, 0, 0, 524332, 0, 0, 524333, 0, 0, 524334, 0, 0, 524335, 0, 0, 524336, 0, 0, 524337, 0, 0, 524338, 0, 0, 524339, 0, 0, 524340, 0, 0, 524341, 0, 0, 524342, 0, 0, 524343, 0, 0, 524344, 0, 0, 589824, 4, 0, 589825, 3, 0, 589826, 4, 0, 589827, 4, 0, 589828, 4, 0, 589829, 4, 0, 589830, 4, 0, 589831, 4, 0, 589832, 4, 0, 589833, 4, 0, 589834, 4, 0, 589835, 4, 0, 589836, 4, 0, 589837, 4, 0, 589838, 2, 0, 589839, 4, 0, 589840, 4, 0, 589841, 4, 0, 589842, 4, 0, 589867, 4, 0, 589868, 4, 0, 589869, 2, 0, 589870, 4, 0, 589871, 4, 0, 589872, 4, 0, 589873, 3, 0, 589874, 4, 0, 589875, 4, 0, 589876, 4, 0, 589877, 4, 0, 589878, 2, 0, 589879, 4, 0, 589880, 4, 0 )
 
 [node name="camera" parent="." index="7"]
@@ -183,7 +446,9 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="void" index="0"]
 
-shape = SubResource( 5 )
+shape = SubResource( 10 )
+
+[connection signal="timeout" from="interface/control/time/spam/timer" to="." method="_on_timer_timeout"]
 
 [connection signal="direction_changed" from="player" to="player/animated_sprite" method="_on_player_direction_changed"]
 
