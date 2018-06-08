@@ -20,7 +20,6 @@ margin_bottom = 505.0
 
 [node name="Buttons" parent="CenterContainer/TabContainer" index="0"]
 
-visible = true
 margin_left = 12.75
 margin_top = 64.0
 margin_right = -11.5
@@ -29,6 +28,7 @@ margin_bottom = -12.75
 [node name="HBoxContainer" parent="CenterContainer/TabContainer/Buttons" index="0"]
 
 margin_right = 598.25
+margin_bottom = 302.25
 
 [node name="Radio" parent="CenterContainer/TabContainer/Buttons/HBoxContainer/VBoxContainer" index="4"]
 
@@ -53,28 +53,6 @@ margin_right = 275.0
 [node name="Button3" parent="CenterContainer/TabContainer/Buttons/HBoxContainer/VBoxContainer2" index="2"]
 
 margin_right = 275.0
-
-[node name="Scrolls" parent="CenterContainer/TabContainer" index="1"]
-
-visible = false
-
-[node name="Lorem" parent="CenterContainer/TabContainer/Scrolls/HBoxContainer/ScrollContainer2" index="0"]
-
-margin_bottom = 281.0
-
-[node name="Label" parent="CenterContainer/TabContainer/Scrolls/HBoxContainer/ScrollContainer2/Lorem" index="0"]
-
-margin_top = 15.0
-margin_bottom = 265.0
-
-[node name="Lorem" parent="CenterContainer/TabContainer/Scrolls/HBoxContainer/ScrollContainer" index="0"]
-
-margin_right = 258.0
-
-[node name="Label2" parent="CenterContainer/TabContainer/Scrolls/HBoxContainer/ScrollContainer/Lorem" index="0"]
-
-margin_left = 16.0
-margin_right = 241.0
 
 [node name="Ranges" parent="CenterContainer/TabContainer" index="2"]
 

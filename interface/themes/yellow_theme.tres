@@ -25,7 +25,6 @@
 [ext_resource path="res://interface/themes/blue_theme/blue_grab_slider.png" type="Texture" id=23]
 [ext_resource path="res://font/kenney_future.ttf" type="DynamicFontData" id=24]
 
-
 [sub_resource type="StyleBoxTexture" id=1]
 
 content_margin_left = -1.0
@@ -487,7 +486,7 @@ grow = 1.0
 thickness = 4
 vertical = true
 
-[sub_resource type="StyleBoxLine" id=36]
+[sub_resource type="StyleBoxLine" id=31]
 
 content_margin_left = -1.0
 content_margin_right = -1.0
@@ -498,7 +497,7 @@ grow = 3.0
 thickness = 10
 vertical = true
 
-[sub_resource type="StyleBoxLine" id=37]
+[sub_resource type="StyleBoxLine" id=32]
 
 content_margin_left = -1.0
 content_margin_right = -1.0
@@ -509,7 +508,7 @@ grow = 1.0
 thickness = 1
 vertical = false
 
-[sub_resource type="StyleBoxLine" id=38]
+[sub_resource type="StyleBoxLine" id=33]
 
 content_margin_left = -1.0
 content_margin_right = -1.0
@@ -520,7 +519,7 @@ grow = 3.0
 thickness = 10
 vertical = true
 
-[sub_resource type="StyleBoxLine" id=39]
+[sub_resource type="StyleBoxLine" id=34]
 
 content_margin_left = -1.0
 content_margin_right = -1.0
@@ -543,10 +542,10 @@ _sections_unfolded = [ "Font", "Settings" ]
 
 default_font = SubResource( 35 )
 Button/colors/ = Color( 1, 1, 1, 1 )
-Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/colors/font_color = Color( 0.300781, 0.300781, 0.300781, 1 )
 Button/colors/font_color_disabled = Color( 0.78125, 0.78125, 0.78125, 0.2 )
-Button/colors/font_color_hover = Color( 0.941176, 0.941176, 0.941176, 1 )
-Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/colors/font_color_hover = Color( 0.298039, 0.298039, 0.298039, 1 )
+Button/colors/font_color_pressed = Color( 0.298039, 0.298039, 0.298039, 1 )
 Button/constants/hseparation = 2
 Button/fonts/ = null
 Button/fonts/font = null
@@ -555,10 +554,10 @@ Button/styles/focus = null
 Button/styles/hover = SubResource( 1 )
 Button/styles/normal = SubResource( 2 )
 Button/styles/pressed = SubResource( 3 )
-CheckBox/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+CheckBox/colors/font_color = Color( 0.298039, 0.298039, 0.298039, 1 )
 CheckBox/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-CheckBox/colors/font_color_hover = Color( 0.941176, 0.941176, 0.941176, 1 )
-CheckBox/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+CheckBox/colors/font_color_hover = Color( 0.298039, 0.298039, 0.298039, 1 )
+CheckBox/colors/font_color_pressed = Color( 0.203125, 0.203125, 0.203125, 1 )
 CheckBox/constants/check_vadjust = 0
 CheckBox/constants/hseparation = 4
 CheckBox/fonts/font = null
@@ -571,7 +570,7 @@ CheckBox/styles/focus = SubResource( 5 )
 CheckBox/styles/hover = SubResource( 6 )
 CheckBox/styles/normal = SubResource( 7 )
 CheckBox/styles/pressed = SubResource( 8 )
-CheckButton/colors/font_color = Color( 0.878431, 0.878431, 0.878431, 1 )
+CheckButton/colors/font_color = Color( 0.298039, 0.298039, 0.298039, 1 )
 CheckButton/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 CheckButton/colors/font_color_hover = Color( 0.941176, 0.941176, 0.941176, 1 )
 CheckButton/colors/font_color_pressed = Color( 1, 1, 1, 1 )
@@ -609,14 +608,14 @@ Panel/styles/panel = SubResource( 23 )
 Panel/styles/panelf = null
 Panel/styles/panelnc = null
 PanelContainer/styles/panel = SubResource( 24 )
-ProgressBar/colors/font_color = Color( 0.941176, 0.941176, 0.941176, 1 )
+ProgressBar/colors/font_color = Color( 0.298039, 0.298039, 0.298039, 1 )
 ProgressBar/colors/font_color_shadow = Color( 0, 0, 0, 1 )
 ProgressBar/fonts/font = null
 ProgressBar/styles/bg = SubResource( 25 )
 ProgressBar/styles/fg = SubResource( 26 )
-TabContainer/colors/font_color_bg = Color( 0.690196, 0.690196, 0.690196, 1 )
+TabContainer/colors/font_color_bg = Color( 0.15625, 0.15625, 0.15625, 1 )
 TabContainer/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-TabContainer/colors/font_color_fg = Color( 0.941176, 0.941176, 0.941176, 1 )
+TabContainer/colors/font_color_fg = Color( 0.238281, 0.238281, 0.238281, 1 )
 TabContainer/constants/hseparation = 4
 TabContainer/constants/label_valign_bg = 2
 TabContainer/constants/label_valign_fg = 0
@@ -632,9 +631,9 @@ TabContainer/icons/menu_highlight = null
 TabContainer/styles/panel = SubResource( 27 )
 TabContainer/styles/tab_bg = SubResource( 28 )
 TabContainer/styles/tab_fg = SubResource( 29 )
-Tabs/colors/font_color_bg = Color( 0.690196, 0.690196, 0.690196, 1 )
+Tabs/colors/font_color_bg = Color( 0.214844, 0.214844, 0.214844, 1 )
 Tabs/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
-Tabs/colors/font_color_fg = Color( 0.941176, 0.941176, 0.941176, 1 )
+Tabs/colors/font_color_fg = Color( 0.183594, 0.183594, 0.183594, 1 )
 Tabs/constants/hseparation = 4
 Tabs/constants/label_valign_bg = 2
 Tabs/constants/label_valign_fg = 0
@@ -666,9 +665,9 @@ VSlider/icons/grabber_disabled = null
 VSlider/icons/grabber_highlight = ExtResource( 23 )
 VSlider/icons/tick = null
 VSlider/styles/focus = null
-VSlider/styles/grabber_area = SubResource( 36 )
-VSlider/styles/grabber_disabled = SubResource( 37 )
-VSlider/styles/grabber_highlight = SubResource( 38 )
-VSlider/styles/slider = SubResource( 39 )
-_sections_unfolded = [ "CheckButton/icons", "HScrollBar/icons", "HScrollBar/styles", "HSeparator/constants", "HSeparator/styles", "HSlider/icons", "HSlider/styles", "Label", "Label/colors", "Panel/styles", "PanelContainer/styles", "ProgressBar/colors", "ProgressBar/styles", "TabContainer/icons", "TabContainer/styles", "VScrollBar/icons", "VScrollBar/styles", "VSeparator/constants", "VSeparator/styles", "VSlider/icons", "VSlider/styles" ]
+VSlider/styles/grabber_area = SubResource( 31 )
+VSlider/styles/grabber_disabled = SubResource( 32 )
+VSlider/styles/grabber_highlight = SubResource( 33 )
+VSlider/styles/slider = SubResource( 34 )
+_sections_unfolded = [ "CheckBox", "CheckBox/colors", "CheckButton/colors", "CheckButton/icons", "HScrollBar/icons", "HScrollBar/styles", "HSeparator/constants", "HSeparator/styles", "HSlider/icons", "HSlider/styles", "Label", "Label/colors", "Panel/styles", "PanelContainer/styles", "ProgressBar/styles", "Tabs/colors", "VScrollBar/icons", "VScrollBar/styles", "VSeparator/constants", "VSeparator/styles", "VSlider/icons", "VSlider/styles" ]
 

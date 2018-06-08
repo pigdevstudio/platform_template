@@ -25,7 +25,6 @@
 [ext_resource path="res://interface/themes/blue_theme/blue_grab_slider.png" type="Texture" id=23]
 [ext_resource path="res://font/kenney_future.ttf" type="DynamicFontData" id=24]
 
-
 [sub_resource type="StyleBoxTexture" id=1]
 
 content_margin_left = -1.0
