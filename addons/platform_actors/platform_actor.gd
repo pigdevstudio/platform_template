@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
-export (int) var walk_speed = 100
+export (int) var walk_speed = 400
 export (int) var jump_height = 800
-export (int) var wall_jump_length = 800
 export (int) var max_jumps = 2
 export (int) var dash_length = 300
-export (int) var dash_speed = 200
-export (int) var climb_speed = 200
+export (int) var dash_speed = 600
+export (int) var climb_speed = 400
+export (int) var wall_jump_length = 400
 
 var direction = 1 setget set_direction
 var velocity = Vector2(0, 0)
