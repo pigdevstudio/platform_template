@@ -48,7 +48,7 @@ func process(actor, delta):
 			return
 		elif Input.is_action_pressed(actor.right) or Input.is_action_pressed(actor.left):
 			if !actor.is_on_floor():
-				actor.fall()
+				actor.fall(true)
 				return
 			else:
 				actor.walk()
