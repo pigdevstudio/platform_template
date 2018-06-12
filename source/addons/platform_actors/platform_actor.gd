@@ -20,7 +20,7 @@ const GRAVITY = 50
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 100
 const MAX_FALL_SPEED = 2000
-const FALL_THRESHOLD = 800
+const FALL_THRESHOLD = 400
 
 signal enter_state(state)
 signal perform_action(action)
@@ -52,11 +52,11 @@ func jump():
 func cancel_jump():
 	velocity.y = 0
 	
-func fall():
-	set_state("jump")
-	if velocity.y > FALL_THRESHOLD:
+func fall(force_fall = false):
+	if velocity.y > FALL_THRESHOLD or force_fall:
+		set_state("jump")
 		emit_signal("perform_action", "fall")
-	jumps -= 1
+		jumps -= 1
 	
 func walk():
 	set_state("walk")
