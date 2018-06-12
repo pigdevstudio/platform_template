@@ -1,7 +1,4 @@
-[gd_scene load_steps=15 format=2]
-
-[ext_resource path="res://addons/platform_actors/icon.png" type="Texture" id=1]
-[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=2]
+[gd_scene load_steps=8 format=2]
 
 [sub_resource type="GDScript" id=1]
 
@@ -80,53 +77,10 @@ func child_died(child):
 	s.get_node(\"label\").text = str(int(500))
 	add_child(s)"
 
-[sub_resource type="LineShape2D" id=7]
+[sub_resource type="RectangleShape2D" id=7]
 
 custom_solver_bias = 0.0
-normal = Vector2( -1, 0 )
-d = 0.0
-
-[sub_resource type="RectangleShape2D" id=8]
-
-custom_solver_bias = 0.0
-extents = Vector2( 10, 544 )
-
-[sub_resource type="GDScript" id=9]
-
-script/source = "extends \"res://addons/platform_actors/player_platform_actor.gd\"
-
-
-func dash():
-	jumps = max_jumps
-	.dash()
-func _on_pick_area_entered(area):
-	if \"pickup\" in area.get_groups():
-		area.queue_free()
-
-func _on_stomp_area_entered(area):
-	if \"enemy\" in area.get_groups():
-		var n = (global_position - area.global_position)
-		n = n.normalized()
-		if n.y > 0:
-			return
-		jumps = max_jumps
-		jump()
-		area.get_parent().queue_free()"
-
-[sub_resource type="RectangleShape2D" id=10]
-
-custom_solver_bias = 0.0
-extents = Vector2( 16, 24 )
-
-[sub_resource type="CircleShape2D" id=11]
-
-custom_solver_bias = 0.0
-radius = 32.9848
-
-[sub_resource type="RectangleShape2D" id=12]
-
-custom_solver_bias = 0.0
-extents = Vector2( 24, 10 )
+extents = Vector2( 80, 56 )
 
 [node name="level_template" type="Node2D"]
 
@@ -135,6 +89,7 @@ script = SubResource( 1 )
 [node name="interface" type="CanvasLayer" parent="." index="0"]
 
 pause_mode = 2
+editor/display_folded = true
 layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
@@ -337,7 +292,7 @@ score_interface = NodePath("../interface/control/score")
 [node name="goal" type="Area2D" parent="." index="3"]
 
 editor/display_folded = true
-position = Vector2( 576, 208 )
+position = Vector2( 928, 448 )
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
@@ -353,7 +308,7 @@ shape = SubResource( 7 )
 [node name="wall_left" type="StaticBody2D" parent="." index="4"]
 
 editor/display_folded = true
-position = Vector2( -8, 8 )
+position = Vector2( -8, 16 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -362,14 +317,15 @@ constant_angular_velocity = 0.0
 friction = 0.0
 bounce = 0.0
 
-[node name="shape" type="CollisionShape2D" parent="wall_left" index="0"]
+[node name="shape" type="CollisionPolygon2D" parent="wall_left" index="0"]
 
-shape = SubResource( 8 )
+build_mode = 0
+polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
 
 [node name="wall_right" type="StaticBody2D" parent="." index="5"]
 
 editor/display_folded = true
-position = Vector2( 1032, 8 )
+position = Vector2( 1048, 24 )
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -378,9 +334,10 @@ constant_angular_velocity = 0.0
 friction = 0.0
 bounce = 0.0
 
-[node name="shape" type="CollisionShape2D" parent="wall_right" index="0"]
+[node name="shape" type="CollisionPolygon2D" parent="wall_right" index="0"]
 
-shape = SubResource( 8 )
+build_mode = 0
+polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
 
 [node name="tile_map" type="TileMap" parent="." index="6"]
 
@@ -432,86 +389,30 @@ editor_draw_limits = true
 editor_draw_drag_margin = true
 _sections_unfolded = [ "Editor", "Limit" ]
 
-[node name="player" type="KinematicBody2D" parent="." index="8" groups=[
-"player",
-]]
+[node name="floor" type="StaticBody2D" parent="." index="8"]
 
-position = Vector2( 392, 408 )
+editor/display_folded = true
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
-collision/safe_margin = 0.08
-script = SubResource( 9 )
-__meta__ = {
-"_editor_icon": ExtResource( 1 )
-}
-walk_speed = 300
-jump_height = 800
-max_jumps = 2
-dash_length = 200
-dash_speed = 600
-climb_speed = 400
-wall_jump_length = 400
-left = "left_1"
-right = "right_1"
-up = "up_1"
-down = "down_1"
-jump = "jump_1"
-dash = "dash_1"
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
 
-[node name="collision_shape_2d" type="CollisionShape2D" parent="player" index="0"]
+[node name="shape" type="CollisionPolygon2D" parent="floor" index="0"]
 
-position = Vector2( 0, -24 )
-shape = SubResource( 10 )
+build_mode = 0
+polygon = PoolVector2Array( 0, 520, 1024, 520, 1024, 600, 0, 600 )
 
-[node name="state_machine" parent="player" index="1" instance=ExtResource( 2 )]
+[node name="bakcground_music" type="AudioStreamPlayer" parent="." index="9"]
 
-[node name="camera_rig" type="RemoteTransform2D" parent="player" index="2"]
-
-remote_path = NodePath("../../camera")
-use_global_coordinates = true
-update_position = true
-update_rotation = true
-update_scale = true
-
-[node name="pick_area" type="Area2D" parent="player" index="3" groups=[
-"player",
-]]
-
-editor/display_folded = true
-position = Vector2( 0, -24 )
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="shape" type="CollisionShape2D" parent="player/pick_area" index="0"]
-
-shape = SubResource( 11 )
-
-[node name="stomp_area" type="Area2D" parent="player" index="4"]
-
-editor/display_folded = true
-input_pickable = true
-gravity_vec = Vector2( 0, 1 )
-gravity = 98.0
-linear_damp = 0.1
-angular_damp = 1.0
-audio_bus_override = false
-audio_bus_name = "Master"
-
-[node name="shape" type="CollisionShape2D" parent="player/stomp_area" index="0"]
-
-position = Vector2( 0, -8 )
-shape = SubResource( 12 )
+stream = null
+volume_db = 0.0
+autoplay = false
+mix_target = 0
+bus = "music"
 
 [connection signal="area_entered" from="goal" to="." method="_on_goal_area_entered"]
-
-[connection signal="area_entered" from="player/pick_area" to="player" method="_on_pick_area_entered"]
-
-[connection signal="area_entered" from="player/stomp_area" to="player" method="_on_stomp_area_entered"]
 
 
