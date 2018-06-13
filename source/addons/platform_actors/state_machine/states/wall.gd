@@ -28,10 +28,10 @@ func handle_input(actor, event):
 		jump_height = actor.jump_height
 	if event.is_action_released(actor.left):
 		actor.velocity.x = 10 * normal.x
-		actor.fall()
+		actor.fall(true)
 	elif event.is_action_released(actor.right):
 		actor.velocity.x = 10 * normal.x
-		actor.fall()
+		actor.fall(true)
 	if event.is_action_pressed(actor.jump):
 		if Input.is_action_pressed(actor.right) and normal.x < 0:
 			actor.wall_jump(jump_length * normal.x, jump_height)
@@ -55,7 +55,3 @@ func process(actor, delta):
 		return
 	actor.emit_signal("perform_action", "wall")
 	actor.velocity.y = actor.velocity.y / 2
-	
-func clear():
-#	actor.emit_signal("perform_action", "fall")
-	pass

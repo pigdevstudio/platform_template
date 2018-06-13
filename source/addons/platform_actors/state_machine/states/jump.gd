@@ -28,7 +28,7 @@ func process(actor, delta):
 	if actor.is_on_wall():
 		actor.wall_slide()
 		return
-	if !actor.is_on_floor() and actor.velocity.y > 0:
+	if !actor.is_on_floor() and actor.velocity.y > actor.FALL_THRESHOLD:
 		actor.emit_signal("perform_action", "fall")
 	if actor.is_on_floor():
 		actor.stop()

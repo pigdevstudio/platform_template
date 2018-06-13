@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
-export (int) var walk_speed = 100
+export (int) var walk_speed = 400
 export (int) var jump_height = 800
-export (int) var wall_jump_length = 800
 export (int) var max_jumps = 2
 export (int) var dash_length = 300
-export (int) var dash_speed = 200
-export (int) var climb_speed = 200
+export (int) var dash_speed = 600
+export (int) var climb_speed = 400
+export (int) var wall_jump_length = 400
 
 var direction = 1 setget set_direction
 var velocity = Vector2(0, 0)
@@ -20,6 +20,7 @@ const GRAVITY = 50
 const FLOOR_NORMAL = Vector2(0, -1)
 const SLOPE_STOP_SPEED = 200
 const MAX_FALL_SPEED = 2000
+const FALL_THRESHOLD = GRAVITY * 2
 
 signal enter_state(state)
 signal perform_action(action)
@@ -51,10 +52,11 @@ func jump():
 func cancel_jump():
 	velocity.y = 0
 	
-func fall():
-	set_state("jump")
-	emit_signal("perform_action", "fall")
-	jumps -= 1
+func fall(force_fall = false):
+	if velocity.y > FALL_THRESHOLD or force_fall:
+		set_state("jump")
+		emit_signal("perform_action", "fall")
+		jumps -= 1
 	
 func walk():
 	set_state("walk")
@@ -71,6 +73,7 @@ func wall_slide():
 func wall_jump(length = jump_height, height = jump_height):
 	velocity.y = -height
 	velocity.x = length
+	emit_signal("perform_action", "jump")
 	
 func climb_ladder():
 	velocity.y = 0

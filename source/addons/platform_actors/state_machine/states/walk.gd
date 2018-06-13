@@ -27,7 +27,13 @@ func handle_input(actor, event):
 
 func process(actor, delta):
 	if actor.is_on_floor():
+		if actor.get_slide_count() > 0:
+			var c = actor.get_slide_collision(0)
+			if abs(rad2deg(c.normal.angle())) > 90:
+				actor.velocity = Vector2(actor.walk_speed * actor.direction, 
+					0)
 		actor.jumps = actor.max_jumps
 		actor.can_dash = true
 	else:
 		actor.fall()
+	print(actor.velocity.x)
