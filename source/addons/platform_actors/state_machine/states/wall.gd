@@ -55,7 +55,3 @@ func process(actor, delta):
 		return
 	actor.emit_signal("perform_action", "wall")
 	actor.velocity.y = actor.velocity.y / 2
-	
-func clear():
-#	actor.emit_signal("perform_action", "fall")
-	pass

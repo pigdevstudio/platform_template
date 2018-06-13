@@ -18,9 +18,9 @@ var state_machine = null
 
 const GRAVITY = 50
 const FLOOR_NORMAL = Vector2(0, -1)
-const SLOPE_STOP_SPEED = 100
+const SLOPE_STOP_SPEED = 200
 const MAX_FALL_SPEED = 2000
-const FALL_THRESHOLD = 400
+const FALL_THRESHOLD = GRAVITY * 2
 
 signal enter_state(state)
 signal perform_action(action)
@@ -73,6 +73,7 @@ func wall_slide():
 func wall_jump(length = jump_height, height = jump_height):
 	velocity.y = -height
 	velocity.x = length
+	emit_signal("perform_action", "jump")
 	
 func climb_ladder():
 	velocity.y = 0
