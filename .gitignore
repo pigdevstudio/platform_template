@@ -1,7 +1,5 @@
-.import/
+source/.import/
 assets/
-promo/
-actors/pig_kinematic_character.tscn
-actors/pig_kinematic_character.tscn
-wait.tscn
-font/GaroaHackerClubeBold.otf
+releases/
+source/levels/demo/
+source/interface/demo/

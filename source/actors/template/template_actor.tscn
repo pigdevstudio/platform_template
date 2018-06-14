@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/platform_actors/player_platform_actor.gd" type="Script" id=1]
+[ext_resource path="res://addons/platform_actors/state_machine.tscn" type="PackedScene" id=2]
+[ext_resource path="res://actors/template/template_character.tscn" type="PackedScene" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 26, 52 )
+
+[node name="template_actor" type="KinematicBody2D"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+collision/safe_margin = 0.08
+script = ExtResource( 1 )
+walk_speed = 400
+jump_height = 800
+max_jumps = 2
+dash_length = 300
+dash_speed = 600
+climb_speed = 400
+wall_jump_length = 400
+left = "left_1"
+right = "right_1"
+up = "up_1"
+down = "down_1"
+jump = "jump_1"
+dash = "dash_1"
+
+[node name="collision_shape_2d" type="CollisionShape2D" parent="." index="0"]
+
+position = Vector2( 0, -50 )
+shape = SubResource( 1 )
+
+[node name="state_machine" parent="." index="1" instance=ExtResource( 2 )]
+
+[node name="template_character" parent="." index="2" instance=ExtResource( 3 )]
+
+scale = Vector2( 0.75, 0.75 )
+_sections_unfolded = [ "Transform" ]
+
+[connection signal="direction_changed" from="." to="template_character" method="_on_actor_direction_changed"]
+
+[connection signal="perform_action" from="." to="template_character" method="_on_actor_perform_action"]
+
+
