@@ -16,14 +16,4 @@ audio_bus_name = "Master"
 
 [node name="shape" type="CollisionShape2D" parent="." index="1"]
 
-[node name="sfx" type="AudioStreamPlayer2D" parent="." index="2"]
-
-stream = null
-volume_db = 0.0
-autoplay = false
-max_distance = 2000.0
-attenuation = 1.0
-bus = "effects"
-area_mask = 1
-
 

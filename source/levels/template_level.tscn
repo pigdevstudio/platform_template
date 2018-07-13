@@ -409,6 +409,7 @@ polygon = PoolVector2Array( 0, 520, 1024, 520, 1024, 600, 0, 600 )
 
 stream = null
 volume_db = 0.0
+pitch_scale = 1.0
 autoplay = false
 mix_target = 0
 bus = "music"

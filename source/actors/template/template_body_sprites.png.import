@@ -7,10 +7,7 @@ path="res://.import/template_body_sprites.png-3c5a108a5d9c98f3b164105ce3b85974.s
 [deps]
 
 source_file="res://actors/template/template_body_sprites.png"
-source_md5="fe36b5f3c65b49ea41c4548b8cf019f9"
-
 dest_files=[ "res://.import/template_body_sprites.png-3c5a108a5d9c98f3b164105ce3b85974.stex" ]
-dest_md5="f2731e3bfd6182efa2abb9dbb6be306d"
 
 [params]
 
