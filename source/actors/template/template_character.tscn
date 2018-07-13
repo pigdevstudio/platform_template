@@ -11,7 +11,7 @@
 [ext_resource path="res://actors/template/template_body_sprites.png" type="Texture" id=9]
 [ext_resource path="res://actors/template/template_faces_sprites.png" type="Texture" id=10]
 
-[node name="template_character" type="Position2D"]
+[node name="template_character" type="Position2D" index="0"]
 
 script = ExtResource( 1 )
 
@@ -38,8 +38,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="leg_l" type="Sprite" parent="sprites" index="0"]
 
-position = Vector2( -0.458252, -36.4259 )
-rotation = -0.610358
+position = Vector2( 12, -37.5 )
 z_index = -1
 texture = ExtResource( 9 )
 offset = Vector2( 0, 18 )
@@ -49,8 +48,7 @@ _sections_unfolded = [ "Region", "Z Index" ]
 
 [node name="leg_r" type="Sprite" parent="sprites" index="1"]
 
-position = Vector2( -1.57411, -37.8288 )
-rotation = 0.401994
+position = Vector2( -10, -39 )
 z_index = -1
 texture = ExtResource( 9 )
 offset = Vector2( 0, 20 )
@@ -60,8 +58,8 @@ _sections_unfolded = [ "Region", "Z Index" ]
 
 [node name="body" type="Sprite" parent="sprites" index="2"]
 
-position = Vector2( 4.78436e-07, -33.2931 )
-rotation = 0.148295
+position = Vector2( 2.40747e-007, -36.5 )
+rotation = -0.00526074
 texture = ExtResource( 9 )
 offset = Vector2( 0.960531, -20.4948 )
 region_enabled = true
@@ -70,18 +68,18 @@ _sections_unfolded = [ "Region" ]
 
 [node name="head" type="Sprite" parent="sprites/body" index="0"]
 
-position = Vector2( 2.13275, -51.9766 )
-rotation = -0.233118
+position = Vector2( 3.26825, -50.9835 )
+rotation = -0.118901
 texture = ExtResource( 10 )
 offset = Vector2( 0.128969, -21.4457 )
 region_enabled = true
 region_rect = Rect2( 0, 68, 53, 60 )
-_sections_unfolded = [ "Region", "Visibility", "Z Index" ]
+_sections_unfolded = [ "Region", "Transform", "Visibility", "Z Index" ]
 
 [node name="arm_l" type="Sprite" parent="sprites/body" index="1"]
 
-position = Vector2( -6.43084, -38.7829 )
-rotation = 0.329752
+position = Vector2( 14.4868, -41.4948 )
+rotation = -0.611825
 z_index = -1
 texture = ExtResource( 9 )
 offset = Vector2( 0, 18 )
@@ -91,8 +89,8 @@ _sections_unfolded = [ "Region", "Z Index" ]
 
 [node name="arm_r" type="Sprite" parent="sprites/body" index="2"]
 
-position = Vector2( -13.0332, -38.1209 )
-rotation = -0.805669
+position = Vector2( -12.5211, -42.4922 )
+rotation = 0.610057
 texture = ExtResource( 9 )
 offset = Vector2( 0, 20 )
 region_enabled = true

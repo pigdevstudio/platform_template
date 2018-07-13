@@ -7,10 +7,7 @@ path="res://.import/template_faces_sprites.png-903e52da18b3730bb59914e39f174f65.
 [deps]
 
 source_file="res://actors/template/template_faces_sprites.png"
-source_md5="d18a566925d708c3a5513da4e96a170f"
-
 dest_files=[ "res://.import/template_faces_sprites.png-903e52da18b3730bb59914e39f174f65.stex" ]
-dest_md5="1a143ca90e8de968e7b94d53c03b6ccb"
 
 [params]
 

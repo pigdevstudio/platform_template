@@ -36,4 +36,3 @@ func process(actor, delta):
 		actor.can_dash = true
 	else:
 		actor.fall()
-	print(actor.velocity.x)

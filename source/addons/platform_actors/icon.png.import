@@ -7,10 +7,7 @@ path="res://.import/icon.png-903315b79de22c7adee284c6eb9a8562.stex"
 [deps]
 
 source_file="res://addons/platform_actors/icon.png"
-source_md5="8f52d1ca859692884a9036215e623cc5"
-
 dest_files=[ "res://.import/icon.png-903315b79de22c7adee284c6eb9a8562.stex" ]
-dest_md5="2a8b274b4dbb6c8ebf6a8e9e763a4223"
 
 [params]
 

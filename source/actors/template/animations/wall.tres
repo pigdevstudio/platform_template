@@ -40,7 +40,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( -2.75534, -46.5151 ) ]
+"values": [ Vector2( 1.2099, -47.0413 ) ]
 }
 tracks/3/type = "value"
 tracks/3/path = NodePath("sprites/body/head:rotation_degrees")
@@ -64,7 +64,7 @@ tracks/4/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ Vector2( 2.40747e-07, -36.5 ) ]
+"values": [ Vector2( 2.40747e-007, -36.5 ) ]
 }
 tracks/5/type = "value"
 tracks/5/path = NodePath("sprites/body:rotation_degrees")
