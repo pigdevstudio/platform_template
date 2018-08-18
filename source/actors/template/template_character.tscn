@@ -11,7 +11,7 @@
 [ext_resource path="res://actors/template/template_body_sprites.png" type="Texture" id=9]
 [ext_resource path="res://actors/template/template_faces_sprites.png" type="Texture" id=10]
 
-[node name="template_character" type="Position2D" index="0"]
+[node name="template_character" type="Position2D"]
 
 script = ExtResource( 1 )
 
@@ -58,7 +58,7 @@ _sections_unfolded = [ "Region", "Z Index" ]
 
 [node name="body" type="Sprite" parent="sprites" index="2"]
 
-position = Vector2( 2.40747e-007, -36.5 )
+position = Vector2( 2.40747e-07, -36.5 )
 rotation = -0.00526074
 texture = ExtResource( 9 )
 offset = Vector2( 0.960531, -20.4948 )
@@ -68,8 +68,7 @@ _sections_unfolded = [ "Region" ]
 
 [node name="head" type="Sprite" parent="sprites/body" index="0"]
 
-position = Vector2( 3.26825, -50.9835 )
-rotation = -0.118901
+position = Vector2( 1.27354, -51.994 )
 texture = ExtResource( 10 )
 offset = Vector2( 0.128969, -21.4457 )
 region_enabled = true
