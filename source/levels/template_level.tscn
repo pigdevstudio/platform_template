@@ -427,9 +427,9 @@ bus = "music"
 
 position = Vector2( 158, 382 )
 
-[node name="state_machine" parent="template_actor" index="1"]
+[node name="wall" parent="template_actor/state_machine" index="5"]
 
-actor = "../"
+dash_jump_multiplier = 1.4
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 

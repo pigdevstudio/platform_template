@@ -24,6 +24,8 @@ func input_process(actor, event):
 
 func process(actor, delta):
 	actor.velocity.y = 0
+	if actor.is_on_wall():
+		actor.wall_slide()
 	
 	if abs(init_pos.x - actor.position.x) >= dash_length:
 		if actor.has_method("handle_input"):

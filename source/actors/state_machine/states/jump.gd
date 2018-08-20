@@ -13,6 +13,8 @@ func setup(actor, previous_state):
 			jumps = max_jumps
 		"walk":
 			jumps = max_jumps
+		"fall":
+			jumps = min(jumps, 1)
 	if jumps < 1:
 		return
 	jumps -= 1
@@ -45,8 +47,6 @@ func input_process(actor, event):
 		actor.dash()
 
 func process(actor, delta):
-	if actor.is_on_floor():
-		jumps = max_jumps
 	
 	if not actor.has_method("handle_input"):
 		return

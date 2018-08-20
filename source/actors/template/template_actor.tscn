@@ -42,6 +42,8 @@ shape = SubResource( 1 )
 
 [node name="state_machine" parent="." index="1" instance=ExtResource( 2 )]
 
+actor = "../"
+
 [node name="idle" type="Node" parent="state_machine" index="0"]
 
 script = ExtResource( 3 )
@@ -72,6 +74,7 @@ MAX_FALL_SPEED = 2000
 
 script = ExtResource( 8 )
 wall_jump = 800
+dash_jump_multiplier = 1.4
 
 [node name="template_character" parent="." index="2" instance=ExtResource( 9 )]
 
