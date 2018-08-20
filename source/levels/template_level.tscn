@@ -88,7 +88,7 @@ extents = Vector2( 80, 56 )
 script/source = "extends Label
 
 func _on_state_machine_state_changed(from, to):
-	text = to.name
+	text = to
 "
 
 [node name="level_template" type="Node2D" index="0"]
@@ -426,6 +426,10 @@ bus = "music"
 [node name="template_actor" parent="." index="10" instance=ExtResource( 1 )]
 
 position = Vector2( 158, 382 )
+
+[node name="state_machine" parent="template_actor" index="1"]
+
+actor = "../"
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 

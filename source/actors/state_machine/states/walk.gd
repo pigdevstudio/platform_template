@@ -2,8 +2,8 @@ extends "state.gd"
 
 export (int) var walk_speed = 400
 
-func setup(actor):
-	.setup(actor)
+func setup(actor, previous_state):
+	.setup(actor, previous_state)
 	actor.velocity.x = walk_speed * actor.direction
 	actor.emit_signal("perform_action", "walk")
 	

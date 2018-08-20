@@ -48,6 +48,9 @@ func walk():
 func idle():
 	set_state("idle")
 	
+func wall_slide():
+	set_state("wall")
+	
 func _ready():
 	state_machine = $state_machine
 	connect("enter_state", state_machine, "set_state")
@@ -56,10 +59,12 @@ func _ready():
 func _physics_process(delta):
 	if state_machine == null:
 		return
-	state_machine.state.process(self, delta)
 	velocity = move_and_slide(velocity, FLOOR_NORMAL, 
 		SLOPE_STOP_SPEED, 4, deg2rad(SLOPE_MAX_DEGREE))
+	state_machine.state.process(self, delta)
 	velocity.y += GRAVITY
 	
+	if is_on_wall():
+		return
 	if velocity.y > FALL_THRESHOLD:
 		fall()

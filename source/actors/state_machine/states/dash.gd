@@ -5,8 +5,8 @@ export (int) var dash_speed = 600
 var can_dash = true
 var init_pos = Vector2()
 
-func setup(actor):
-	.setup(actor)
+func setup(actor, previous_state):
+	.setup(actor, previous_state)
 	init_pos = actor.position
 	if not can_dash:
 		return

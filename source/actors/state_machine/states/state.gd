@@ -13,7 +13,7 @@ func process(actor, delta):
 func input_process(actor, event):
 	pass
 	
-func setup(actor):
+func setup(actor, previous_state):
 	pass
 	
 func clear():

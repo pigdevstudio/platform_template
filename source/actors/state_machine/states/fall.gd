@@ -3,8 +3,8 @@ extends "state.gd"
 var in_air_speed = 400
 export (float) var MAX_FALL_SPEED = 2000
 
-func setup(actor):
-	.setup(actor)
+func setup(actor, previous_state):
+	.setup(actor, previous_state)
 
 	actor.emit_signal("perform_action", "fall")
 
@@ -30,6 +30,9 @@ func input_process(actor, event):
 
 func process(actor, delta):
 	actor.velocity.y = min(actor.velocity.y, MAX_FALL_SPEED)
+	
+	if actor.is_on_wall():
+		actor.wall_slide()
 	
 	if actor.has_method("handle_input"):
 		if Input.is_action_pressed(actor.right):

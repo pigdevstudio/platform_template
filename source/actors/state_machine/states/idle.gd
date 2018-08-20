@@ -1,7 +1,7 @@
 extends "state.gd"
 
-func setup(actor):
-	.setup(actor)
+func setup(actor, previous_state):
+	.setup(actor, previous_state)
 	actor.velocity.x = 0
 	actor.emit_signal("perform_action", "idle")
 	

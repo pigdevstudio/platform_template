@@ -6,15 +6,23 @@ export (int) var max_jumps = 2
 
 onready var jumps = max_jumps
 
-func setup(actor):
-	.setup(actor)
-	jumps -= 1
-	actor.emit_signal("perform_action", "jump")
+func setup(actor, previous_state):
+	.setup(actor, previous_state)
+	match previous_state:
+		"idle":
+			jumps = max_jumps
+		"walk":
+			jumps = max_jumps
 	if jumps < 1:
 		return
+	jumps -= 1
 	actor.velocity.y = -jump_height
+	actor.emit_signal("perform_action", "jump")
 
 func input_process(actor, event):
+	if actor.is_on_wall():
+		actor.wall_slide()
+		
 	if event.is_action_pressed(actor.jump):
 		actor.jump()
 	elif event.is_action_released(actor.jump):

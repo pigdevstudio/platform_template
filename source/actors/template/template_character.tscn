@@ -14,6 +14,7 @@
 [node name="template_character" type="Position2D"]
 
 script = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
 
 [node name="animator" type="AnimationPlayer" parent="." index="0"]
 
@@ -44,7 +45,7 @@ texture = ExtResource( 9 )
 offset = Vector2( 0, 18 )
 region_enabled = true
 region_rect = Rect2( 65, 216, 14, 39 )
-_sections_unfolded = [ "Region", "Z Index" ]
+_sections_unfolded = [ "Transform", "Z Index" ]
 
 [node name="leg_r" type="Sprite" parent="sprites" index="1"]
 
@@ -59,12 +60,11 @@ _sections_unfolded = [ "Region", "Z Index" ]
 [node name="body" type="Sprite" parent="sprites" index="2"]
 
 position = Vector2( 2.40747e-07, -36.5 )
-rotation = -0.00526074
 texture = ExtResource( 9 )
 offset = Vector2( 0.960531, -20.4948 )
 region_enabled = true
 region_rect = Rect2( 1, 57, 49, 71 )
-_sections_unfolded = [ "Region" ]
+_sections_unfolded = [ "Transform" ]
 
 [node name="head" type="Sprite" parent="sprites/body" index="0"]
 
