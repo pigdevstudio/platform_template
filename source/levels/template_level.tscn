@@ -1,4 +1,6 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://actors/template/template_actor.tscn" type="PackedScene" id=1]
 
 [sub_resource type="GDScript" id=1]
 
@@ -6,8 +8,7 @@ script/source = "extends Node2D
 
 func _on_goal_area_entered(area):
 	if \"player\" in area.get_parent().get_groups():
-		print(\"finished\")
-"
+		print(\"finished\")"
 
 [sub_resource type="GDScript" id=2]
 
@@ -40,7 +41,7 @@ var score = 0
 func _ready():
 	var t = \"score: {amount}\"
 	$amount.text = t.format({\"amount\":score})
-	
+
 func increase_score(amount):
 	score += amount
 	var t = \"score: {amount}\"
@@ -67,10 +68,10 @@ const SCORE = preload(\"res://interface/score_pop.tscn\")
 
 func _ready():
 	for c in get_children():
-		c.connect(\"tree_exited\", get_node(score_interface), 
+		c.connect(\"tree_exited\", get_node(score_interface),
 			\"increase_score\", [500])
 		c.connect(\"tree_exited\", self, \"child_died\", [c])
-		
+
 func child_died(child):
 	var s = SCORE.instance()
 	s.position = child.position
@@ -82,7 +83,15 @@ func child_died(child):
 custom_solver_bias = 0.0
 extents = Vector2( 80, 56 )
 
-[node name="level_template" type="Node2D"]
+[sub_resource type="GDScript" id=8]
+
+script/source = "extends Label
+
+func _on_state_machine_state_changed(from, to):
+	text = to
+"
+
+[node name="level_template" type="Node2D" index="0"]
 
 script = SubResource( 1 )
 
@@ -414,6 +423,63 @@ autoplay = false
 mix_target = 0
 bus = "music"
 
+[node name="template_actor" parent="." index="10" instance=ExtResource( 1 )]
+
+position = Vector2( 158, 382 )
+
+[node name="wall" parent="template_actor/state_machine" index="5"]
+
+dash_jump_multiplier = 1.4
+
+[node name="label" type="Label" parent="template_actor" index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -98.0
+margin_top = -172.0
+margin_right = 112.0
+margin_bottom = -122.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+script = SubResource( 8 )
+
+[node name="slope" type="StaticBody2D" parent="." index="11"]
+
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+
+[node name="shape" type="CollisionPolygon2D" parent="slope" index="0"]
+
+position = Vector2( 210, 0 )
+build_mode = 0
+polygon = PoolVector2Array( 400, 520, 560, 460, 810, 460, 810, 520 )
+
+[node name="shape2" type="CollisionPolygon2D" parent="slope" index="1"]
+
+position = Vector2( 220, 390 )
+build_mode = 0
+polygon = PoolVector2Array( 128, 4, 0, 132, 128, 132 )
+_sections_unfolded = [ "Transform" ]
+
 [connection signal="area_entered" from="goal" to="." method="_on_goal_area_entered"]
 
+[connection signal="state_changed" from="template_actor/state_machine" to="template_actor/label" method="_on_state_machine_state_changed"]
 
+
+[editable path="template_actor"]
