@@ -2,12 +2,12 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/coin.png-911936e30e7ce678d19d030942fe63d6.stex"
+path="res://.import/icon.png-0c04af38be00805a3af162d8f33c50de.stex"
 
 [deps]
 
-source_file="res://objects/coin/coin.png"
-dest_files=[ "res://.import/coin.png-911936e30e7ce678d19d030942fe63d6.stex" ]
+source_file="res://addons/net.kivano.fsm/icon.png"
+dest_files=[ "res://.import/icon.png-0c04af38be00805a3af162d8f33c50de.stex" ]
 
 [params]
 

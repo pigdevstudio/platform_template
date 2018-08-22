@@ -15,5 +15,3 @@ audio_bus_name = "Master"
 [node name="sprite" type="Sprite" parent="." index="0"]
 
 [node name="shape" type="CollisionShape2D" parent="." index="1"]
-
-
