@@ -316,7 +316,6 @@ shape = SubResource( 7 )
 
 [node name="wall_left" type="StaticBody2D" parent="." index="4"]
 
-editor/display_folded = true
 position = Vector2( -8, 16 )
 input_pickable = false
 collision_layer = 1
@@ -426,10 +425,6 @@ bus = "music"
 [node name="template_actor" parent="." index="10" instance=ExtResource( 1 )]
 
 position = Vector2( 158, 382 )
-
-[node name="wall" parent="template_actor/state_machine" index="5"]
-
-dash_jump_multiplier = 1.4
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 
