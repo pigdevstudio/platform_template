@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://actors/template/template_actor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://juiceness/shake_camera/rigged_camera/camera_rig.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=1]
 
@@ -370,34 +371,7 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="camera" type="Camera2D" parent="." index="7"]
-
-position = Vector2( 392, 408 )
-anchor_mode = 1
-rotating = false
-current = true
-zoom = Vector2( 1, 1 )
-limit_left = 0
-limit_top = -10000000
-limit_right = 10000000
-limit_bottom = 635
-limit_smoothed = false
-drag_margin_h_enabled = true
-drag_margin_v_enabled = true
-smoothing_enabled = false
-smoothing_speed = 5.0
-offset_v = 0.0
-offset_h = 0.0
-drag_margin_left = 0.2
-drag_margin_top = 0.2
-drag_margin_right = 0.2
-drag_margin_bottom = 0.2
-editor_draw_screen = true
-editor_draw_limits = true
-editor_draw_drag_margin = true
-_sections_unfolded = [ "Editor", "Limit" ]
-
-[node name="floor" type="StaticBody2D" parent="." index="8"]
+[node name="floor" type="StaticBody2D" parent="." index="7"]
 
 editor/display_folded = true
 input_pickable = false
@@ -413,7 +387,7 @@ bounce = 0.0
 build_mode = 0
 polygon = PoolVector2Array( 0, 520, 1024, 520, 1024, 600, 0, 600 )
 
-[node name="bakcground_music" type="AudioStreamPlayer" parent="." index="9"]
+[node name="bakcground_music" type="AudioStreamPlayer" parent="." index="8"]
 
 stream = null
 volume_db = 0.0
@@ -422,9 +396,34 @@ autoplay = false
 mix_target = 0
 bus = "music"
 
+[node name="slope" type="StaticBody2D" parent="." index="9"]
+
+editor/display_folded = true
+scale = Vector2( 1, 1 )
+input_pickable = false
+collision_layer = 1
+collision_mask = 1
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+
+[node name="shape" type="CollisionPolygon2D" parent="slope" index="0"]
+
+position = Vector2( 210, 0 )
+build_mode = 0
+polygon = PoolVector2Array( 400, 520, 560, 460, 810, 460, 810, 520 )
+
+[node name="shape2" type="CollisionPolygon2D" parent="slope" index="1"]
+
+position = Vector2( 220, 390 )
+build_mode = 0
+polygon = PoolVector2Array( 128, 4, 0, 132, 128, 132 )
+_sections_unfolded = [ "Transform" ]
+
 [node name="template_actor" parent="." index="10" instance=ExtResource( 1 )]
 
-position = Vector2( 158, 382 )
+position = Vector2( 510, 340 )
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 
@@ -449,32 +448,49 @@ lines_skipped = 0
 max_lines_visible = -1
 script = SubResource( 8 )
 
-[node name="slope" type="StaticBody2D" parent="." index="11"]
+[node name="camera_rig" parent="template_actor" index="4" instance=ExtResource( 2 )]
 
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 1.0
-bounce = 0.0
+remote_path = NodePath("../../camera")
 
-[node name="shape" type="CollisionPolygon2D" parent="slope" index="0"]
+[node name="camera" type="Camera2D" parent="." index="11"]
 
-position = Vector2( 210, 0 )
-build_mode = 0
-polygon = PoolVector2Array( 400, 520, 560, 460, 810, 460, 810, 520 )
+position = Vector2( 510, 340 )
+scale = Vector2( 1, 1 )
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit_left = -10000000
+limit_top = -10000000
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = false
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_enabled = false
+smoothing_speed = 5.0
+offset_v = 0.0
+offset_h = 0.0
+drag_margin_left = 0.2
+drag_margin_top = 0.2
+drag_margin_right = 0.2
+drag_margin_bottom = 0.2
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
 
-[node name="shape2" type="CollisionPolygon2D" parent="slope" index="1"]
+[node name="timer" type="Timer" parent="." index="12"]
 
-position = Vector2( 220, 390 )
-build_mode = 0
-polygon = PoolVector2Array( 128, 4, 0, 132, 128, 132 )
-_sections_unfolded = [ "Transform" ]
+process_mode = 1
+wait_time = 4.0
+one_shot = false
+autostart = true
 
 [connection signal="area_entered" from="goal" to="." method="_on_goal_area_entered"]
 
 [connection signal="state_changed" from="template_actor/state_machine" to="template_actor/label" method="_on_state_machine_state_changed"]
+
+[connection signal="timeout" from="timer" to="template_actor/camera_rig" method="shake"]
 
 
 [editable path="template_actor"]

@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://juiceness/pop_score/pop_score.gd" type="Script" id=1]
+
+[node name="pop_score" type="Node2D"]
+
+position = Vector2( 528, 328 )
+script = ExtResource( 1 )
+final_scale = Vector2( 1.5, 1.5 )
+float_length = 100
+duration = 0.5
+
+[node name="label" type="Label" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = -64.0
+margin_top = -16.0
+margin_right = 64.0
+margin_bottom = 16.0
+rect_pivot_offset = Vector2( 64, 16 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "500"
+align = 1
+valign = 1
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Rect" ]
+
+[node name="tween" type="Tween" parent="." index="1"]
+
+repeat = false
+playback_process_mode = 1
+playback_speed = 1.0
+playback/active = false
+playback/repeat = false
+playback/speed = 1.0
+
+
