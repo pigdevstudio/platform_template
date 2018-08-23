@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://juiceness/shake_camera/rigged_camera/camera_rig.gd" type="Script" id=1]
+
+[node name="camera_rig" type="RemoteTransform2D"]
+
+remote_path = NodePath("")
+use_global_coordinates = true
+update_position = true
+update_rotation = true
+update_scale = true
+script = ExtResource( 1 )
+shake_strength = 10
+
+[node name="timer" type="Timer" parent="." index="0"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+
