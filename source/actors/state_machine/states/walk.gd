@@ -34,9 +34,11 @@ func input_process(actor, event):
 		actor.dash()
 
 func process(actor, delta):
+	actor.velocity.y += actor.GRAVITY
 	if actor.get_slide_count() < 1:
 		return
 	
 	var collision = actor.get_slide_collision(0)
 	if abs(rad2deg(collision.normal.angle())) > 90:
 		actor.velocity = Vector2(walk_speed * actor.direction, 0)
+	

@@ -29,6 +29,7 @@ func input_process(actor, event):
 		actor.dash()
 
 func process(actor, delta):
+	actor.velocity.y += actor.GRAVITY
 	actor.velocity.y = min(actor.velocity.y, MAX_FALL_SPEED)
 	
 	if actor.is_on_wall():

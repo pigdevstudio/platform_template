@@ -22,17 +22,23 @@ func input_process(actor, event):
 			actor.velocity.y = -wall_jump
 			actor.emit_signal("perform_action", "jump")
 	
+	elif event.is_action_pressed(actor.dash) and not actor.is_on_wall():
+		actor.dash()
+	
 	if event.is_action_released(actor.right) and sign(normal.x) == -1:
 		actor.velocity.x = 0
 		actor.fall()
 	if event.is_action_released(actor.left) and sign(normal.x) == 1:
 		actor.velocity.x = 0
 		actor.fall()
+		
 
 func process(actor, delta):
 	if actor.is_on_wall():
 		actor.emit_signal("perform_action", "wall")
 		actor.velocity.y /= 2
+	actor.velocity.y += actor.GRAVITY
+	
 	
 	if actor.has_method("handle_input"):
 		if Input.is_action_pressed(actor.right) and sign(normal.x) == -1:

@@ -48,6 +48,7 @@ func input_process(actor, event):
 
 func process(actor, delta):
 	
+	actor.velocity.y += actor.GRAVITY
 	if not actor.has_method("handle_input"):
 		return
 	if Input.is_action_pressed(actor.right):

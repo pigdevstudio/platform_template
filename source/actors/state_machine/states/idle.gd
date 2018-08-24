@@ -20,4 +20,5 @@ func input_process(actor, event):
 		actor.dash()
 	
 func process(actor, delta):
-	pass
+	actor.velocity.y += actor.GRAVITY
+	
