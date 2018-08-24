@@ -18,7 +18,10 @@ func setup(actor, previous_state):
 			can_dash = true
 	
 	if not can_dash:
-		get_parent().state = previous_state
+		if previous_state.name == "jump":
+			actor.fall()
+		else:
+			get_parent().state = previous_state
 		return
 	actor.velocity.y = 0
 	actor.emit_signal("perform_action", "dash")
@@ -32,6 +35,7 @@ func input_process(actor, event):
 		
 	if event.is_action_pressed(actor.jump):
 		actor.jump()
+		can_dash = true
 
 func process(actor, delta):
 	if actor.is_on_wall():

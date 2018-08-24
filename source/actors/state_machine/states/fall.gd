@@ -5,7 +5,15 @@ export (float) var MAX_FALL_SPEED = 2000
 
 func setup(actor, previous_state):
 	.setup(actor, previous_state)
-
+	
+	in_air_speed = get_node("../walk").walk_speed
+	match previous_state:
+		"jump":
+			in_air_speed = get_node("../jump").in_air_speed
+		"dash":
+			in_air_speed = get_node("../dash").dash_speed
+		"walk":
+			in_air_speed = get_node("../walk").walk_speed
 	actor.emit_signal("perform_action", "fall")
 
 func input_process(actor, event):
@@ -27,6 +35,8 @@ func input_process(actor, event):
 	
 	if event.is_action_pressed(actor.dash):
 		actor.dash()
+	if event.is_action_released(actor.dash):
+		in_air_speed = get_node("../walk").walk_speed
 
 func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
@@ -55,3 +65,4 @@ func process(actor, delta):
 				actor.idle()
 		else:
 			actor.idle()
+		
