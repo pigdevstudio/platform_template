@@ -3,14 +3,14 @@
 [ext_resource path="res://actors/template/template_actor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://juiceness/shake_camera/rigged_camera/camera_rig.tscn" type="PackedScene" id=2]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
 
 script/source = "extends VBoxContainer
 
 func _process(delta):
 	$spam.text = str(int($spam/timer.time_left))"
 
-[sub_resource type="GDScript" id=3]
+[sub_resource type="GDScript" id=2]
 
 script/source = "extends HBoxContainer
 
@@ -25,7 +25,7 @@ func add_coin():
 	$amount.text = t.format({\"amount\":coins})
 	"
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=3]
 
 script/source = "extends HBoxContainer
 
@@ -40,7 +40,7 @@ func increase_score(amount):
 	var t = \"score: {amount}\"
 	$amount.text = t.format({\"amount\":score})"
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=4]
 
 script/source = "extends Node2D
 
@@ -52,7 +52,7 @@ func _ready():
 		c.connect(\"tree_exited\", get_node(score_interface),
 			 \"increase_score\", [100])"
 
-[sub_resource type="GDScript" id=6]
+[sub_resource type="GDScript" id=5]
 
 script/source = "extends Node2D
 export (NodePath) var score_interface
@@ -71,7 +71,7 @@ func child_died(child):
 	s.get_node(\"label\").text = str(int(500))
 	add_child(s)"
 
-[sub_resource type="GDScript" id=8]
+[sub_resource type="GDScript" id=6]
 
 script/source = "extends Label
 
@@ -128,7 +128,7 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 custom_constants/separation = 14
 alignment = 0
-script = SubResource( 2 )
+script = SubResource( 1 )
 _sections_unfolded = [ "custom_constants" ]
 
 [node name="title" type="Label" parent="interface/control/time" index="0"]
@@ -193,7 +193,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
-script = SubResource( 3 )
+script = SubResource( 2 )
 
 [node name="coin" type="TextureRect" parent="interface/control/coins" index="0"]
 
@@ -249,7 +249,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
-script = SubResource( 4 )
+script = SubResource( 3 )
 
 [node name="amount" type="Label" parent="interface/control/score" index="0"]
 
@@ -273,20 +273,19 @@ max_lines_visible = -1
 
 [node name="coins" type="Node2D" parent="." index="1"]
 
-script = SubResource( 5 )
+script = SubResource( 4 )
 coins_interface = NodePath("../interface/control/coins")
 score_interface = NodePath("../interface/control/score")
 
 [node name="enemies" type="Node2D" parent="." index="2"]
 
 z_index = -1
-script = SubResource( 6 )
+script = SubResource( 5 )
 _sections_unfolded = [ "Z Index" ]
 score_interface = NodePath("../interface/control/score")
 
 [node name="wall_left" type="StaticBody2D" parent="." index="3"]
 
-editor/display_folded = true
 position = Vector2( -8, 16 )
 input_pickable = false
 collision_layer = 1
@@ -301,9 +300,14 @@ bounce = 0.0
 build_mode = 0
 polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
 
+[node name="shape2" type="CollisionPolygon2D" parent="wall_left" index="1"]
+
+position = Vector2( -212, 4 )
+build_mode = 0
+polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
+
 [node name="wall_right" type="StaticBody2D" parent="." index="4"]
 
-editor/display_folded = true
 position = Vector2( 1930, 20 )
 input_pickable = false
 collision_layer = 1
@@ -343,7 +347,6 @@ __meta__ = {
 
 [node name="floor" type="StaticBody2D" parent="." index="6"]
 
-editor/display_folded = true
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -356,6 +359,12 @@ bounce = 0.0
 
 build_mode = 0
 polygon = PoolVector2Array( 0, 520, 1910, 520, 1910, 590, 0, 600 )
+
+[node name="shape2" type="CollisionPolygon2D" parent="floor" index="1"]
+
+position = Vector2( 320, -40 )
+build_mode = 0
+polygon = PoolVector2Array( 890, 210, 890, 280, 1410, 280, 1410, 210 )
 
 [node name="bakcground_music" type="AudioStreamPlayer" parent="." index="7"]
 
@@ -391,11 +400,8 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="template_actor" parent="." index="9" instance=ExtResource( 1 )]
 
+editor/display_folded = true
 position = Vector2( 510, 340 )
-
-[node name="jump" parent="template_actor/state_machine" index="2"]
-
-max_jumps = 1
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 
@@ -418,7 +424,7 @@ valign = 1
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
-script = SubResource( 8 )
+script = SubResource( 6 )
 
 [node name="camera_rig" parent="template_actor" index="4" instance=ExtResource( 2 )]
 

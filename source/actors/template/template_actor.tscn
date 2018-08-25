@@ -15,7 +15,7 @@
 custom_solver_bias = 0.0
 extents = Vector2( 26, 52 )
 
-[node name="template_actor" type="KinematicBody2D"]
+[node name="template_actor" type="KinematicBody2D" index="0"]
 
 input_pickable = false
 collision_layer = 1
@@ -52,6 +52,13 @@ script = ExtResource( 3 )
 
 script = ExtResource( 4 )
 walk_speed = 400
+
+[node name="fall_threshold" type="Timer" parent="state_machine/walk" index="0"]
+
+process_mode = 1
+wait_time = 0.25
+one_shot = true
+autostart = false
 
 [node name="jump" type="Node" parent="state_machine" index="2"]
 
