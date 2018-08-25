@@ -36,6 +36,8 @@ func process(actor, delta):
 	if actor.is_on_wall():
 		actor.emit_signal("perform_action", "wall")
 		actor.velocity.y /= 2
+	elif actor.velocity.y > actor.FALL_THRESHOLD:
+		actor.fall()
 	actor.velocity.y += actor.GRAVITY
 	
 	if actor.is_on_floor():

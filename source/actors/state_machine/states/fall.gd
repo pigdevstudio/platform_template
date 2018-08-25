@@ -8,8 +8,6 @@ func setup(actor, previous_state):
 	match previous_state:
 		"jump":
 			in_air_speed = get_node("../jump").in_air_speed
-		"dash":
-			in_air_speed = get_node("../dash").dash_speed
 		"walk":
 			in_air_speed = get_node("../walk").walk_speed
 	actor.emit_signal("perform_action", "fall")

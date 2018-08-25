@@ -408,11 +408,12 @@ position = Vector2( 510, 340 )
 
 [node name="fall_threshold" parent="template_actor/state_machine/walk" index="0"]
 
+wait_time = 1.0
 coyotte_fall = false
 
-[node name="wall" parent="template_actor/state_machine" index="5"]
+[node name="jump" parent="template_actor/state_machine" index="2"]
 
-MAX_WALL_SPEED = 600
+max_jumps = 2
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 

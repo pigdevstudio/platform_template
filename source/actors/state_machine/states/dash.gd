@@ -22,15 +22,19 @@ func setup(actor, previous_state):
 		else:
 			get_parent().state = previous_state
 		return
+	
 	actor.velocity.y = 0
-	actor.emit_signal("perform_action", "dash")
+	
 	actor.velocity.x = dash_speed * actor.direction
+	actor.emit_signal("perform_action", "dash")
 	can_dash = false
 
 func input_process(actor, event):
 	if event.is_action_released(actor.dash):
-		actor.idle()
-		can_dash = true
+		if actor.is_on_floor():
+			actor.idle()
+		else:
+			actor.fall()
 		
 	if event.is_action_pressed(actor.jump):
 		actor.jump()
