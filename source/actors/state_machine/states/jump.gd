@@ -11,9 +11,6 @@ onready var jumps = max_jumps
 func setup(actor, previous_state):
 	was_dashing = false
 	in_air_speed = get_node("../walk").walk_speed
-	if actor.is_on_wall():
-		actor.wall_slide()
-		return
 	
 	match previous_state:
 		"idle":
@@ -35,9 +32,6 @@ func setup(actor, previous_state):
 	actor.emit_signal("perform_action", "jump")
 
 func input_process(actor, event):
-	if actor.is_on_wall():
-		actor.wall_slide()
-		
 	if event.is_action_pressed(actor.jump):
 		actor.jump()
 	elif event.is_action_released(actor.jump):
@@ -66,6 +60,8 @@ func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
 	if actor.velocity.y > actor.FALL_THRESHOLD:
 		actor.fall()
+	if actor.is_on_wall():
+		actor.wall_slide()
 	
 	if not actor.has_method("handle_input"):
 		return
