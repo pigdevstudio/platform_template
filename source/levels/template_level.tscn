@@ -459,7 +459,5 @@ editor_draw_drag_margin = false
 
 [connection signal="state_changed" from="template_actor/state_machine" to="template_actor/label" method="_on_state_machine_state_changed"]
 
-[connection signal="timeout" from="timer" to="template_actor/camera_rig" method="shake"]
-
 
 [editable path="template_actor"]

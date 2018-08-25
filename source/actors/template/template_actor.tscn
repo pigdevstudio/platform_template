@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://actors/template/player_platform_actor.gd" type="Script" id=1]
 [ext_resource path="res://actors/state_machine/state_machine.tscn" type="PackedScene" id=2]
@@ -14,6 +14,19 @@
 
 custom_solver_bias = 0.0
 extents = Vector2( 26, 52 )
+
+[sub_resource type="GDScript" id=2]
+
+script/source = "extends Timer
+
+export (bool) var coyotte_fall = false
+
+func start():
+	if coyotte_fall:
+		.start()
+	else:
+		emit_signal(\"timeout\")
+		stop()"
 
 [node name="template_actor" type="KinematicBody2D" index="0"]
 
@@ -55,16 +68,18 @@ walk_speed = 400
 
 [node name="fall_threshold" type="Timer" parent="state_machine/walk" index="0"]
 
-process_mode = 1
-wait_time = 0.25
+process_mode = 0
+wait_time = 2.0
 one_shot = true
 autostart = false
+script = SubResource( 2 )
+coyotte_fall = true
 
 [node name="jump" type="Node" parent="state_machine" index="2"]
 
 script = ExtResource( 5 )
 jump_height = 800
-max_jumps = 2
+max_jumps = 1
 
 [node name="dash" type="Node" parent="state_machine" index="3"]
 
