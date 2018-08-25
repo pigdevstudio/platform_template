@@ -79,7 +79,7 @@ func _on_state_machine_state_changed(from, to):
 	text = to
 "
 
-[node name="level_template" type="Node2D" index="0"]
+[node name="template_level" type="Node2D" index="0"]
 
 [node name="interface" type="CanvasLayer" parent="." index="0"]
 
@@ -95,6 +95,7 @@ _sections_unfolded = [ "Pause" ]
 [node name="control" type="Control" parent="interface" index="0"]
 
 pause_mode = 1
+visible = false
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -403,8 +404,15 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="template_actor" parent="." index="9" instance=ExtResource( 1 )]
 
-editor/display_folded = true
 position = Vector2( 510, 340 )
+
+[node name="fall_threshold" parent="template_actor/state_machine/walk" index="0"]
+
+coyotte_fall = false
+
+[node name="wall" parent="template_actor/state_machine" index="5"]
+
+MAX_WALL_SPEED = 600
 
 [node name="label" type="Label" parent="template_actor" index="3"]
 

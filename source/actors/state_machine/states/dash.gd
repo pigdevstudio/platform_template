@@ -17,7 +17,7 @@ func setup(actor, previous_state):
 			can_dash = true
 	
 	if not can_dash:
-		if previous_state.name == "jump":
+		if previous_state == "jump":
 			actor.fall()
 		else:
 			get_parent().state = previous_state

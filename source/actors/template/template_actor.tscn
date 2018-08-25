@@ -97,6 +97,7 @@ MAX_FALL_SPEED = 2000
 script = ExtResource( 8 )
 wall_jump = 800
 dash_jump_multiplier = 1.4
+MAX_WALL_SPEED = 600
 
 [node name="template_character" parent="." index="2" instance=ExtResource( 9 )]
 

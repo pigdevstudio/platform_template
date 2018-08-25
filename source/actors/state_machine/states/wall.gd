@@ -2,6 +2,7 @@ extends "state.gd"
 
 export (float) var wall_jump = 800
 export (float) var dash_jump_multiplier = 1.4
+export (float) var MAX_WALL_SPEED = 600
 
 var normal = Vector2(0,0)
 
@@ -53,4 +54,6 @@ func process(actor, delta):
 			actor.velocity.x += actor.GRAVITY * -sign(normal.x) * 2
 	else:
 		actor.velocity.x += actor.GRAVITY * -sign(normal.x) * 2
+	
+	actor.velocity.x = clamp(actor.velocity.x, -MAX_WALL_SPEED, MAX_WALL_SPEED)
 	
