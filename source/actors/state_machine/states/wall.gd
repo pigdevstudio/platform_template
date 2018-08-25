@@ -38,7 +38,13 @@ func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
 	
 	if actor.is_on_floor():
-		actor.idle()
+		if not actor.has_method("handle_input"):
+			actor.idle()
+			return
+		if Input.is_action_pressed(actor.right) or Input.is_action_pressed(actor.left):
+			actor.walk()
+		else:
+			actor.idle()
 	
 	if actor.has_method("handle_input"):
 		if Input.is_action_pressed(actor.right) and sign(normal.x) == -1:
