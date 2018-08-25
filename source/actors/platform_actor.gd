@@ -57,8 +57,6 @@ func _ready():
 	set_state("idle")
 	
 func _physics_process(delta):
-	if state_machine == null:
-		return
 	velocity = move_and_slide(velocity, FLOOR_NORMAL, 
 		SLOPE_STOP_SPEED, 4, deg2rad(SLOPE_MAX_DEGREE))
 	state_machine.state.process(self, delta)
