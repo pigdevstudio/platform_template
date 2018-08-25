@@ -9,8 +9,6 @@ var in_air_speed = 400.0
 onready var jumps = max_jumps
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
-	
 	was_dashing = false
 	in_air_speed = get_node("../walk").walk_speed
 	if actor.is_on_wall():

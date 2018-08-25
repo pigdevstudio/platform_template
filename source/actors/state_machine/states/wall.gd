@@ -6,8 +6,6 @@ export (float) var dash_jump_multiplier = 1.4
 var normal = Vector2(0,0)
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
-	
 	normal = actor.get_slide_collision(0).normal
 	actor.emit_signal("perform_action", "wall")
 

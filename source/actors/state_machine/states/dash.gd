@@ -6,7 +6,6 @@ var can_dash = true
 var init_pos = Vector2()
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
 	init_pos = actor.position
 	
 	match previous_state:
@@ -58,4 +57,5 @@ func process(actor, delta):
 	
 	var collision = actor.get_slide_collision(0)
 	if abs(rad2deg(collision.normal.angle())) > 90:
-		actor.velocity = Vector2(dash_speed * actor.direction, 0)	
+		actor.velocity = Vector2(dash_speed * actor.direction, 0)
+	

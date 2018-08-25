@@ -4,8 +4,6 @@ var in_air_speed = 400
 export (float) var MAX_FALL_SPEED = 2000
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
-	
 	in_air_speed = get_node("../walk").walk_speed
 	match previous_state:
 		"jump":
