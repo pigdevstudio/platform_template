@@ -61,8 +61,3 @@ func _physics_process(delta):
 		SLOPE_STOP_SPEED, 4, deg2rad(SLOPE_MAX_DEGREE))
 	state_machine.state.process(self, delta)
 	
-	if is_on_wall():
-		return
-	if velocity.y > FALL_THRESHOLD:
-		fall()
-	

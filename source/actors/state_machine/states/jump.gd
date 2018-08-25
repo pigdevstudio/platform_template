@@ -1,11 +1,12 @@
 extends "state.gd"
 
-var in_air_speed = 400.0
 export (int) var jump_height = 800
 export (int) var max_jumps = 2
 
-onready var jumps = max_jumps
 var was_dashing = false
+var in_air_speed = 400.0
+
+onready var jumps = max_jumps
 
 func setup(actor, previous_state):
 	.setup(actor, previous_state)
@@ -65,6 +66,9 @@ func input_process(actor, event):
 
 func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
+	if actor.velocity.y > actor.FALL_THRESHOLD:
+		actor.fall()
+	
 	if not actor.has_method("handle_input"):
 		return
 	if Input.is_action_pressed(actor.right):
@@ -73,3 +77,4 @@ func process(actor, delta):
 	elif Input.is_action_pressed(actor.left):
 		actor.direction = -1
 		actor.velocity.x = in_air_speed * actor.direction
+	
