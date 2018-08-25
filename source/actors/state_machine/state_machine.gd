@@ -22,3 +22,4 @@ func set_state(new_state):
 	
 func get_state():
 	return state
+	

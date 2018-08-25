@@ -1,7 +1,5 @@
 extends Node
 
-var test = false
-
 func _ready():
 	set_process_input(false)
 	set_process(false)
@@ -18,3 +16,4 @@ func setup(actor, previous_state):
 	
 func clear():
 	pass
+	

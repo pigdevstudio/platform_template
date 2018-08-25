@@ -1,7 +1,6 @@
 extends "state.gd"
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
 	actor.velocity.x = 0
 	actor.emit_signal("perform_action", "idle")
 	
@@ -20,4 +19,7 @@ func input_process(actor, event):
 		actor.dash()
 	
 func process(actor, delta):
-	pass
+	actor.velocity.y += actor.GRAVITY
+	if actor.velocity.y > actor.FALL_THRESHOLD:
+		actor.fall()
+	

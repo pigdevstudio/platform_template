@@ -6,8 +6,6 @@ export (float) var dash_jump_multiplier = 1.4
 var normal = Vector2(0,0)
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
-	
 	normal = actor.get_slide_collision(0).normal
 	actor.emit_signal("perform_action", "wall")
 
@@ -22,17 +20,31 @@ func input_process(actor, event):
 			actor.velocity.y = -wall_jump
 			actor.emit_signal("perform_action", "jump")
 	
+	elif event.is_action_pressed(actor.dash) and not actor.is_on_wall():
+		actor.dash()
+	
 	if event.is_action_released(actor.right) and sign(normal.x) == -1:
 		actor.velocity.x = 0
 		actor.fall()
 	if event.is_action_released(actor.left) and sign(normal.x) == 1:
 		actor.velocity.x = 0
 		actor.fall()
+		
 
 func process(actor, delta):
 	if actor.is_on_wall():
 		actor.emit_signal("perform_action", "wall")
 		actor.velocity.y /= 2
+	actor.velocity.y += actor.GRAVITY
+	
+	if actor.is_on_floor():
+		if not actor.has_method("handle_input"):
+			actor.idle()
+			return
+		if Input.is_action_pressed(actor.right) or Input.is_action_pressed(actor.left):
+			actor.walk()
+		else:
+			actor.idle()
 	
 	if actor.has_method("handle_input"):
 		if Input.is_action_pressed(actor.right) and sign(normal.x) == -1:

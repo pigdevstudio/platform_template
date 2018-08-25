@@ -3,9 +3,13 @@ extends "state.gd"
 export (int) var walk_speed = 400
 
 func setup(actor, previous_state):
-	.setup(actor, previous_state)
 	actor.velocity.x = walk_speed * actor.direction
 	actor.emit_signal("perform_action", "walk")
+	
+	$fall_threshold.connect("timeout", self, "_on_fall_threshold_timeout", [actor])
+	
+func clear():
+	$fall_threshold.disconnect("timeout", self, "_on_fall_threshold_timeout")
 	
 func input_process(actor, event):
 	if event.is_action_pressed(actor.jump):
@@ -34,9 +38,20 @@ func input_process(actor, event):
 		actor.dash()
 
 func process(actor, delta):
+	actor.velocity.y += actor.GRAVITY
+	if actor.velocity.y > actor.FALL_THRESHOLD:
+		$fall_threshold.start()
+		
+	if not $fall_threshold.is_stopped() and actor.is_on_wall():
+		actor.wall_slide()
+	
 	if actor.get_slide_count() < 1:
 		return
 	
 	var collision = actor.get_slide_collision(0)
 	if abs(rad2deg(collision.normal.angle())) > 90:
 		actor.velocity = Vector2(walk_speed * actor.direction, 0)
+	
+func _on_fall_threshold_timeout(actor):
+	actor.fall()
+	
