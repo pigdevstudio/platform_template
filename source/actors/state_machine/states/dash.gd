@@ -8,19 +8,22 @@ var init_pos = Vector2()
 func setup(actor, previous_state):
 	init_pos = actor.position
 	
-	match previous_state:
-		"idle":
-			can_dash = true
-		"walk":
-			can_dash = true
-		"wall":
-			can_dash = true
+	match previous_state.name:
+		"jump":
+			if previous_state.jumps + 1 < previous_state.max_jumps:
+				can_dash = false
+			previous_state.jumps -= 1
+		"fall":
+			var jump = get_parent().get_node("jump")
+			if jump.jumps + 1 < jump.max_jumps:
+				can_dash = false
+			jump.jumps -= 1
 	
 	if not can_dash:
-		if previous_state == "jump":
+		if previous_state.name == "jump":
 			actor.fall()
 		else:
-			get_parent().state = previous_state
+			get_parent().state = previous_state.name
 		return
 	
 	actor.velocity.y = 0
