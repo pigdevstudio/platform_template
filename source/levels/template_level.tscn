@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://actors/template/template_actor.tscn" type="PackedScene" id=1]
 [ext_resource path="res://juiceness/shake_camera/rigged_camera/camera_rig.tscn" type="PackedScene" id=2]
+[ext_resource path="res://objects/ladder/ladder.tscn" type="PackedScene" id=3]
 
 [sub_resource type="GDScript" id=1]
 
@@ -57,7 +58,7 @@ func _ready():
 script/source = "extends Node2D
 export (NodePath) var score_interface
 
-const SCORE = preload(\"res://interface/score_pop.tscn\")
+const SCORE = preload(\"res://juiceness/pop_score/pop_label.tscn\")
 
 func _ready():
 	for c in get_children():
@@ -344,13 +345,13 @@ collision_mask = 1
 occluder_light_mask = 1
 format = 1
 tile_data = PoolIntArray(  )
+_sections_unfolded = [ "Collision" ]
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="floor" type="StaticBody2D" parent="." index="6"]
 
-editor/display_folded = true
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -364,12 +365,6 @@ bounce = 0.0
 build_mode = 0
 polygon = PoolVector2Array( 0, 520, 1910, 520, 1910, 590, 0, 600 )
 
-[node name="shape2" type="CollisionPolygon2D" parent="floor" index="1"]
-
-position = Vector2( 320, -40 )
-build_mode = 0
-polygon = PoolVector2Array( 890, 210, 890, 280, 1410, 280, 1410, 210 )
-
 [node name="bakcground_music" type="AudioStreamPlayer" parent="." index="7"]
 
 stream = null
@@ -381,6 +376,7 @@ bus = "music"
 
 [node name="slope" type="StaticBody2D" parent="." index="8"]
 
+editor/display_folded = true
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -406,9 +402,12 @@ _sections_unfolded = [ "Transform" ]
 
 position = Vector2( 510, 340 )
 
-[node name="fall_threshold" parent="template_actor/state_machine/walk" index="0"]
+[node name="walk" parent="template_actor/state_machine" index="1"]
 
-wait_time = 1.0
+editor/display_folded = true
+
+[node name="coyotte_fall" parent="template_actor/state_machine/walk" index="0"]
+
 coyotte_fall = false
 
 [node name="jump" parent="template_actor/state_machine" index="2"]
@@ -458,7 +457,7 @@ limit_smoothed = false
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 smoothing_enabled = false
-smoothing_speed = 5.0
+smoothing_speed = 20.0
 offset_v = 0.0
 offset_h = 0.0
 drag_margin_left = 0.2
@@ -468,6 +467,39 @@ drag_margin_bottom = 0.2
 editor_draw_screen = true
 editor_draw_limits = false
 editor_draw_drag_margin = false
+_sections_unfolded = [ "Smoothing" ]
+
+[node name="ladder" parent="." index="11" instance=ExtResource( 3 )]
+
+position = Vector2( 1360, 160 )
+
+[node name="ladder2" parent="." index="12" instance=ExtResource( 3 )]
+
+position = Vector2( 1677.6, -88 )
+
+[node name="pass_through" type="StaticBody2D" parent="." index="13"]
+
+input_pickable = false
+collision_layer = 8
+collision_mask = 0
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Collision" ]
+
+[node name="shape" type="CollisionPolygon2D" parent="pass_through" index="0"]
+
+position = Vector2( 136, 64 )
+build_mode = 0
+polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
+
+[node name="shape2" type="CollisionPolygon2D" parent="pass_through" index="1"]
+
+position = Vector2( 141.6, -184 )
+scale = Vector2( 1, 1 )
+build_mode = 0
+polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
 
 [connection signal="state_changed" from="template_actor/state_machine" to="template_actor/label" method="_on_state_machine_state_changed"]
 

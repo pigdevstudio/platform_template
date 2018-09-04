@@ -102,6 +102,11 @@ wall_jump = 800
 dash_jump_multiplier = 1.4
 MAX_WALL_SPEED = 600
 
+[node name="climb" type="Node" parent="state_machine" index="6"]
+
+script = ExtResource( 9 )
+speed = 200.0
+
 
 scale = Vector2( 0.75, 0.75 )
 

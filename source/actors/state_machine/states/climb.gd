@@ -1,25 +1,39 @@
 extends "state.gd"
 
-signal start_climb
-signal stop_climb
-func setup(actor):
-	.setup(actor)
-	actor.jumps = actor.max_jumps
-func handle_input(actor, event):
+export (float) var speed = 200
+
+var direction = -1
+
+func setup(actor, previous_state):
+	actor.velocity = Vector2(0, 0)
+	actor.emit_signal("perform_action", "climb")
+
+func input_process(actor, event):
+	if event.is_action_pressed(actor.up):
+		direction = -1
+		actor.emit_signal("perform_action", "climb")
+	elif event.is_action_pressed(actor.down):
+		direction = 1
+		actor.emit_signal("perform_action", "climb")
+		
+	if event.is_action_released(actor.up) and direction == -1:
+		actor.velocity.y = 0
+		actor.emit_signal("perform_action", "stop")
+	if event.is_action_released(actor.down) and direction == 1:
+		actor.velocity.y = 0
+		actor.emit_signal("perform_action", "stop")
+		
 	if event.is_action_pressed(actor.jump):
 		actor.jump()
-
+	
 func process(actor, delta):
-	if !actor.is_on_ladder():
-		actor.fall()
+	
+	if not actor.has_method("handle_input"):
 		return
-	if actor.has_method("handle_input"):
-		if Input.is_action_pressed(actor.up):
-			actor.velocity.y = -actor.climb_speed
-			emit_signal("start_climb")
-		elif Input.is_action_pressed(actor.down):
-			actor.velocity.y = actor.climb_speed
-			emit_signal("start_climb")
-		else:
-			actor.velocity.y = 0
-			emit_signal("stop_climb")
+		
+	if Input.is_action_pressed(actor.up):
+		direction = -1
+		actor.velocity.y = speed * direction
+	if Input.is_action_pressed(actor.down):
+		direction = 1
+		actor.velocity.y = speed * direction

@@ -26,6 +26,9 @@ func set_direction(value):
 
 func set_state(new_state):
 	emit_signal("enter_state", new_state)
+	
+func climb():
+	set_state("climb")
 
 func dash():
 	if not can_dash:
@@ -40,7 +43,6 @@ func cancel_jump():
 	
 func fall(force_fall = false):
 	set_state("fall")
-	emit_signal("perform_action", "fall")
 	
 func walk():
 	set_state("walk")
@@ -51,6 +53,9 @@ func idle():
 func wall_slide():
 	set_state("wall")
 	
+func stop():
+	emit_signal("perform_action", "stop")
+
 func _ready():
 	state_machine = $state_machine
 	connect("enter_state", state_machine, "set_state")

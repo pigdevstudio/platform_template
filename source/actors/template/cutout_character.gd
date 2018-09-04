@@ -23,6 +23,10 @@ func _on_actor_perform_action(action):
 			$animator.play("dash")
 		"wall":
 			$animator.play("wall")
+		"climb":
+			$animator.play("climb")
+		"stop":
+			$animator.stop(false)
 
 func _on_actor_direction_changed(new_direction):
 	if new_direction < 0:
