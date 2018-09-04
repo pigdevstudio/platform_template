@@ -107,11 +107,34 @@ MAX_WALL_SPEED = 600
 script = ExtResource( 9 )
 speed = 200.0
 
+[node name="pass_through" type="Area2D" parent="." index="2"]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision_layer = 0
+collision_mask = 8
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 10 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="shape" type="CollisionShape2D" parent="pass_through" index="0"]
+
+position = Vector2( 0, -50 )
+scale = Vector2( 1, 1 )
+shape = SubResource( 1 )
+
+[node name="template_character" parent="." index="3" instance=ExtResource( 11 )]
 
 scale = Vector2( 0.75, 0.75 )
 
 [connection signal="direction_changed" from="." to="template_character" method="_on_actor_direction_changed"]
 
 [connection signal="perform_action" from="." to="template_character" method="_on_actor_perform_action"]
+
+[connection signal="body_exited" from="pass_through" to="pass_through" method="_on_pass_through_body_exited"]
 
 
