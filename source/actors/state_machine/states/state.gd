@@ -14,6 +14,6 @@ func input_process(actor, event):
 func setup(actor, previous_state):
 	pass
 	
-func clear():
+func clear(actor):
 	pass
 	

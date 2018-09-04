@@ -12,7 +12,7 @@ func set_state(new_state):
 	new_state = get_node(new_state)
 	
 	if state != null:
-		state.clear()
+		state.clear(actor)
 		emit_signal("state_changed", state.name, new_state.name)
 		previous_state = state
 	else:
