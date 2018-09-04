@@ -6,11 +6,11 @@ export (int) var max_jumps = 2
 var was_dashing = false
 var in_air_speed = 400.0
 
-onready var jumps = max_jumps
+onready var jumps = max_jumps setget set_jumps
 
 func setup(actor, previous_state):
 	was_dashing = false
-	in_air_speed = get_node("../walk").walk_speed
+	in_air_speed = get_node("../walk").speed
 	
 	match previous_state.name:
 		"idle":
@@ -20,7 +20,7 @@ func setup(actor, previous_state):
 		"fall":
 			jumps = min(jumps, max_jumps - 1)
 		"dash":
-			in_air_speed = get_node("../dash").dash_speed
+			in_air_speed = previous_state.speed
 			jumps = max(max_jumps - 1, 1)
 			was_dashing = true
 	
@@ -54,7 +54,7 @@ func input_process(actor, event):
 		if not was_dashing:
 			actor.dash()
 	if event.is_action_released(actor.dash):
-		in_air_speed = get_node("../walk").walk_speed
+		in_air_speed = get_node("../walk").speed
 
 func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
@@ -71,4 +71,8 @@ func process(actor, delta):
 	elif Input.is_action_pressed(actor.left):
 		actor.direction = -1
 		actor.velocity.x = in_air_speed * actor.direction
+	
+func set_jumps(value):
+	jumps = value
+	jumps = clamp(jumps, 0, max_jumps)
 	

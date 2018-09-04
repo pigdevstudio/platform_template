@@ -7,9 +7,9 @@ func setup(actor, previous_state):
 	in_air_speed = get_node("../walk").speed
 	match previous_state.name:
 		"jump":
-			in_air_speed = get_node("../jump").in_air_speed
+			in_air_speed = previous_state.in_air_speed
 		"walk":
-			in_air_speed = get_node("../walk").walk_speed
+			in_air_speed = previous_state.speed
 	actor.emit_signal("perform_action", "fall")
 
 func input_process(actor, event):
@@ -32,7 +32,7 @@ func input_process(actor, event):
 	if event.is_action_pressed(actor.dash):
 		actor.dash()
 	if event.is_action_released(actor.dash):
-		in_air_speed = get_node("../walk").walk_speed
+		in_air_speed = get_node("../walk").speed
 
 func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
