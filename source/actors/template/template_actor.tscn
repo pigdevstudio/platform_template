@@ -58,6 +58,7 @@ shape = SubResource( 1 )
 
 [node name="state_machine" parent="." index="1" instance=ExtResource( 2 )]
 
+editor/display_folded = true
 actor = "../"
 
 [node name="idle" type="Node" parent="state_machine" index="0"]

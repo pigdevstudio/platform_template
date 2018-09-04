@@ -12,7 +12,7 @@
 [ext_resource path="res://actors/template/template_body_sprites.png" type="Texture" id=10]
 [ext_resource path="res://actors/template/template_faces_sprites.png" type="Texture" id=11]
 
-[node name="template_character" type="Position2D" index="0"]
+[node name="template_character" type="Position2D"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]

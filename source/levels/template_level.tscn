@@ -497,7 +497,6 @@ polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
 [node name="shape2" type="CollisionPolygon2D" parent="pass_through" index="1"]
 
 position = Vector2( 141.6, -184 )
-scale = Vector2( 1, 1 )
 build_mode = 0
 polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
 
