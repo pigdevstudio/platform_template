@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://juiceness/pop_score/pop_score.gd" type="Script" id=1]
+[ext_resource path="res://juiceness/pop_score/pop_label.gd" type="Script" id=1]
+
 
 [node name="pop_score" type="Node2D"]
 
