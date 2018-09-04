@@ -5,11 +5,11 @@ export (int) var speed = 400
 func setup(actor, previous_state):
 	actor.velocity.x = speed * actor.direction
 	
-	$fall_threshold.connect("timeout", self, "_on_fall_threshold_timeout", [actor])
+	$coyotte_fall.connect("timeout", self, "_on_coyotte_fall_timeout", [actor])
 	actor.emit_signal("perform_action", "walk")
 	
-func clear():
-	$fall_threshold.disconnect("timeout", self, "_on_fall_threshold_timeout")
+func clear(actor):
+	$coyotte_fall.disconnect("timeout", self, "_on_coyotte_fall_timeout")
 	
 func input_process(actor, event):
 	if event.is_action_pressed(actor.jump):
@@ -50,6 +50,6 @@ func process(actor, delta):
 	if abs(rad2deg(collision.normal.angle())) > 90:
 		actor.velocity = Vector2(speed * actor.direction, 0)
 	
-func _on_fall_threshold_timeout(actor):
+func _on_coyotte_fall_timeout(actor):
 	actor.fall()
 	
