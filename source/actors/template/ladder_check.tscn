@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://actors/template/ladder_check.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=2]
+
+custom_solver_bias = 0.0
+extents = Vector2( 26, 52 )
+
+[node name="ladder_check" type="Area2D"]
+
+editor/display_folded = true
+z_index = -1
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision_layer = 0
+collision_mask = 4
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 1 )
+_sections_unfolded = [ "Collision" ]
+snap = false
+
+[node name="shape" type="CollisionShape2D" parent="." index="0"]
+
+position = Vector2( 0, -48 )
+shape = SubResource( 2 )
+
+[connection signal="area_entered" from="." to="." method="_on_ladder_check_area_entered"]
+
+[connection signal="area_exited" from="." to="." method="_on_ladder_check_area_exited"]
+
+[connection signal="body_entered" from="." to="." method="_on_ladder_check_body_entered"]
+
+

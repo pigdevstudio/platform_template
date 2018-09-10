@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://actors/template/pass_through.gd" type="Script" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+custom_solver_bias = 0.0
+extents = Vector2( 26, 52 )
+
+[node name="pass_through" type="Area2D"]
+
+editor/display_folded = true
+z_index = -1
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+collision_layer = 0
+collision_mask = 8
+audio_bus_override = false
+audio_bus_name = "Master"
+script = ExtResource( 1 )
+_sections_unfolded = [ "Collision" ]
+
+[node name="shape" type="CollisionShape2D" parent="." index="0"]
+
+position = Vector2( 0, -50 )
+shape = SubResource( 1 )
+
+[connection signal="body_exited" from="." to="." method="_on_pass_through_body_exited"]
+
+

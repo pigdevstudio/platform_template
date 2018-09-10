@@ -1,30 +1,44 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene format=2]
 
-[ext_resource path="res://objects/ladder/ladder.gd" type="Script" id=1]
-[ext_resource path="res://actors/template/player_platform_actor.gd" type="Script" id=2]
+[node name="ladder" type="Position2D"]
 
-[node name="ladder" type="Area2D"]
+_sections_unfolded = [ "Collision" ]
 
+[node name="top" type="StaticBody2D" parent="." index="0"]
+
+scale = Vector2( 1, 1 )
+input_pickable = false
+collision_layer = 4
+collision_mask = 0
+constant_linear_velocity = Vector2( 0, 0 )
+constant_angular_velocity = 0.0
+friction = 1.0
+bounce = 0.0
+_sections_unfolded = [ "Collision" ]
+
+[node name="shape" type="CollisionPolygon2D" parent="top" index="0"]
+
+scale = Vector2( 1, 1 )
+build_mode = 0
+polygon = PoolVector2Array( -40, 0, -40, 40, 40, 40, 40, 0 )
+
+[node name="bottom" type="Area2D" parent="." index="1"]
+
+scale = Vector2( 1, 1 )
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
 gravity = 98.0
 linear_damp = 0.1
 angular_damp = 1.0
 collision_layer = 4
-collision_mask = 2
+collision_mask = 0
 audio_bus_override = false
 audio_bus_name = "Master"
-script = ExtResource( 1 )
 _sections_unfolded = [ "Collision" ]
-Player = ExtResource( 2 )
 
-[node name="shape" type="CollisionPolygon2D" parent="." index="0"]
+[node name="shape" type="CollisionPolygon2D" parent="bottom" index="0"]
 
 build_mode = 0
-polygon = PoolVector2Array( -40, 0, -40, 220, 40, 220, 40, 0 )
-
-[connection signal="body_entered" from="." to="." method="_on_ladder_body_entered"]
-
-[connection signal="body_exited" from="." to="." method="_on_ladder_body_exited"]
+polygon = PoolVector2Array( -40, 0, 40, 0, 40, 272, -40, 272 )
 
 

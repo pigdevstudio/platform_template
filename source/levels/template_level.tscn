@@ -352,6 +352,7 @@ __meta__ = {
 
 [node name="floor" type="StaticBody2D" parent="." index="6"]
 
+editor/display_folded = true
 input_pickable = false
 collision_layer = 1
 collision_mask = 1
@@ -465,20 +466,21 @@ drag_margin_top = 0.2
 drag_margin_right = 0.2
 drag_margin_bottom = 0.2
 editor_draw_screen = true
-editor_draw_limits = false
-editor_draw_drag_margin = false
-_sections_unfolded = [ "Smoothing" ]
+editor_draw_limits = true
+editor_draw_drag_margin = true
+_sections_unfolded = [ "Drag Margin", "Editor", "Limit", "Smoothing" ]
 
 [node name="ladder" parent="." index="11" instance=ExtResource( 3 )]
 
-position = Vector2( 1360, 160 )
+position = Vector2( 1077.6, 168 )
 
 [node name="ladder2" parent="." index="12" instance=ExtResource( 3 )]
 
-position = Vector2( 1677.6, -88 )
+position = Vector2( 1248, -80 )
 
 [node name="pass_through" type="StaticBody2D" parent="." index="13"]
 
+editor/display_folded = true
 input_pickable = false
 collision_layer = 8
 collision_mask = 0
@@ -490,7 +492,8 @@ _sections_unfolded = [ "Collision" ]
 
 [node name="shape" type="CollisionPolygon2D" parent="pass_through" index="0"]
 
-position = Vector2( 136, 64 )
+position = Vector2( -26.4001, 64 )
+scale = Vector2( 1, 1 )
 build_mode = 0
 polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
 
