@@ -6,34 +6,34 @@ var direction = Vector2(1, -1)
 
 func setup(actor, previous_state):
 	actor.velocity = Vector2(0, 0)
-	actor.emit_signal("perform_action", "climb")
+	actor.emit_signal("action_performed", "climb")
 
 func input_process(actor, event):
 	if event.is_action_pressed(actor.up):
 		direction.y = -1
-		actor.emit_signal("perform_action", "climb")
+		actor.emit_signal("action_performed", "climb")
 	elif event.is_action_pressed(actor.down):
 		direction.y = 1
-		actor.emit_signal("perform_action", "climb")
+		actor.emit_signal("action_performed", "climb")
 	elif event.is_action_pressed(actor.left):
 		direction.x = -1
-		actor.emit_signal("perform_action", "climb")
+		actor.emit_signal("action_performed", "climb")
 	elif event.is_action_pressed(actor.right):
 		direction.x = 1
-		actor.emit_signal("perform_action", "climb")
+		actor.emit_signal("action_performed", "climb")
 		
 	if event.is_action_released(actor.up) and direction.y == -1:
 		actor.velocity.y = 0
-		actor.emit_signal("perform_action", "stop")
+		actor.emit_signal("action_performed", "stop")
 	if event.is_action_released(actor.down) and direction.y == 1:
 		actor.velocity.y = 0
-		actor.emit_signal("perform_action", "stop")
+		actor.emit_signal("action_performed", "stop")
 	if event.is_action_released(actor.left) and direction.x == -1:
 		actor.velocity.x = 0
-		actor.emit_signal("perform_action", "stop")
+		actor.emit_signal("action_performed", "stop")
 	if event.is_action_released(actor.right) and direction.x == 1:
 		actor.velocity.x = 0
-		actor.emit_signal("perform_action", "stop")
+		actor.emit_signal("action_performed", "stop")
 		
 	if event.is_action_pressed(actor.jump):
 		actor.jump()

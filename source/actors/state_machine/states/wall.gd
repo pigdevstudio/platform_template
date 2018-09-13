@@ -8,18 +8,18 @@ var normal = Vector2(0,0)
 
 func setup(actor, previous_state):
 	normal = actor.get_slide_collision(0).normal
-	actor.emit_signal("perform_action", "wall")
+	actor.emit_signal("action_performed", "wall")
 
 func input_process(actor, event):
 	if event.is_action_pressed(actor.jump) and actor.is_on_wall():
 		if Input.is_action_pressed(actor.dash):
 			actor.velocity.x = (wall_jump * normal.x)
 			actor.velocity.y = -wall_jump * dash_jump_multiplier
-			actor.emit_signal("perform_action", "jump")
+			actor.emit_signal("action_performed", "jump")
 		else:
 			actor.velocity.x = wall_jump * normal.x
 			actor.velocity.y = -wall_jump
-			actor.emit_signal("perform_action", "jump")
+			actor.emit_signal("action_performed", "jump")
 	
 	elif event.is_action_pressed(actor.dash) and not actor.is_on_wall():
 		actor.dash()
@@ -34,7 +34,7 @@ func input_process(actor, event):
 
 func process(actor, delta):
 	if actor.is_on_wall():
-		actor.emit_signal("perform_action", "wall")
+		actor.emit_signal("action_performed", "wall")
 		actor.velocity.y /= 2
 	elif actor.velocity.y > actor.FALL_THRESHOLD:
 		actor.fall()

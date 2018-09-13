@@ -120,8 +120,8 @@ snap = true
 
 scale = Vector2( 0.75, 0.75 )
 
-[connection signal="direction_changed" from="." to="template_character" method="_on_actor_direction_changed"]
+[connection signal="action_performed" from="." to="template_character" method="_on_actor_action_performed"]
 
-[connection signal="perform_action" from="." to="template_character" method="_on_actor_perform_action"]
+[connection signal="direction_changed" from="." to="template_character" method="_on_actor_direction_changed"]
 
 

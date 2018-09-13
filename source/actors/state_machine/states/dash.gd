@@ -30,7 +30,7 @@ func setup(actor, previous_state):
 	actor.velocity.y = 0
 	
 	actor.velocity.x = speed * actor.direction
-	actor.emit_signal("perform_action", "dash")
+	actor.emit_signal("action_performed", "dash")
 	can_dash = false
 
 func input_process(actor, event):

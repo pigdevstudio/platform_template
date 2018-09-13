@@ -10,7 +10,7 @@ func setup(actor, previous_state):
 			in_air_speed = previous_state.in_air_speed
 		"walk":
 			in_air_speed = previous_state.speed
-	actor.emit_signal("perform_action", "fall")
+	actor.emit_signal("action_performed", "fall")
 
 func input_process(actor, event):
 	if event.is_action_pressed(actor.right):

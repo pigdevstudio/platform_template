@@ -29,7 +29,7 @@ func setup(actor, previous_state):
 	
 	jumps -= 1
 	actor.velocity.y = -jump_height
-	actor.emit_signal("perform_action", "jump")
+	actor.emit_signal("action_performed", "jump")
 
 func input_process(actor, event):
 	if event.is_action_pressed(actor.jump):

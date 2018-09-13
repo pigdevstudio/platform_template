@@ -13,8 +13,7 @@ export (float) var FALL_THRESHOLD = 100
 
 export (bool) var can_dash = true
 
-signal enter_state(state)
-signal perform_action(action)
+signal action_performed(action)
 signal direction_changed(new_direction)
 
 func set_velocity(value):
@@ -25,7 +24,7 @@ func set_direction(value):
 	emit_signal("direction_changed", value)
 
 func set_state(new_state):
-	emit_signal("enter_state", new_state)
+	state_machine.state = new_state
 	
 func climb():
 	set_state("climb")
@@ -41,7 +40,7 @@ func jump():
 func cancel_jump():
 	velocity.y = 0
 	
-func fall(force_fall = false):
+func fall():
 	set_state("fall")
 	
 func walk():
@@ -54,11 +53,10 @@ func wall_slide():
 	set_state("wall")
 	
 func stop():
-	emit_signal("perform_action", "stop")
+	emit_signal("action_performed", "stop")
 
 func _ready():
 	state_machine = $state_machine
-	connect("enter_state", state_machine, "set_state")
 	set_state("idle")
 	
 func _physics_process(delta):

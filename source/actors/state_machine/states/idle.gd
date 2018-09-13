@@ -2,11 +2,10 @@ extends "state.gd"
 	
 func setup(actor, previous_state):
 	actor.velocity.x = 0
-	actor.emit_signal("perform_action", "idle")
+	actor.emit_signal("action_performed", "idle")
 	
 func input_process(actor, event):
 	if event.is_action_pressed(actor.jump):
-		# Jump through
 		if Input.is_action_pressed(actor.down) and actor.has_node("pass_through"):
 			actor.set_collision_mask_bit(3, false)
 		else:

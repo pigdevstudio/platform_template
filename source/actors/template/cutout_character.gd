@@ -9,7 +9,13 @@ func flip_sprites(direction):
 	else:
 		scale.x = initial_scale.x * -1
 
-func _on_actor_perform_action(action):
+func _on_actor_direction_changed(new_direction):
+	if new_direction < 0:
+		flip_sprites(LEFT)
+	else:
+		flip_sprites(RIGHT)
+
+func _on_actor_action_performed(action):
 	match action:
 		"idle":
 			$animator.play("idle")
@@ -27,9 +33,3 @@ func _on_actor_perform_action(action):
 			$animator.play("climb")
 		"stop":
 			$animator.stop(false)
-
-func _on_actor_direction_changed(new_direction):
-	if new_direction < 0:
-		flip_sprites(LEFT)
-	else:
-		flip_sprites(RIGHT)
