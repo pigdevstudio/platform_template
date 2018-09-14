@@ -5,11 +5,10 @@
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
-extents = Vector2( 26, 52 )
+extents = Vector2( 24, 48 )
 
 [node name="pass_through" type="Area2D"]
 
-editor/display_folded = true
 z_index = -1
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -25,8 +24,9 @@ _sections_unfolded = [ "Collision" ]
 
 [node name="shape" type="CollisionShape2D" parent="." index="0"]
 
-position = Vector2( 0, -50 )
+position = Vector2( 0, -48 )
 shape = SubResource( 1 )
+_sections_unfolded = [ "Transform" ]
 
 [connection signal="body_exited" from="." to="." method="_on_pass_through_body_exited"]
 
