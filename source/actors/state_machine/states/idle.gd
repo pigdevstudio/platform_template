@@ -7,6 +7,8 @@ func setup(actor, previous_state):
 func input_process(actor, event):
 	if event.is_action_pressed(actor.jump):
 		if Input.is_action_pressed(actor.down) and actor.has_node("pass_through"):
+			if not actor.is_on_floor():
+				return
 			actor.set_collision_mask_bit(3, false)
 		else:
 			actor.jump()
@@ -25,4 +27,3 @@ func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
 	if actor.velocity.y > actor.FALL_THRESHOLD:
 		actor.fall()
-	

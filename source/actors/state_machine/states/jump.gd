@@ -75,4 +75,3 @@ func process(actor, delta):
 func set_jumps(value):
 	jumps = value
 	jumps = clamp(jumps, 0, max_jumps)
-	

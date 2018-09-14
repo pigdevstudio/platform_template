@@ -26,6 +26,9 @@ func set_direction(value):
 func set_state(new_state):
 	state_machine.state = new_state
 	
+func get_state():
+	return state_machine.state
+	
 func climb():
 	set_state("climb")
 
@@ -63,4 +66,3 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity, FLOOR_NORMAL, 
 		SLOPE_STOP_SPEED, 4, deg2rad(SLOPE_MAX_DEGREE))
 	state_machine.state.process(self, delta)
-	

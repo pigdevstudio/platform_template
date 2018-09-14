@@ -4,9 +4,8 @@ export (int) var speed = 400
 
 func setup(actor, previous_state):
 	actor.velocity.x = speed * actor.direction
-	
-	$coyotte_fall.connect("timeout", self, "_on_coyotte_fall_timeout", [actor])
 	actor.emit_signal("action_performed", "walk")
+	$coyotte_fall.connect("timeout", self, "_on_coyotte_fall_timeout", [actor])
 	
 func clear(actor):
 	$coyotte_fall.disconnect("timeout", self, "_on_coyotte_fall_timeout")

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://objects/ladder/ladder.tscn" type="PackedScene" id=1]
-[ext_resource path="res://actors/template/template_actor.tscn" type="PackedScene" id=2]
-[ext_resource path="res://juiceness/shake_camera/rigged_camera/camera_rig.tscn" type="PackedScene" id=3]
+[ext_resource path="res://objects/pass_through_platform/pass_through_platform.tscn" type="PackedScene" id=2]
+[ext_resource path="res://actors/template/template_actor.tscn" type="PackedScene" id=3]
+[ext_resource path="res://juiceness/shake_camera/rigged_camera/camera_rig.tscn" type="PackedScene" id=4]
 
 [sub_resource type="GDScript" id=1]
 
@@ -426,46 +427,24 @@ position = Vector2( 1077.6, 168 )
 
 position = Vector2( 1248, -80 )
 
-[node name="pass_through" type="StaticBody2D" parent="." index="12"]
+[node name="pass_through_platform" parent="." index="12" instance=ExtResource( 2 )]
 
-editor/display_folded = true
-input_pickable = false
-collision_layer = 8
-collision_mask = 0
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 1.0
-bounce = 0.0
-_sections_unfolded = [ "Collision" ]
+position = Vector2( 1288, -80 )
 
-[node name="shape" type="CollisionPolygon2D" parent="pass_through" index="0"]
+[node name="pass_through_platform2" parent="." index="13" instance=ExtResource( 2 )]
 
-position = Vector2( -26.4001, 64 )
-build_mode = 0
-polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
+position = Vector2( 976, -80 )
 
-[node name="shape2" type="CollisionPolygon2D" parent="pass_through" index="1"]
+[node name="pass_through_platform3" parent="." index="14" instance=ExtResource( 2 )]
 
-position = Vector2( 141.6, -184 )
-build_mode = 0
-polygon = PoolVector2Array( 1144, 104, 1144, 176, 1616, 176, 1616, 104 )
+position = Vector2( 1112, 168 )
+scale = Vector2( 1, 1 )
 
-[node name="template_actor" parent="." index="13" instance=ExtResource( 2 )]
+[node name="template_actor" parent="." index="15" instance=ExtResource( 3 )]
 
-position = Vector2( 448, 232 )
+[node name="camera_rig" parent="template_actor" index="5" instance=ExtResource( 4 )]
 
-[node name="state_machine" parent="template_actor" index="1"]
-
-editor/display_folded = false
-
-[node name="jump" parent="template_actor/state_machine" index="2"]
-
-max_jumps = 2
-
-[node name="camera_rig" parent="template_actor" index="5" instance=ExtResource( 3 )]
-
-position = Vector2( 0, -40 )
+scale = Vector2( 1, 1 )
 remote_path = NodePath("../../camera")
 
 
-[editable path="template_actor"]

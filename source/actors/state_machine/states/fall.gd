@@ -61,4 +61,3 @@ func process(actor, delta):
 				actor.idle()
 		else:
 			actor.idle()
-		

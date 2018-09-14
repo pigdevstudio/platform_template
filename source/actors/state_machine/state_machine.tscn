@@ -2,8 +2,9 @@
 
 [ext_resource path="res://actors/state_machine/state_machine.gd" type="Script" id=1]
 
-[node name="state_machine" type="Node" index="0"]
+[node name="state_machine" type="Node"]
 
 script = ExtResource( 1 )
+actor = "../"
 
 
