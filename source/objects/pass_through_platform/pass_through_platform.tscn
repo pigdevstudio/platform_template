@@ -15,5 +15,6 @@ _sections_unfolded = [ "Collision", "Transform" ]
 
 build_mode = 0
 polygon = PoolVector2Array( 0, 0, 0, 64, 232, 64, 232, 0 )
+one_way_collision = true
 
 

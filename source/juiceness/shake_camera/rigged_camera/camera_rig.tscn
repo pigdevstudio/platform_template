@@ -10,13 +10,5 @@ update_position = true
 update_rotation = true
 update_scale = true
 script = ExtResource( 1 )
-shake_strength = 10
-
-[node name="timer" type="Timer" parent="." index="0"]
-
-process_mode = 1
-wait_time = 1.0
-one_shot = false
-autostart = false
 
 
