@@ -5,9 +5,9 @@ script/source = "extends Timer
 
 export (bool) var coyotte_fall = false
 
-func time_start():
+func start(time): # error(5,1): Function signature doesn't match the parent. Parent signature is: 'void start(float=default)'.
 	if coyotte_fall:
-		.start()
+		.start(time)
 	else:
 		emit_signal(\"timeout\")
 		stop()
@@ -18,3 +18,4 @@ process_mode = 0
 wait_time = 0.25
 one_shot = true
 script = SubResource( 1 )
+coyotte_fall = null
