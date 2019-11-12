@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://objects/ladder/ladder.tscn" type="PackedScene" id=1]
 [ext_resource path="res://objects/pass_through_platform/pass_through_platform.tscn" type="PackedScene" id=2]
@@ -7,14 +7,12 @@
 [ext_resource path="res://juiceness/shake_camera/shake_camera.tscn" type="PackedScene" id=5]
 
 [sub_resource type="GDScript" id=1]
-
 script/source = "extends VBoxContainer
 
 func _process(delta):
 	$spam.text = str(int($spam/timer.time_left))"
 
 [sub_resource type="GDScript" id=2]
-
 script/source = "extends HBoxContainer
 
 var coins = 0
@@ -29,7 +27,6 @@ func add_coin():
 	"
 
 [sub_resource type="GDScript" id=3]
-
 script/source = "extends HBoxContainer
 
 var score = 0
@@ -44,7 +41,6 @@ func increase_score(amount):
 	$amount.text = t.format({\"amount\":score})"
 
 [sub_resource type="GDScript" id=4]
-
 script/source = "extends Node2D
 
 export (NodePath) var coins_interface
@@ -56,7 +52,6 @@ func _ready():
 			 \"increase_score\", [100])"
 
 [sub_resource type="GDScript" id=5]
-
 script/source = "extends Node2D
 export (NodePath) var score_interface
 
@@ -74,355 +69,161 @@ func child_died(child):
 	s.get_node(\"label\").text = str(int(500))
 	add_child(s)"
 
-[node name="template_level" type="Node2D" index="0"]
+[sub_resource type="PhysicsMaterial" id=6]
+friction = 0.0
 
-[node name="interface" type="CanvasLayer" parent="." index="0"]
+[sub_resource type="PhysicsMaterial" id=7]
+friction = 0.0
 
+[node name="template_level" type="Node2D"]
+
+[node name="interface" type="CanvasLayer" parent="."]
 pause_mode = 2
 editor/display_folded = true
-layer = 1
-offset = Vector2( 0, 0 )
-rotation = 0.0
-scale = Vector2( 1, 1 )
-transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-_sections_unfolded = [ "Pause" ]
 
-[node name="control" type="Control" parent="interface" index="0"]
-
+[node name="control" type="Control" parent="interface"]
 pause_mode = 1
 visible = false
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
 margin_right = 72.0
 margin_bottom = 40.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-_sections_unfolded = [ "Pause" ]
 
-[node name="time" type="VBoxContainer" parent="interface/control" index="0"]
-
+[node name="time" type="VBoxContainer" parent="interface/control"]
 editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
 margin_left = 488.0
 margin_top = 8.0
 margin_right = 528.0
 margin_bottom = 50.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
 custom_constants/separation = 14
-alignment = 0
 script = SubResource( 1 )
-_sections_unfolded = [ "custom_constants" ]
 
-[node name="title" type="Label" parent="interface/control/time" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="title" type="Label" parent="interface/control/time"]
 margin_right = 40.0
 margin_bottom = 14.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "Time:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="spam" type="Label" parent="interface/control/time" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="spam" type="Label" parent="interface/control/time"]
 margin_top = 28.0
 margin_right = 40.0
 margin_bottom = 42.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
 text = "{time}"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="timer" type="Timer" parent="interface/control/time/spam" index="0"]
-
-process_mode = 1
+[node name="timer" type="Timer" parent="interface/control/time/spam"]
 wait_time = 120.0
 one_shot = true
 autostart = true
 
-[node name="coins" type="HBoxContainer" parent="interface/control" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="coins" type="HBoxContainer" parent="interface/control"]
 margin_left = 656.0
 margin_right = 750.0
 margin_bottom = 42.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-alignment = 0
 script = SubResource( 2 )
 
-[node name="coin" type="TextureRect" parent="interface/control/coins" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="coin" type="TextureRect" parent="interface/control/coins"]
 margin_right = 16.0
 margin_bottom = 42.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 stretch_mode = 4
 
-[node name="amount" type="Label" parent="interface/control/coins" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="amount" type="Label" parent="interface/control/coins"]
 margin_left = 20.0
 margin_right = 94.0
 margin_bottom = 42.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "x: {amount}"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="score" type="HBoxContainer" parent="interface/control" index="2"]
-
+[node name="score" type="HBoxContainer" parent="interface/control"]
 editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
 margin_left = 872.0
 margin_right = 974.0
 margin_bottom = 42.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-alignment = 0
 script = SubResource( 3 )
 
-[node name="amount" type="Label" parent="interface/control/score" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+[node name="amount" type="Label" parent="interface/control/score"]
 margin_right = 102.0
 margin_bottom = 42.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "score: {amount}"
 valign = 1
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
 
-[node name="coins" type="Node2D" parent="." index="1"]
-
+[node name="coins" type="Node2D" parent="."]
 script = SubResource( 4 )
 coins_interface = NodePath("../interface/control/coins")
 score_interface = NodePath("../interface/control/score")
 
-[node name="enemies" type="Node2D" parent="." index="2"]
-
+[node name="enemies" type="Node2D" parent="."]
 z_index = -1
 script = SubResource( 5 )
-_sections_unfolded = [ "Z Index" ]
 score_interface = NodePath("../interface/control/score")
 
-[node name="wall_left" type="StaticBody2D" parent="." index="3"]
-
+[node name="wall_left" type="StaticBody2D" parent="."]
 editor/display_folded = true
 position = Vector2( -8, 16 )
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 0.0
-bounce = 0.0
+physics_material_override = SubResource( 6 )
 
-[node name="shape" type="CollisionPolygon2D" parent="wall_left" index="0"]
-
-build_mode = 0
+[node name="shape" type="CollisionPolygon2D" parent="wall_left"]
 polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
 
-[node name="shape2" type="CollisionPolygon2D" parent="wall_left" index="1"]
-
+[node name="shape2" type="CollisionPolygon2D" parent="wall_left"]
 position = Vector2( -212, 4 )
-build_mode = 0
 polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
 
-[node name="wall_right" type="StaticBody2D" parent="." index="4"]
-
+[node name="wall_right" type="StaticBody2D" parent="."]
 editor/display_folded = true
 position = Vector2( 1930, 20 )
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 0.0
-bounce = 0.0
+physics_material_override = SubResource( 7 )
 
-[node name="shape" type="CollisionPolygon2D" parent="wall_right" index="0"]
-
-build_mode = 0
+[node name="shape" type="CollisionPolygon2D" parent="wall_right"]
 polygon = PoolVector2Array( 8, -8, 8, 504, -24, 504, -24, -8 )
 
-[node name="tile_map" type="TileMap" parent="." index="5"]
-
-mode = 0
-tile_set = null
-cell_size = Vector2( 64, 64 )
-cell_quadrant_size = 16
-cell_custom_transform = Transform2D( 1, 0, 0, 1, 0, 0 )
-cell_half_offset = 2
-cell_tile_origin = 0
-cell_y_sort = false
-cell_clip_uv = false
-collision_use_kinematic = false
-collision_friction = 1.0
-collision_bounce = 0.0
-collision_layer = 1
-collision_mask = 1
-occluder_light_mask = 1
+[node name="tile_map" type="TileMap" parent="."]
 format = 1
-tile_data = PoolIntArray(  )
-_sections_unfolded = [ "Collision" ]
 __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="floor" type="StaticBody2D" parent="." index="6"]
+[node name="floor" type="StaticBody2D" parent="."]
 
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 1.0
-bounce = 0.0
-
-[node name="shape" type="CollisionPolygon2D" parent="floor" index="0"]
-
-build_mode = 0
+[node name="shape" type="CollisionPolygon2D" parent="floor"]
 polygon = PoolVector2Array( 0, 520, 1904, 520, 1904, 592, 0, 592 )
 
-[node name="bakcground_music" type="AudioStreamPlayer" parent="." index="7"]
-
-stream = null
-volume_db = 0.0
-pitch_scale = 1.0
-autoplay = false
-mix_target = 0
+[node name="bakcground_music" type="AudioStreamPlayer" parent="."]
 bus = "music"
 
-[node name="slope" type="StaticBody2D" parent="." index="8"]
-
+[node name="slope" type="StaticBody2D" parent="."]
 editor/display_folded = true
-input_pickable = false
-collision_layer = 1
-collision_mask = 1
-constant_linear_velocity = Vector2( 0, 0 )
-constant_angular_velocity = 0.0
-friction = 1.0
-bounce = 0.0
 
-[node name="shape" type="CollisionPolygon2D" parent="slope" index="0"]
-
+[node name="shape" type="CollisionPolygon2D" parent="slope"]
 position = Vector2( -50, 0 )
-build_mode = 0
 polygon = PoolVector2Array( 400, 520, 560, 460, 810, 460, 810, 520 )
 
-[node name="shape2" type="CollisionPolygon2D" parent="slope" index="1"]
-
+[node name="shape2" type="CollisionPolygon2D" parent="slope"]
 position = Vector2( 1780, 390 )
-build_mode = 0
 polygon = PoolVector2Array( 128, 4, 0, 132, 128, 132 )
-_sections_unfolded = [ "Transform" ]
 
-[node name="ladder" parent="." index="9" instance=ExtResource( 1 )]
-
+[node name="ladder" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1077.6, 168 )
 
-[node name="ladder2" parent="." index="10" instance=ExtResource( 1 )]
-
+[node name="ladder2" parent="." instance=ExtResource( 1 )]
 position = Vector2( 1248, -184 )
 
-[node name="pass_through_platform" parent="." index="11" instance=ExtResource( 2 )]
-
+[node name="pass_through_platform" parent="." instance=ExtResource( 2 )]
 position = Vector2( 824, -56 )
 
-[node name="pass_through_platform2" parent="." index="12" instance=ExtResource( 2 )]
-
+[node name="pass_through_platform2" parent="." instance=ExtResource( 2 )]
 position = Vector2( 976, -184 )
 
-[node name="pass_through_platform3" parent="." index="13" instance=ExtResource( 2 )]
-
+[node name="pass_through_platform3" parent="." instance=ExtResource( 2 )]
 position = Vector2( 1112, 168 )
 
-[node name="template_actor" parent="." index="14" instance=ExtResource( 3 )]
-
+[node name="template_actor" parent="." instance=ExtResource( 3 )]
 position = Vector2( 576, 96 )
 
-[node name="camera_rig" parent="template_actor" index="5" instance=ExtResource( 4 )]
-
+[node name="camera_rig" parent="template_actor" instance=ExtResource( 4 )]
 remote_path = NodePath("../../shake_camera")
 
-[node name="shake_camera" parent="." index="15" instance=ExtResource( 5 )]
-
+[node name="shake_camera" parent="." instance=ExtResource( 5 )]
 position = Vector2( 576, 96 )
-scale = Vector2( 1, 1 )
-
-
