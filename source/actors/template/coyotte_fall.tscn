@@ -7,7 +7,7 @@ export (bool) var coyotte_fall = false
 
 func start(default_time = -1): # error(5,1): Function signature doesn't match the parent. Parent signature is: 'void start(float=default)'.
 	if coyotte_fall:
-		.start()
+		.start(default_time)
 	else:
 		emit_signal(\"timeout\")
 		stop()
