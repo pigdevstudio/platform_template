@@ -1,8 +1,14 @@
 extends Node2D
-
+# Cannot convert the provided value to the export type. That's why I commented them out.
+"""
 export (float) var final_scale = Vector2(1.5, 1.5)
 export (float) var float_length = 100
 export (float) var duration = 0.25
+"""
+onready var final_scale = Vector2(1.5, 1.5)
+onready var float_length = 100
+onready var duration = 0.25
+
 func _ready():
 	pop()
 	

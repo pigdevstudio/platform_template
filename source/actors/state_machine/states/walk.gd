@@ -37,7 +37,7 @@ func process(actor, delta):
 	actor.velocity.y += actor.GRAVITY
 
 	if actor.velocity.y > actor.FALL_THRESHOLD:
-		$coyotte_fall.start()
+		$coyotte_fall.time_start()
 		
 	if not $coyotte_fall.is_stopped() and actor.is_on_wall():
 		actor.wall_slide()

@@ -15,94 +15,51 @@
 [ext_resource path="res://actors/template/template_character.tscn" type="PackedScene" id=13]
 
 [sub_resource type="RectangleShape2D" id=1]
-
-custom_solver_bias = 0.0
 extents = Vector2( 24, 48 )
 
 [node name="template_actor" type="KinematicBody2D"]
-
-input_pickable = false
 collision_layer = 2
 collision_mask = 15
-collision/safe_margin = 0.08
 script = ExtResource( 1 )
-_sections_unfolded = [ "Collision", "Transform" ]
-GRAVITY = 50
-FLOOR_NORMAL = Vector2( 0, -1 )
-SLOPE_STOP_SPEED = 200
-SLOPE_MAX_DEGREE = 46
-FALL_THRESHOLD = 100
-can_dash = true
-left = "left_1"
-right = "right_1"
-up = "up_1"
-down = "down_1"
-jump = "jump_1"
-dash = "dash_1"
 
-[node name="shape" type="CollisionShape2D" parent="." index="0"]
-
+[node name="shape" type="CollisionShape2D" parent="."]
 position = Vector2( 0, -48 )
 z_index = -1
 shape = SubResource( 1 )
-_sections_unfolded = [ "Transform" ]
 
-[node name="state_machine" parent="." index="1" instance=ExtResource( 2 )]
+[node name="state_machine" parent="." instance=ExtResource( 2 )]
 
-[node name="idle" type="Node" parent="state_machine" index="0"]
-
+[node name="idle" type="Node" parent="state_machine"]
 script = ExtResource( 3 )
 
-[node name="walk" type="Node" parent="state_machine" index="1"]
-
+[node name="walk" type="Node" parent="state_machine"]
 script = ExtResource( 4 )
-speed = 400
 
-[node name="coyotte_fall" parent="state_machine/walk" index="0" instance=ExtResource( 5 )]
+[node name="coyotte_fall" parent="state_machine/walk" instance=ExtResource( 5 )]
 
-[node name="jump" type="Node" parent="state_machine" index="2"]
-
+[node name="jump" type="Node" parent="state_machine"]
 script = ExtResource( 6 )
-jump_height = 800
 max_jumps = 1
 
-[node name="dash" type="Node" parent="state_machine" index="3"]
-
+[node name="dash" type="Node" parent="state_machine"]
 script = ExtResource( 7 )
-length = 300
 speed = 1000
 
-[node name="fall" type="Node" parent="state_machine" index="4"]
-
+[node name="fall" type="Node" parent="state_machine"]
 script = ExtResource( 8 )
-MAX_FALL_SPEED = 2000
 
-[node name="wall" type="Node" parent="state_machine" index="5"]
-
+[node name="wall" type="Node" parent="state_machine"]
 script = ExtResource( 9 )
-wall_jump = 800
-dash_jump_multiplier = 1.4
-MAX_WALL_SPEED = 600
 
-[node name="climb" type="Node" parent="state_machine" index="6"]
-
+[node name="climb" type="Node" parent="state_machine"]
 script = ExtResource( 10 )
-speed = 200.0
 
-[node name="pass_through" parent="." index="2" instance=ExtResource( 11 )]
+[node name="pass_through" parent="." instance=ExtResource( 11 )]
 
-_sections_unfolded = [ "Collision", "Transform" ]
-
-[node name="ladder_check" parent="." index="3" instance=ExtResource( 12 )]
-
+[node name="ladder_check" parent="." instance=ExtResource( 12 )]
 snap = true
 
-[node name="template_character" parent="." index="4" instance=ExtResource( 13 )]
-
+[node name="template_character" parent="." instance=ExtResource( 13 )]
 scale = Vector2( 0.75, 0.75 )
-
 [connection signal="action_performed" from="." to="template_character" method="_on_actor_action_performed"]
-
 [connection signal="direction_changed" from="." to="template_character" method="_on_actor_direction_changed"]
-
-
