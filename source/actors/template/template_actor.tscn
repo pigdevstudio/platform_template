@@ -36,6 +36,7 @@ script = ExtResource( 3 )
 script = ExtResource( 4 )
 
 [node name="coyotte_fall" parent="state_machine/walk" instance=ExtResource( 5 )]
+coyotte_fall = false
 
 [node name="jump" type="Node" parent="state_machine"]
 script = ExtResource( 6 )
