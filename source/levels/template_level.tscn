@@ -190,7 +190,7 @@ __meta__ = {
 [node name="shape" type="CollisionPolygon2D" parent="floor"]
 polygon = PoolVector2Array( 0, 520, 1904, 520, 1904, 592, 0, 592 )
 
-[node name="bakcground_music" type="AudioStreamPlayer" parent="."]
+[node name="background_music" type="AudioStreamPlayer" parent="."]
 bus = "music"
 
 [node name="slope" type="StaticBody2D" parent="."]
