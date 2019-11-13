@@ -1,26 +1,20 @@
 [gd_scene load_steps=2 format=2]
 
 [sub_resource type="GDScript" id=1]
-
 script/source = "extends Timer
 
 export (bool) var coyotte_fall = false
 
-func start():
+func start(default_time = -1): # error(5,1): Function signature doesn't match the parent. Parent signature is: 'void start(float=default)'.
 	if coyotte_fall:
-		.start()
+		.start(default_time)
 	else:
 		emit_signal(\"timeout\")
 		stop()
 "
 
 [node name="coyotte_fall" type="Timer"]
-
 process_mode = 0
 wait_time = 0.25
 one_shot = true
-autostart = false
 script = SubResource( 1 )
-coyotte_fall = false
-
-
