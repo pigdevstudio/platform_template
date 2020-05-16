@@ -62,4 +62,3 @@ func process(actor, delta):
 	var collision = actor.get_slide_collision(0)
 	if abs(rad2deg(collision.normal.angle())) > 90:
 		actor.velocity = Vector2(speed * actor.direction, 0)
-	
