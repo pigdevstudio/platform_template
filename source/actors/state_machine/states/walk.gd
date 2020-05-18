@@ -51,4 +51,3 @@ func process(actor, delta):
 	
 func _on_coyotte_fall_timeout(actor):
 	actor.fall()
-	

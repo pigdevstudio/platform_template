@@ -16,4 +16,3 @@ func setup(actor, previous_state):
 	
 func clear(actor):
 	pass
-	

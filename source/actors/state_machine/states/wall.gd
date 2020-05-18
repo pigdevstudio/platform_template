@@ -58,4 +58,3 @@ func process(actor, delta):
 		actor.velocity.x += actor.GRAVITY * -sign(normal.x) * 2
 	
 	actor.velocity.x = clamp(actor.velocity.x, -MAX_WALL_SPEED, MAX_WALL_SPEED)
-	
